@@ -1,0 +1,38 @@
+apiVersion: skaffold/v4beta7
+kind: Config
+metadata:
+  name: craftcloud
+build:
+  artifacts:
+    - image: manager-api-image
+      context: backend
+      docker:
+        dockerfile: Dockerfile
+        
+    - image: dashboard-image
+      context: webui
+      docker:
+        dockerfile: Dockerfile
+        
+    - image: mod-syncer-image
+      context: mod-syncer
+      docker:
+        dockerfile: Dockerfile
+        
+    - image: ai-rag-worker-image
+      context: worker
+      docker:
+        dockerfile: Dockerfile
+        
+    - image: valheim-sidecar-image
+      context: sidecar
+      docker:
+        dockerfile: Dockerfile
+
+manifests:
+  kustomize:
+    paths:
+      - k8s/overlays/dev 
+
+deploy:
+  kubectl: {}

@@ -1,113 +1,149 @@
 # backend/manager.py
-import docker
 import os
-import subprocess
 import uuid
-
 from dotenv import load_dotenv
+from kubernetes import client, config
+from kubernetes.client.rest import ApiException
 
 load_dotenv()
 
-# --- 1. THE MANAGER (The "Cloud-Ready" Brain) ---
+# --- 1. THE MANAGER (The "Kubernetes-Native" Brain) ---
 class ServerManager:
     def __init__(self):
-        self.uri = os.getenv("DOCKER_URL", "unix://var/run/docker.sock")
+        # SHIFT 1: The Connection
+        # Instead of a local Docker socket, we use the internal Kubernetes cluster token
         try:
-            self.client = docker.DockerClient(base_url=self.uri)
+            config.load_incluster_config()
+            self.custom_api = client.CustomObjectsApi()
+            self.namespace = os.getenv("NAMESPACE", "craftcloud-system")
         except Exception as e:
-            print(f"Docker Connection Error: {e}")
+            print(f"Kubernetes Connection Error: {e}")
 
     def list_all_servers(self):
-        containers = self.client.containers.list(all=True)
+        # SHIFT 2: The Listing
+        # Instead of listing Docker containers, we list Agones "GameServers"
         server_list = []
-        
-        for c in containers:
-            # Check for a specific label or your GAME_ID naming convention
-            # For now, let's include anything that isn't the 'dashboard' or 'manager-api'
-            if c.labels.get("craftcloud.role") != "game_server":
-                continue
+        try:
+            gameservers = self.custom_api.list_namespaced_custom_object(
+                group="agones.dev",
+                version="v1",
+                namespace=self.namespace,
+                plural="gameservers"
+            )
             
-            server_list.append({
-                "id": c.name,
-                "name": c.name.replace("-", " ").title(),
-                "status": "online" if c.status == "running" else "offline",
-                # Include default 0s so the UI doesn't break before the sidecar reports
-                "cpu": 0,
-                "ram": 0,
-                "players": 0
-            })
+            for gs in gameservers.get("items", []):
+                metadata = gs.get("metadata", {})
+                status = gs.get("status", {})
+                
+                # Agones tracks state in status.state (e.g., Ready, Allocated, Shutdown)
+                current_state = status.get("state", "Unknown")
+                
+                server_list.append({
+                    "id": metadata.get("name"),
+                    "name": metadata.get("name").replace("-", " ").title(),
+                    "status": "online" if current_state in ["Ready", "Allocated"] else "offline",
+                    # Return default 0s to keep your frontend perfectly intact
+                    "cpu": 0, 
+                    "ram": 0,
+                    "players": 0 
+                })
+        except ApiException as e:
+            print(f"Failed to list servers: {e}")
+            
         return server_list
 
     def get_container(self, server_id: str):
+        # We keep the name 'get_container' so your existing API routes don't break
         try:
-            return self.client.containers.get(server_id)
-        except:
+            return self.custom_api.get_namespaced_custom_object(
+                group="agones.dev",
+                version="v1",
+                namespace=self.namespace,
+                plural="gameservers",
+                name=server_id
+            )
+        except ApiException:
             return None
     
     def stop_server(self, server_id):
-        container = self.get_container(server_id)
-        if container:
-            container.stop(timeout=30)
+        # SHIFT 3: The Teardown
+        # Instead of stopping a container, we delete the GameServer resource
+        try:
+            self.custom_api.delete_namespaced_custom_object(
+                group="agones.dev",
+                version="v1",
+                namespace=self.namespace,
+                plural="gameservers",
+                name=server_id
+            )
+        except ApiException as e:
+            print(f"Error stopping server: {e}")
     
     def start_logic(self, server_id: str):
-        # Dynamically bring up the specific service from compose
-        current_env = os.environ.copy()
-        subprocess.run([
-            "docker-compose",
-            "-f", "/app/docker-compose.yml",
-            "--profile", "manual",
-            "up", "-d", server_id
-        ], check=True)
+        # Note: In Kubernetes, pods are generally ephemeral. 
+        # If a server is 'stopped' (deleted), you typically use create_server to spin it up again.
+        # If you meant 'unpause', Kubernetes doesn't pause pods natively like Docker does.
+        pass
 
     def create_server(self, game_id: str, user_id: str, config_data: dict = None):
         if config_data is None:
             config_data = {}
-        
-        """
-        Launches a new game server using Docker Compose profiles.
-        """
-        # Mapping frontend IDs to Compose service names
-        game_map = {
-            "valheim": "valheim-server",
-            "minecraft": "minecraft-server",
-            "rust": "rust-server",
-            "palworld": "palworld-server"
-        }
-
-        service_name = game_map.get(game_id)
-        if not service_name:
-            raise Exception(f"Game template '{game_id}' not found in configuration.")
-        
+            
         unique_suffix = str(uuid.uuid4())[:8]
         project_name = f"craftcloud-{game_id}-{unique_suffix}"
         
-        deploy_env = os.environ.copy()
-        deploy_env["GAME_ID"] = project_name
-        deploy_env["GAME_TYPE"] = game_id
+        # SHIFT 4: The Creation
+        # Instead of subprocess and docker-compose, we build the exact Kubernetes 
+        # manifest as a Python dictionary and post it directly to the API.
         
-        for key, value in config_data.items():
-            deploy_env[key] = str(value)
+        # We combine both your Game and Sidecar into a single Pod blueprint
+        manifest = {
+            "apiVersion": "agones.dev/v1",
+            "kind": "GameServer",
+            "metadata": {
+                "name": project_name,
+                "labels": {
+                    "craftcloud.role": "game_server",
+                    "game": game_id,
+                    "user": user_id
+                }
+            },
+            "spec": {
+                "ports": [{
+                    "name": "default",
+                    "portPolicy": "Dynamic",
+                    "containerPort": 2456 # Valheim's default port
+                }],
+                "template": {
+                    "spec": {
+                        "containers": [
+                            {
+                                "name": f"{game_id}-server",
+                                # Update this to your actual game server image
+                                "image": f"ghcr.io/your-username/{game_id}-server:latest", 
+                                "env": [{"name": k, "value": str(v)} for k, v in config_data.items()]
+                            },
+                            {
+                                "name": "sidecar-monitor",
+                                # Update this to your actual sidecar image
+                                "image": "valheim-sidecar-image", 
+                                "env": [{"name": k, "value": str(v)} for k, v in config_data.items()]
+                            }
+                        ]
+                    }
+                }
+            }
+        }
         
         try:
-            # Start the game server FIRST
-            subprocess.run([
-                "docker-compose",
-                "-p", project_name,
-                "-f", "/app/docker-compose.yml",
-                "up", "-d", service_name
-            ], env=deploy_env, check=True)
-            
-            # Start the sidecar SECOND
-            subprocess.run([
-                "docker-compose",
-                "-p", project_name,
-                "-f", "/app/docker-compose.yml",
-                "up", "-d", "sidecar-monitor"
-            ], env=deploy_env, check=True) # <-- Passed here as well
-            
-            # Return the container object so the API can get the ID
+            self.custom_api.create_namespaced_custom_object(
+                group="agones.dev",
+                version="v1",
+                namespace=self.namespace,
+                plural="gameservers",
+                body=manifest
+            )
             return self.get_container(project_name)
-            
-        except subprocess.CalledProcessError as e:
-            print(f"Compose Deployment Error: {e}")
-            raise Exception("Failed to execute docker-compose deployment.")
+        except ApiException as e:
+            print(f"Kubernetes Deployment Error: {e}")
+            raise Exception("Failed to execute Kubernetes deployment.")

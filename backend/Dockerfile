@@ -23,7 +23,7 @@ FROM python:3.14-alpine
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-RUN apk add --no-cache docker-cli docker-cli-compose libpq
+RUN apk add --no-cache libpq
 
 WORKDIR /app
 

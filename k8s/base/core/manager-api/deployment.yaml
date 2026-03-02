@@ -14,14 +14,27 @@ spec:
       labels:
         app: manager-api
     spec:
+      serviceAccountName: manager-api-sa
       containers:
         - name: api
           image: manager-api-image
           ports:
             - containerPort: 5000
           envFrom:
-            # Pulls in all variables from our generated config and secrets!
             - configMapRef:
                 name: craftcloud-config
             - secretRef:
                 name: craftcloud-secrets
+      initContainers:
+        - name: wait-for-db
+          image: postgres:18-alpine
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for database..."
+              # Note: We use 'user' here because this is the master API account
+              until pg_isready -h postgres-service -U user; do
+                sleep 2
+              done
+              echo "Database is ready!"

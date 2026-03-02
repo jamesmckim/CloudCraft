@@ -30,6 +30,11 @@ spec:
             secretKeyRef:
               name: craftcloud-secrets
               key: DB_PASS 
+        - name: SYNCER_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: craftcloud-secrets
+              key: SYNCER_DB_PASSWORD
         ports:
         - containerPort: 5432
         volumeMounts:

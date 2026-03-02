@@ -16,24 +16,10 @@ spec:
     spec:
       containers:
         - name: worker
-          # Placeholder for Kustomize to replace with your GHCR image
           image: ai-rag-worker-image 
           imagePullPolicy: Always
-          # The CMD from your Dockerfile will automatically run Celery
-          env:
-            - name: REDIS_URL
-              # Points to the K8s service name for your Redis broker
-              value: "redis://redis-broker:6379/0" 
-            - name: QDRANT_URL
-              # Points to the K8s service name for your Vector DB
-              value: "http://qdrant-db:6333" 
-            - name: LLM_URL
-              # UPDATE THIS: K8s needs the actual IP of your host machine running the LLM
-              value: "http://192.168.0.159:1234/v1" 
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: db-secrets
-                  key: database_url
-                  # Optional: Only if your worker actually needs Postgres access. 
-                  # (Your docker-compose passed it, but ai_worker.py doesn't show it being used)
+          envFrom:
+            - configMapRef:
+                name: craftcloud-config
+            - secretRef:
+                name: craftcloud-secrets
