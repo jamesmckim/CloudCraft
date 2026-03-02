@@ -17,8 +17,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --prefix=/install -r requirements.txt
 
-# STAGE 2
-FROM python:3.14-alpine
+# STAGE 2: Base Runtime
+FROM python:3.14-alpine AS base
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -30,8 +30,12 @@ WORKDIR /app
 # Copy the pre-compiled libraries from the builder stage
 COPY --from=builder /install /usr/local
 
+FROM base AS dev
 COPY . .
-
 EXPOSE 5000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
 
+FROM base AS prod
+COPY . .
+EXPOSE 5000
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]

@@ -5,28 +5,23 @@ metadata:
   labels:
     app: craftcloud
   annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.middlewares: craftcloud-system-strip-api@kubernetescrd
 spec:
-  ingressClassName: nginx
-  # This references the TLS certs you will store in config/secret.yaml
-  tls:
-    - hosts:
-        - "localhost" # Replace with your actual domain when moving to prod
-      secretName: gateway-certs 
+  ingressClassName: traefik
   rules:
-    - host: "localhost" # Replace with your actual domain
+    - host: "localhost"
       http:
         paths:
-          - path: /api/?(.*)
-            pathType: ImplementationSpecific
+          - path: /api
+            pathType: Prefix
             backend:
               service:
                 name: manager-api
                 port:
                   number: 5000
-          - path: /()(.*)
-            pathType: ImplementationSpecific
+          - path: /
+            pathType: Prefix
             backend:
               service:
                 name: dashboard

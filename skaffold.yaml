@@ -2,7 +2,10 @@ apiVersion: skaffold/v4beta7
 kind: Config
 metadata:
   name: craftcloud
+
 build:
+  tagPolicy:
+    gitCommit: {}
   artifacts:
     - image: manager-api-image
       context: backend
@@ -29,10 +32,59 @@ build:
       docker:
         dockerfile: Dockerfile
 
-manifests:
-  kustomize:
-    paths:
-      - k8s/overlays/dev 
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      local:
+        push: false
+      artifacts:
+       - image: manager-api-image
+         context: backend
+         docker:
+           dockerfile: Dockerfile
+           target: dev
+         sync:
+           manual:
+             - src: 'app/**/*.py'
+               dest: /app
 
-deploy:
-  kubectl: {}
+       - image: dashboard-image
+         context: webui
+         docker:
+           target: dev
+           dockerfile: Dockerfile
+         sync:
+           manual:
+             - src: 'src/**/*'
+               dest: /app
+             - src: 'index.html'
+               dest: /app
+    manifests:
+      kustomize:
+        paths:
+          - k8s/overlays/dev
+    deploy:
+      kubectl: {}
+
+  - name: prod
+    manifests:
+      kustomize:
+        paths:
+          - k8s/overlays/prod
+    deploy:
+      kubectl: {}
+
+portForward:
+  - resourceType: service
+    resourceName: dashboard
+    namespace: craftcloud-system
+    port: 80
+    address: 127.0.0.1
+    localPort: 8080
+  - resourceType: service
+    resourceName: manager-api
+    namespace: craftcloud-system
+    port: 5000
+    localPort: 5000

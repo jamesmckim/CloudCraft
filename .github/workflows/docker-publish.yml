@@ -28,7 +28,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Images
-        run: |
-          docker compose build
-          docker compose push
+      - name: Setup Skaffold
+        uses: hiberbee/github-action-skaffold@1.26.0
+
+      - name: Build and Push Images with Skaffold
+        run: skaffold build -p prod --default-repo ghcr.io/${{ env.DOCKER_REPO }} --push
