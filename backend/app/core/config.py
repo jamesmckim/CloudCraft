@@ -10,10 +10,8 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str
 
-    # Infrastructure (Docker & Redis)
-    DOCKER_URL: str = "unix://var/run/docker.sock"
-    REDIS_HOST: str = "localhost"
-    REDIS_PORT: int = 6379
+    # Infrastructure (Redis)
+    REDIS_URL: str = "redis://localhost:6379/0"
 
     # Security
     SECRET_KEY: str = "change_this_to_a_secure_random_string"

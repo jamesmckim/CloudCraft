@@ -7,6 +7,8 @@ class GameDeploymentPayload(BaseModel):
     config: dict
     
 class ValheimConfigValidator(BaseModel):
+    is_modded: bool = False
+    mod_urls: Optional[str] = ""
     # Only allow alphanumeric characters, underscores, and hyphens, Max 30 chars.
     VALHEIM_SERVER_NAME: str = Field(..., min_length=3, max_length=30, pattern=r"^[a-zA-Z0-9_\-]+$")
     VALHEIM_WORLD_NAME: str = Field(..., min_length=3, max_length=30, pattern=r"^[a-zA-Z0-9_\-]+$")

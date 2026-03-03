@@ -1,5 +1,5 @@
 # /backend/app/models/models.py
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Text, DateTime
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Text, DateTime, JSON
 from sqlalchemy.sql import func
 
 from app.core.database import Base
@@ -18,9 +18,17 @@ class User(Base):
 class Server(Base):
     __tablename__ = "servers"
     
-    # The Docker container name is used as the primary key
+    # Primary Key - logical server ID
     id = Column(String, primary_key=True) 
     owner_id = Column(Integer, ForeignKey("users.id"))
+    
+    # Store game type and configs to enable redeployment
+    game_id = Column(String)
+    config = Column(JSON)
+    
+    # Ephemeral Pd ID, stored to maintain references to active container
+    active_pod_name = Column(String, nullable=True)
+    
     # Default cost per hour
     hourly_cost = Column(Float, default=0.10) 
 

@@ -1,58 +1,38 @@
 # backend/manager.py
 import os
 import copy
-import yaml
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
 
 # --- 1. LOAD CONFIGURATIONS ---
-# this is messy as hell, but I am tired and want to goto bet
-# the files reside in app.config
-# how this should be handled is with a file reader in the config file
-# that file reader would be imported by the dependancy.py
-# dependacy.py then would inject them into the singleton
-# I would have to update __init__ to accept those files
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_DIR = os.path.join(BASE_DIR, 'config')
-
-TEMPLATE_FILE = os.path.join(CONFIG_DIR, 'templates.yaml')
-SETTINGS_FILE = os.path.join(CONFIG_DIR, 'settings.yaml')
-
-def load_yaml(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            return yaml.safe_load(file) or {}
-    except FileNotFoundError:
-        print(f"Critical Error: Could not find {file_path}")
-        return {}
-
-GAME_TEMPLATES = load_yaml(TEMPLATE_FILE)
-SETTINGS = load_yaml(SETTINGS_FILE)
 
 # --- 2. THE MANAGER (The "Kubernetes-Native" Brain) ---
 class ServerManager:
-    def __init__(self):
+    def __init__(self, game_templates, game_settings):
         try:
             config.load_incluster_config()
         except config.ConfigException:
             config.load_kube_config() # Fallback for local testing
-
+        
+        self.GAME_TEMPLATES = game_templates
+        self.SETTINGS = game_settings
+        
         self.core_v1 = client.CoreV1Api()
         self.custom_api = client.CustomObjectsApi()
         
         # --- NO MORE HARDCODING! ---
         # Fetch from environment variable first, fallback to settings.yaml
-        kube_settings = SETTINGS.get('kubernetes', {})
-        agones_settings = SETTINGS.get('agones', {})
+        kube_settings = self.SETTINGS.get('kubernetes', {})
+        agones_settings = self.SETTINGS.get('agones', {})
         
         self.namespace = os.getenv("NAMESPACE", kube_settings.get('namespace', 'default'))
         self.group = agones_settings.get('group', 'agones.dev')
         self.version = agones_settings.get('version', 'v1')
         self.plural = agones_settings.get('plural', 'gameservers')
 
-    def _ensure_pvc_exists(self, user_id: str, game_id: str):
+    def _ensure_pvc_exists(self, logical_server_id: str):
         """Ensures the user has a permanent hard drive for this specific game."""
-        pvc_name = f"{game_id}-world-pvc-{user_id}"
+        pvc_name = f"world-pvc-{logical_server_id}"
         
         try:
             self.core_v1.read_namespaced_persistent_volume_claim(
@@ -75,19 +55,19 @@ class ServerManager:
                 raise e
         return pvc_name
 
-    def _build_manifest(self, game_id: str, user_id: str, config_data: dict):
+    def _build_manifest(self, game_id: str, user_id: str, config_data: dict, logical_server_id: str, sidecar_token: str):
         """Constructs the Agones GameServer YAML using the Template Registry."""
         # Determine mod state from config (default to vanilla)
         is_modded = config_data.get("is_modded", False)
         mod_state = "modded" if is_modded else "vanilla"
         
         # Fetch the blueprint
-        blueprint = GAME_TEMPLATES.get(game_id, {}).get(mod_state)
+        blueprint = self.GAME_TEMPLATES.get(game_id, {}).get(mod_state)
         if not blueprint:
             raise ValueError(f"No template found for {game_id} ({mod_state})")
 
         # Provision/Fetch the player's storage drive
-        pvc_name = self._ensure_pvc_exists(user_id, game_id)
+        pvc_name = self._ensure_pvc_exists(logical_server_id)
         
         # Merge user config with blueprint defaults
         final_env = copy.deepcopy(blueprint.get("env_defaults", []))
@@ -95,7 +75,7 @@ class ServerManager:
             if k != "is_modded": # Don't pass our internal flag to the game
                 final_env.append({"name": k, "value": str(v)})
         
-        app_settings = SETTINGS.get('app', {})
+        app_settings = self.SETTINGS.get('app', {})
         manager_api_url = os.getenv("MANAGER_API_URL", app_settings.get('manager_api_url', 'http://localhost:5000'))
         
         # 1. Grab the initContainers from the blueprint (if they exist)
@@ -127,7 +107,16 @@ class ServerManager:
                     "command": ["python", "-u", "/app/main.py"],
                     "env": [
                         {"name": "GAME_TYPE", "value": game_id},
-                        {"name": "MANAGER_API_URL", "value": manager_api_url}
+                        {"name": "MANAGER_API_URL", "value": manager_api_url},
+                        {"name": "SIDECAR_API_KEY", "value": sidecar_token},
+                        {
+                            "name": "TARGET_CONTAINER_NAME",
+                            "valueFrom": {
+                                "fieldRef": {
+                                    "fieldPath": "metadata.name"
+                                }
+                            }
+                        }
                     ],
                     "volumeMounts": [
                         {"name": "world-data", "mountPath": "/config", "readOnly": True},
@@ -152,12 +141,14 @@ class ServerManager:
                 "generateName": f"{game_id}-{mod_state}-{user_id}-",
                 "labels": {
                     "craftcloud.role": "game_server",
+                    "craftcloud.server_id": str(logical_server_id),
                     "game": game_id,
                     "mod_state": mod_state,
                     "owner_id": str(user_id)
                 }
             },
             "spec": {
+                "container": "game-engine",
                 "ports": blueprint.get("ports", []),
                 "template": {
                     "spec": manifest_spec_template_spec
@@ -165,11 +156,11 @@ class ServerManager:
             }
         }
 
-    def create_server(self, game_id: str, user_id: str, config_data: dict = None):
+    def create_server(self, game_id: str, user_id: str, logical_server_id: str, sidecar_token: str, config_data: dict = None):
         if config_data is None:
             config_data = {}
             
-        manifest = self._build_manifest(game_id, user_id, config_data)
+        manifest = self._build_manifest(game_id, user_id, config_data, logical_server_id, sidecar_token)
         
         try:
             response = self.custom_api.create_namespaced_custom_object(

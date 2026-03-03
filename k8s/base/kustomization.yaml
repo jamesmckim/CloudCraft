@@ -7,6 +7,7 @@ namespace: craftcloud-system
 # 1. Bring in all the sub-components
 resources:
   - namespace.yaml
+  - core/agones-sdk/rbac-sdk.yaml
   - config/
   - data/postgres/
   - data/redis/
@@ -16,4 +17,13 @@ resources:
   - core/dashboard/
   - core/mod-syncer/
   - core/ai-rag-worker/
-  - games/valheim/
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: sidecar-scripts
+    files:
+      - main.py=core/sidecar-scripts/main.py
+      - probes.py=core/sidecar-scripts/probes.py
+    

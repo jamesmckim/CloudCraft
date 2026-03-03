@@ -4,6 +4,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: manager-api-sa
+  namespace: craftcloud-system
   labels:
     app: manager-api
 
@@ -17,13 +18,16 @@ rules:
   - apiGroups: ["agones.dev"]
     resources: ["gameservers", "fleets"]
     verbs: ["get", "list", "watch", "create", "delete", "patch", "update"]
-
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "create"]
 ---
 # 3. THE STAPLER
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: agones-manager-binding
+  namespace: craftcloud-system
 subjects:
   - kind: ServiceAccount
     name: manager-api-sa
