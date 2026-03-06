@@ -7,11 +7,23 @@ build:
   tagPolicy:
     gitCommit: {}
   artifacts:
-    - image: manager-api-image
-      context: backend
+    # --- New Microservices ---
+    - image: identity-api-image
+      context: backend-identity
       docker:
         dockerfile: Dockerfile
-        
+
+    - image: fleet-api-image
+      context: backend-fleet
+      docker:
+        dockerfile: Dockerfile
+
+    - image: telemetry-api-image
+      context: backend-telemetry
+      docker:
+        dockerfile: Dockerfile
+
+    # --- Existing Artifacts ---
     - image: dashboard-image
       context: webui
       docker:
@@ -40,8 +52,19 @@ profiles:
       local:
         push: false
       artifacts:
-       - image: manager-api-image
-         context: backend
+       # Dev sync for new microservices
+       - image: identity-api-image
+         context: backend-identity
+         docker:
+           dockerfile: Dockerfile
+           target: dev
+         sync:
+           manual:
+             - src: 'app/**/*.py'
+               dest: /app
+               
+       - image: fleet-api-image
+         context: backend-fleet
          docker:
            dockerfile: Dockerfile
            target: dev
@@ -50,6 +73,17 @@ profiles:
              - src: 'app/**/*.py'
                dest: /app
 
+       - image: telemetry-api-image
+         context: backend-telemetry
+         docker:
+           dockerfile: Dockerfile
+           target: dev
+         sync:
+           manual:
+             - src: 'app/**/*.py'
+               dest: /app
+
+       # Existing Dashboard Dev Sync
        - image: dashboard-image
          context: webui
          docker:
@@ -83,8 +117,19 @@ portForward:
     port: 80
     address: 127.0.0.1
     localPort: 8080
+  # Updated Port Forwards for local development testing
   - resourceType: service
-    resourceName: manager-api
+    resourceName: identity-service
     namespace: craftcloud-system
     port: 5000
     localPort: 5000
+  - resourceType: service
+    resourceName: fleet-service
+    namespace: craftcloud-system
+    port: 5000
+    localPort: 5001
+  - resourceType: service
+    resourceName: telemetry-service
+    namespace: craftcloud-system
+    port: 5000
+    localPort: 5002

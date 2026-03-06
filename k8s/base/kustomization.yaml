@@ -13,10 +13,11 @@ resources:
   - data/redis/
   - data/qdrant/
   - core/ingress.yaml
-  - core/manager-api/
+#  - core/manager-api/
   - core/dashboard/
   - core/mod-syncer/
   - core/ai-rag-worker/
+  - core/api/
 
 generatorOptions:
   disableNameSuffixHash: true
