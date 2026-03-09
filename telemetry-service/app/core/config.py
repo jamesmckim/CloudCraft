@@ -1,5 +1,5 @@
 # /app/core/config.py
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # Database & Redis
@@ -9,14 +9,17 @@ class Settings(BaseSettings):
     CELERY_RESULT_BACKEND: str = "redis://telemetry-redis:6379/2"
     
     # Auth & Security
-    JWT_SECRET: str
+    SECRET_KEY: str
     SIDECAR_API_KEY: str
     
     # Telemetry logic
     AI_COOLDOWN_SECONDS: int = 120
     MAX_BUFFER_LINES: int = 50
 
-    class Config:
-        case_sensitive = True
+    model_config = SettingsConfigDict(
+        case_sensitive = True,
+        env_file=".env",
+        extr="ignore"
+    )
 
 settings = Settings()

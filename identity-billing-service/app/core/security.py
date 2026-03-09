@@ -8,9 +8,6 @@ from fastapi.security import OAuth2PasswordBearer
 
 from app.core.config import settings
 
-if not settings.SECRET_KEY or settings.SECRET_KEY == "change_this_to_a_secure_random_string":
-    print("WARNING: Using default or missing SECRET_KEY. Not safe for production!")
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

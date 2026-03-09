@@ -1,5 +1,5 @@
 # app/core/config.py
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # App Config
@@ -20,9 +20,10 @@ class Settings(BaseSettings):
     PAYPAL_CLIENT_SECRET: str | None = None
     PAYPAL_MODE: str = "sandbox"  # 'sandbox' or 'live'
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = SettingsConfigDict(
+        env_file = ".env",
+        case_sensitive = True,
         extra = "ignore"
+    )
 
 settings = Settings()

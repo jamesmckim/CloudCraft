@@ -9,17 +9,17 @@ build:
   artifacts:
     # --- New Microservices ---
     - image: identity-api-image
-      context: backend-identity
+      context: identity-billing-service
       docker:
         dockerfile: Dockerfile
 
     - image: fleet-api-image
-      context: backend-fleet
+      context: fleet-manager
       docker:
         dockerfile: Dockerfile
 
     - image: telemetry-api-image
-      context: backend-telemetry
+      context: telemetry-service
       docker:
         dockerfile: Dockerfile
 
@@ -54,7 +54,7 @@ profiles:
       artifacts:
        # Dev sync for new microservices
        - image: identity-api-image
-         context: backend-identity
+         context: identity-billing-service
          docker:
            dockerfile: Dockerfile
            target: dev
@@ -64,7 +64,7 @@ profiles:
                dest: /app
                
        - image: fleet-api-image
-         context: backend-fleet
+         context: fleet-manager
          docker:
            dockerfile: Dockerfile
            target: dev
@@ -74,7 +74,7 @@ profiles:
                dest: /app
 
        - image: telemetry-api-image
-         context: backend-telemetry
+         context: telemetry-service
          docker:
            dockerfile: Dockerfile
            target: dev
@@ -99,6 +99,8 @@ profiles:
       kustomize:
         paths:
           - k8s/overlays/dev
+        buildArgs:
+          - "--enable-alpha-plugins"
     deploy:
       kubectl: {}
 
@@ -107,6 +109,8 @@ profiles:
       kustomize:
         paths:
           - k8s/overlays/prod
+        buildArgs:
+          - "--enable-alpha-plugins"
     deploy:
       kubectl: {}
 

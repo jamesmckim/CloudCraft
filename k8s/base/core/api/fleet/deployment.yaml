@@ -25,15 +25,27 @@ spec:
           env:
             - name: ENVIRONMENT
               value: "development"
+            - name: IDENTITY_SERVICE_URL
+              value: "https://identity-service:5000"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: fleet-secrets
+                  key: DATABASE_URL
       initContainers:
         - name: wait-for-db
           image: postgres:18-alpine
+          env:
+            - name: PGHOST
+              value: "postgres-service"
+            - name: PGUSER
+              value: "user"
           command:
             - sh
             - -c
             - |
               echo "Waiting for database..."
-              until pg_isready -h postgres-service -U user; do
+              until pg_isready; do
                 sleep 2
               done
               echo "Database is ready!"

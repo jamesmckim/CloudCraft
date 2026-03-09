@@ -28,12 +28,12 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: craftcloud-secrets
+              name: postgres-secrets
               key: DB_PASS 
         - name: SYNCER_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: craftcloud-secrets
+              name: postgres-secrets
               key: SYNCER_DB_PASSWORD
         ports:
         - containerPort: 5432

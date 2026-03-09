@@ -9,9 +9,3 @@ configMapGenerator:
       - LLM_URL=http://host.docker.internal:11434/v1
       - QDRANT_URL=http://qdrant-db:6333
       - REDIS_URL=redis://redis-broker:6379/0
-
-# This generates a Secret named 'craftcloud-secrets'
-secretGenerator:
-  - name: craftcloud-secrets
-    envs:
-      - secrets.env # Kustomize will read from k8s/base/config/secrets.env

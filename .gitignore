@@ -19,6 +19,9 @@ __pycache__/
 webui/node_modules/
 npm-debug.log
 
+# Ignore decrypted SOPS files
+*.plain.yaml
+
 # --- OS Generated Files ---
 .DS_Store
 Thumbs.db
