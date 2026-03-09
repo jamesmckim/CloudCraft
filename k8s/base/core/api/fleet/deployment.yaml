@@ -32,6 +32,11 @@ spec:
                 secretKeyRef:
                   name: fleet-secrets
                   key: DATABASE_URL
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fleet-secrets
+                  key: SECRET_KEY
       initContainers:
         - name: wait-for-db
           image: postgres:18-alpine

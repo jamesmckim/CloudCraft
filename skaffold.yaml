@@ -99,8 +99,6 @@ profiles:
       kustomize:
         paths:
           - k8s/overlays/dev
-        buildArgs:
-          - "--enable-alpha-plugins"
     deploy:
       kubectl: {}
 
