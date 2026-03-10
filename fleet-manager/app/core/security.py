@@ -1,19 +1,15 @@
-# /app/core/security.py
-import os
+# /fleet-manager/app/core/security.py
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
+from app.core.config import settings
+
 # This MUST match the secret key used by your Identity Service
-SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    raise RuntimeError("SECRET_KEY not found! The server cannot start safely.")
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
 
-ALGORITHM = "HS256"
-
-# Points to the Identity Service token URL for Swagger UI compatibility
-IDENTITY_URL = os.getenv("IDENTITY_SERVICE_URL", "http://localhost:8000")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{IDENTITY_URL}/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.IDENTITY_SERVICE_URL}/auth/token")
 
 async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:
     """Validates the JWT and extracts the user ID."""

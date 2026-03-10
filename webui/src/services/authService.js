@@ -22,7 +22,7 @@ const Auth = {
         params.append('username', username);
         params.append('password', password);
 
-        const response = await fetch('/api/token', {
+        const response = await fetch('/api/auth/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: params
@@ -39,7 +39,7 @@ const Auth = {
 	
 	// --- REGISTRATION METHOD ---
     async register(username, email, password) {
-        const response = await fetch('/api/register', { // Assuming backend endpoint is /register
+        const response = await fetch('/api/auth/register', { // Assuming backend endpoint is /register
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 

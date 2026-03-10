@@ -1,4 +1,4 @@
-# /app/services/incident_service.py
+# /telemetry-service/app/services/incident_service.py
 from celery import Celery
 from celery.result import AsyncResult
 from fastapi import HTTPException

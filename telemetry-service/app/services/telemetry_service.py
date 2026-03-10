@@ -1,4 +1,4 @@
-# /app/services/telemetry_service.py
+# /telemetry-service/app/services/telemetry_service.py
 from typing import List
 from redis import Redis
 from celery import Celery

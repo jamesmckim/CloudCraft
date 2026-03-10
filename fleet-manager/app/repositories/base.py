@@ -1,4 +1,4 @@
-# /app/repositories/base.py
+# /fleet-manager/app/repositories/base.py
 from typing import Generic, TypeVar, Type, Optional, Any
 from sqlalchemy.orm import Session
 from app.core.database import Base

@@ -1,4 +1,4 @@
-# app/models/user.py
+# /identity-billing-service/app/models/user.py
 from sqlalchemy import Column, Integer, String, Float
 from app.core.database import Base
 

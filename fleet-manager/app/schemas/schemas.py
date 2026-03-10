@@ -1,4 +1,4 @@
-# /backend/app/schemas/schemas.py
+# /fleet-manager/app/schemas/schemas.py
 from pydantic import BaseModel, Field, model_validator, ConfigDict
 from typing import Optional, List, Literal
 

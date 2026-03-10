@@ -1,8 +1,7 @@
-# backend/app/services/server_service.py
+# /fleet-manager/app/services/server_service.py
 import uuid
 import secrets
 import os
-import httpx
 from fastapi import HTTPException, status
 from redis import Redis
 from typing import TYPE_CHECKING
@@ -12,33 +11,20 @@ if TYPE_CHECKING:
     
 from app.repositories.server_repo import ServerRepository
 from app.schemas.schemas import ValheimConfigValidator
+from app.clients.identity_client import IdentityServiceClient
 
 class ServerService:
     def __init__(
         self, 
         server_repo: ServerRepository,
         manager: "ServerManager", 
-        redis: Redis
+        redis: Redis,
+        identity_client: IdentityServiceClient
     ):
         self.server_repo = server_repo
         self.manager = manager
         self.redis = redis
-        # Fetch the internal Identity Service URL from the environment
-        self.identity_api_url = os.getenv("IDENTITY_SERVICE_URL", "http://identity-service:8000/api")
-
-    async def _get_user_credits(self, user_id: str) -> float:
-        """Helper method to fetch user credits from the Identity Service asynchronously."""
-        async with httpx.AsyncClient() as client:
-            try:
-                response = await client.get(f"{self.identity_api_url}/users/{user_id}/credits")
-                if response.status_code == 404:
-                    raise HTTPException(status_code=404, detail="User not found in Identity Service.")
-                response.raise_for_status()
-                data = response.json()
-                return data.get("credits", 0.0)
-            except httpx.RequestError as e:
-                # Log the exception (e) in a real environment
-                raise HTTPException(status_code=503, detail="Identity service is currently unavailable.")
+        self.identity_client = identity_client
 
     def list_servers(self):
         """Wraps the manager's list function."""
@@ -89,8 +75,8 @@ class ServerService:
             self.server_repo.update(server_record, {"active_pod_name": None})
 
         elif action == "start":
-            # 1. Async Credit Check via internal microservice API
-            credits = await self._get_user_credits(user_id)
+            # 1. Async Credit Check via injected client
+            credits = await self.identity_client.get_user_credits(user_id)
             if credits <= 1.0:
                 raise HTTPException(status_code=402, detail="Insufficient credits.")
             
@@ -124,8 +110,8 @@ class ServerService:
         except ValueError:
             raise HTTPException(status_code=400, detail="Invalid user ID format.")
         
-        # 1. Async Credit Check via internal microservice API
-        credits = await self._get_user_credits(user_id)
+        # 1. Async Credit Check via injected client
+        credits = await self.identity_client.get_user_credits(user_id)
         if credits < 5.0:
             raise HTTPException(status_code=402, detail="Insufficient credits.")
         

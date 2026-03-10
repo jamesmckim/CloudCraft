@@ -1,4 +1,4 @@
-# app/services/auth_service.py
+# /identity-billing-service/app/services/auth_service.py
 from fastapi import HTTPException, status
 from sqlalchemy.exc import SQLAlchemyError
 

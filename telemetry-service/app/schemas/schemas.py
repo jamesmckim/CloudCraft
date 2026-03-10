@@ -1,4 +1,4 @@
-# /app/schemas/schemas.py
+# /telemetry-service/app/schemas/schemas.py
 from typing import List
 from pydantic import BaseModel
 

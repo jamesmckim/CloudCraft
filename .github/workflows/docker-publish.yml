@@ -28,8 +28,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Skaffold
-        uses: hiberbee/github-action-skaffold@1.26.0
+      - name: Install Latest Skaffold
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+          sudo install skaffold /usr/local/bin/
 
       - name: Build and Push Images with Skaffold
         run: skaffold build -p prod --default-repo ghcr.io/${{ env.DOCKER_REPO }} --push

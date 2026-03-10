@@ -1,4 +1,4 @@
-# /backend/app/models/models.py
+# /fleet-manager/app/models/models.py
 from sqlalchemy import Column, Integer, String, Float, Text, DateTime, JSON
 from sqlalchemy.sql import func
 

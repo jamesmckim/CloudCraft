@@ -1,4 +1,4 @@
-# /app/repositories/server_repo.py
+# /fleet-manager/app/repositories/server_repo.py
 from sqlalchemy.orm import Session
 from app.models.models import Server
 from app.repositories.base import BaseRepository

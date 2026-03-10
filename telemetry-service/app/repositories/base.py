@@ -1,4 +1,4 @@
-# /app/repositories/base.py
+# /telemetry-service/app/repositories/base.py
 from typing import Generic, TypeVar, Type
 from sqlalchemy.orm import Session
 

@@ -1,4 +1,4 @@
-# /app/api/dependencies.py
+# /telemetry-service/app/api/dependencies.py
 import os
 from fastapi import Depends
 from sqlalchemy.orm import Session

@@ -1,4 +1,4 @@
-# /backend/config/packages.py
+# /identity-billing-service/config/packages.py
 
 CREDIT_PACKAGES = {
     "pack_starter": {

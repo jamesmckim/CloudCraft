@@ -1,10 +1,8 @@
-# /main.py
+# /fleet-manager/main.py
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import servers
 from app.core.database import engine, Base
-
-# Create the database tables if they don't exist
-# (In production, you should use Alembic for migrations instead of this)
 from app.models import models
 Base.metadata.create_all(bind=engine)
 
@@ -14,8 +12,16 @@ app = FastAPI(
     version="1.0.0"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # In production, replace with settings.DOMAIN_URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Register the server routes
-app.include_router(servers.router, prefix="/api/servers")
+app.include_router(servers.router, prefix="/servers")
 
 @app.get("/health", tags=["System"])
 def health_check():

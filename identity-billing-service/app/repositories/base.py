@@ -1,4 +1,4 @@
-# app/repositories/base.py
+# /identity-billing-service/app/repositories/base.py
 from typing import TypeVar, Generic, Type
 from sqlalchemy.orm import Session
 from app.core.database import Base

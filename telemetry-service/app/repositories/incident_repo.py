@@ -1,4 +1,4 @@
-# /app/repositories/incident_repo.py
+# /telemetry-service/app/repositories/incident_repo.py
 from typing import List
 from sqlalchemy.orm import Session
 

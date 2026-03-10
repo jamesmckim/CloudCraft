@@ -1,4 +1,4 @@
-# /app/models/models.py
+# /telemetry-service/app/models/models.py
 from sqlalchemy import Column, Integer, String, Text, DateTime
 from sqlalchemy.sql import func
 from app.core.database import Base

@@ -1,4 +1,4 @@
-# /backend/app/payments/stripe_provider.py
+# /identity-billing-service/app/payments/stripe_provider.py
 import stripe
 import os
 

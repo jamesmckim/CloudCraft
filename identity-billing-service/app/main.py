@@ -1,11 +1,11 @@
-# app/main.py
+# /identity-billing-service/app/main.py
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import init_db
-from app.api.routers import auth, payments
+from app.api.routers import auth, payments, users
 
 # --- Lifespan Events ---
 @asynccontextmanager
@@ -38,8 +38,9 @@ app.add_middleware(
 
 # --- Router Registration ---
 # We use prefixes here to keep the API URLs clean and organized
-app.include_router(auth.router, prefix="/api/v1/auth")
-app.include_router(payments.router, prefix="/api/v1/payments")
+app.include_router(auth.router, prefix="/auth")
+app.include_router(payments.router, prefix="/payments")
+app.include_router(users.router, prefix="/users")
 
 @app.get("/health", tags=["System"])
 async def health_check():

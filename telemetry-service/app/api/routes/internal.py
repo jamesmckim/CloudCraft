@@ -1,4 +1,4 @@
-# /app/api/routes/internal.py
+# /telemetry-service/app/api/routes/internal.py
 import os
 from fastapi import APIRouter, Depends, Header, HTTPException, status
 

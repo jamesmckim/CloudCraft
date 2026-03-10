@@ -1,4 +1,4 @@
-# /app/api/routes/incidents.py
+# /telemetry-service/app/api/routes/incidents.py
 from fastapi import APIRouter, Depends
 
 from app.services.incident_service import IncidentService
@@ -7,7 +7,7 @@ from app.core.auth import get_current_user_stateless
 
 router = APIRouter(tags=["Incidents"])
 
-@router.get("/{server_id}/incidents")
+@router.get("/{server_id}")
 def get_server_incidents(
     server_id: str, 
     service: IncidentService = Depends(get_incident_service),
@@ -15,7 +15,7 @@ def get_server_incidents(
 ):
     return service.get_server_incidents(server_id)
 
-@router.get("/{server_id}/incidents/resolve/{task_id}")
+@router.get("/{server_id}/resolve/{task_id}")
 def resolve_ai_incident(
     server_id: str, 
     task_id: str, 

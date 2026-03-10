@@ -1,9 +1,10 @@
-# backend/manager.py
+# /fleet-manager/manager.py
 import os
 import copy
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
 
+from app.core.config import settings
 # --- 1. LOAD CONFIGURATIONS ---
 
 # --- 2. THE MANAGER (The "Kubernetes-Native" Brain) ---
@@ -16,16 +17,13 @@ class ServerManager:
         
         self.GAME_TEMPLATES = game_templates
         self.SETTINGS = game_settings
-        
         self.core_v1 = client.CoreV1Api()
         self.custom_api = client.CustomObjectsApi()
         
-        # --- NO MORE HARDCODING! ---
-        # Fetch from environment variable first, fallback to settings.yaml
-        kube_settings = self.SETTINGS.get('kubernetes', {})
-        agones_settings = self.SETTINGS.get('agones', {})
+        self.namespace = settings.NAMESPACE
         
-        self.namespace = os.getenv("NAMESPACE", kube_settings.get('namespace', 'default'))
+        agones_settings = self.SETTINGS.get('agones', {})
+
         self.group = agones_settings.get('group', 'agones.dev')
         self.version = agones_settings.get('version', 'v1')
         self.plural = agones_settings.get('plural', 'gameservers')
@@ -76,7 +74,7 @@ class ServerManager:
                 final_env.append({"name": k, "value": str(v)})
         
         app_settings = self.SETTINGS.get('app', {})
-        manager_api_url = os.getenv("MANAGER_API_URL", app_settings.get('manager_api_url', 'http://localhost:5000'))
+        manager_api_url = settings.MANAGER_API_URL
         
         # 1. Grab the initContainers from the blueprint (if they exist)
         init_containers = copy.deepcopy(blueprint.get("initContainers", []))
