@@ -12,7 +12,7 @@ resources:
   - data/postgres/
   - data/redis/
   - data/qdrant/
-  - core/ingress.yaml
+#  - core/ingress.yaml
 #  - core/manager-api/
   - core/dashboard/
   - core/mod-syncer/

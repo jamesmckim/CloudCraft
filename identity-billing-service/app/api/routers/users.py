@@ -1,5 +1,5 @@
 # /identity-billing-service/app/api/routers/users.py
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -29,9 +29,16 @@ async def get_user_profile(
 
 @router.get("/{user_id}/credits") # This creates the /users/{user_id}/credits path
 async def get_user_credits(
-    user_id: int, 
+    user_id: int,
+    requesting_user_id: str = Depends(get_current_user_id),
     db: Session = Depends(get_db)
 ):
+    if str(user_id) != str(requesting_user_id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="Not authorized to view this wallet."
+        )
+    
     repo = UserRepository(db)
     user = repo.get_by_id(user_id)
     

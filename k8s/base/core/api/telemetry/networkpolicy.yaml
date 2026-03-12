@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: telemetry-allow-traefik-and-sidecars
+spec:
+  podSelector:
+    matchLabels:
+      app: telemetry-service
+  policyTypes:
+    - Ingress
+  ingress:
+    # 1. Allow HTTP traffic from the API Gateway
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+    # 2. Allow internal traffic from Agones game sidecars
+    - from:
+        - podSelector:
+            matchLabels:
+              # Must match the label you apply to your Agones Fleet spec
+              role: game-sidecar

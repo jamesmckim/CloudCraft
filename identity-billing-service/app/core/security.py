@@ -3,7 +3,7 @@ import bcrypt
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Header
 from fastapi.security import OAuth2PasswordBearer
 
 from app.core.config import settings
@@ -33,8 +33,11 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
-# --- Dependency to protect routes ---
-async def get_current_user_id(token: str = Depends(oauth2_scheme)):
+async def verify_and_decode_jwt(token: str = Depends(oauth2_scheme)):
+    """
+    Used exclusively by the Identity Service's /verify endpoint to 
+    validate the token and return the user ID to Traefik.
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -48,3 +51,16 @@ async def get_current_user_id(token: str = Depends(oauth2_scheme)):
         return user_id
     except JWTError:
         raise credentials_exception
+
+# --- UPDATED: Standard Dependency for Protected Routes ---
+async def get_current_user_id(x_user_id: str = Header(None, alias="X-User-ID")):
+    """
+    Used by all microservices to get the user ID injected by the API Gateway.
+    Bypasses token decoding entirely.
+    """
+    if not x_user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized: Missing identity context"
+        )
+    return x_user_id

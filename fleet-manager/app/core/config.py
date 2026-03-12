@@ -15,9 +15,6 @@ class Settings(BaseSettings):
     # Database & Security
     DATABASE_URL: str
     
-    SECRET_KEY: str
-    ALGORITHM: str = "HS256"
-    
     NAMESPACE: str = "default"
     
     model_config = SettingsConfigDict(
