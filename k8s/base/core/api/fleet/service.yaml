@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: fleet-service
+  namespace: craftcloud-system
 spec:
   selector:
     app: fleet-service

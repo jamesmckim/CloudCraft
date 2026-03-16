@@ -1,5 +1,6 @@
 # 
-FROM python:3.14.1-alpine3.23
+ARG REGISTRY=""
+FROM ${REGISTRY}python:3.14.1-alpine3.23
 
 WORKDIR /app
 

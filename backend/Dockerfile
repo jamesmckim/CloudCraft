@@ -18,7 +18,7 @@ COPY requirements.txt .
 RUN pip install --prefix=/install -r requirements.txt
 
 # STAGE 2: Base Runtime
-FROM python:3.14-alpine AS base
+FROM ${REGISTRY}python:3.14-alpine AS base
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1

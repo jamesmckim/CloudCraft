@@ -1,5 +1,6 @@
 # STAGE 1: Build
-FROM python:3.14-alpine AS builder
+ARG REGISTRY=""
+FROM ${REGISTRY}python:3.14-alpine AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PIP_NO_CACHE_DIR=1
@@ -19,7 +20,7 @@ COPY requirements.txt .
 RUN pip install --prefix=/install -r requirements.txt
 
 # STAGE 2: Base Runtime
-FROM python:3.14-alpine AS base
+FROM ${REGISTRY}python:3.14-alpine AS base
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1

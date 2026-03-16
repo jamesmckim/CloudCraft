@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # Database & Security
     DATABASE_URL: str
     
-    NAMESPACE: str = "default"
+    NAMESPACE: str = "valheim-workloads"
     
     model_config = SettingsConfigDict(
         env_file = ".env",

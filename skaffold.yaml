@@ -7,7 +7,6 @@ build:
   tagPolicy:
     gitCommit: {}
   artifacts:
-    # --- New Microservices ---
     - image: identity-api-image
       context: identity-billing-service
       docker:
@@ -23,7 +22,6 @@ build:
       docker:
         dockerfile: Dockerfile
 
-    # --- Existing Artifacts ---
     - image: dashboard-image
       context: webui
       docker:
@@ -45,14 +43,37 @@ build:
         dockerfile: Dockerfile
 
 profiles:
+  - name: offline
+    build:
+      artifacts:
+        - image: identity-api-image
+          context: identity-billing-service
+          docker:
+            buildArgs:
+              REGISTRY: "localhost:5000/"
+        - image: fleet-api-image
+          context: fleet-manager
+          docker:
+            buildArgs:
+              REGISTRY: "localhost:5000/"
+        - image: telemetry-api-image
+          context: telemetry-service
+          docker:
+            buildArgs:
+              REGISTRY: "localhost:5000/"
+        - image: dashboard-image
+          context: webui
+          docker:
+            buildArgs:
+              REGISTRY: "localhost:5000/"
   - name: dev
     activation:
       - command: dev
     build:
       local:
         push: false
+        useDockerCLI: true
       artifacts:
-       # Dev sync for new microservices
        - image: identity-api-image
          context: identity-billing-service
          docker:
@@ -83,7 +104,6 @@ profiles:
              - src: 'app/**/*.py'
                dest: /app
 
-       # Existing Dashboard Dev Sync
        - image: dashboard-image
          context: webui
          docker:
@@ -96,6 +116,8 @@ profiles:
              - src: 'index.html'
                dest: /app
     manifests:
+      rawYaml:
+        - k8s/base/namespace.yaml
       kustomize:
         paths:
           - k8s/overlays/dev
@@ -119,7 +141,6 @@ portForward:
     port: 80
     address: 127.0.0.1
     localPort: 8080
-  # Updated Port Forwards for local development testing
   - resourceType: service
     resourceName: identity-service
     namespace: craftcloud-system

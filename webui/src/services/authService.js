@@ -1,6 +1,6 @@
 // webui/src/services/authService.js
 const Auth = {
-    // 1. Storage Helpers
+    // Storage Helpers
     saveToken(token) {
         localStorage.setItem('craftcloud_token', token);
     },
@@ -15,9 +15,7 @@ const Auth = {
         window.location.href = '/';
     },
 
-    // 2. THE LOGIN HANDSHAKE
     async login(username, password) {
-        // FastAPI requires 'application/x-www-form-urlencoded' for /token
         const params = new URLSearchParams();
         params.append('username', username);
         params.append('password', password);
@@ -37,9 +35,8 @@ const Auth = {
         return data;
     },
 	
-	// --- REGISTRATION METHOD ---
     async register(username, email, password) {
-        const response = await fetch('/api/auth/register', { // Assuming backend endpoint is /register
+        const response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -57,7 +54,7 @@ const Auth = {
         return await response.json();
     },
 
-    // 3. SECURE API CALLER
+    // SECURE API CALLER
     async call(endpoint, options = {}) {
         const token = this.getToken();
 		

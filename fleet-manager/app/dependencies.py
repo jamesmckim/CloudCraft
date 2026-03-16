@@ -9,7 +9,7 @@ from app.core.database import get_db, settings
 from app.repositories.server_repo import ServerRepository
 from app.services.server_service import ServerService
 from app.clients.identity_client import IdentityServiceClient
-
+from app.config.reader import GAME_TEMPLATES, SETTINGS
 
 def get_redis() -> Redis:
     return Redis(
@@ -20,7 +20,10 @@ def get_redis() -> Redis:
     )
 
 def get_server_manager() -> ServerManager:
-    return ServerManager(game_templates={}, game_settings={})
+    return ServerManager(
+        game_templates=GAME_TEMPLATES,
+        game_settings={}
+    )
 
 def get_server_repo(db: Session = Depends(get_db)) -> ServerRepository:
     return ServerRepository(db)

@@ -11,3 +11,4 @@ redis
 httpx
 psycopg2-binary
 pydantic_settings
+pyyaml

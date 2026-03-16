@@ -1,6 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: craftcloud-system
+
 # This generates a ConfigMap named 'craftcloud-config'
 configMapGenerator:
   - name: craftcloud-config

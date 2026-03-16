@@ -1,12 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# Set a common namespace for all base resources
-namespace: craftcloud-system
-
 # 1. Bring in all the sub-components
 resources:
-  - namespace.yaml
   - core/agones-sdk/rbac-sdk.yaml
   - config/
   - data/postgres/
@@ -24,6 +20,7 @@ generatorOptions:
 
 configMapGenerator:
   - name: sidecar-scripts
+    namespace: craftcloud-system
     files:
       - main.py=core/sidecar-scripts/main.py
       - probes.py=core/sidecar-scripts/probes.py

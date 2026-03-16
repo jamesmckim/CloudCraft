@@ -1,5 +1,6 @@
 # backend/Dockerfile.worker
-FROM python:3.14-slim
+ARG REGISTRY=""
+FROM ${REGISTRY}python:3.14-slim
 
 # Prevent Python from writing .pyc files and keep stdout unbuffered for real-time logs
 ENV PYTHONDONTWRITEBYTECODE=1
