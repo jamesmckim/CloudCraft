@@ -11,10 +11,9 @@ flowchart LR
   E@{ shape: rect, label: "Telemetry Service" }
   F@{ shape: processes, label: "Gamer Servers" }
   G@{ shape: cyl, label: "mongoDB" }
-  H@{ shape: cloud, label: "internet" }
   U@{ shape: circle, label: "👤 User"}
 A --> |HTTP| B;
-A <--> |UDP| H;
+A <--> |UDP| F;
 B --> C;
 B --> D;
 B --> E;
