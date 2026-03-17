@@ -17,7 +17,11 @@ graph LR
     fleet_manager[fleet-manager]
     db_main[(Main Database)]
     db_session[(Game Session DB)]
-
+    flowchart TB
+    subgraph Card Stack
+        direction TB
+        Card1[Card 1] ~~~ Card2[Card 2] ~~~ Card3[Card 3]
+    end
     %% Connections and Protocols
     user --> lb
     lb -->|UDP| agones
