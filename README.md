@@ -15,11 +15,11 @@ flowchart LR
   U@{ shape: circle, label: "👤 User"}
 A --> |HTTP| B;
 A <--> |UDP| H;
-A <-.- U;
 B --> C;
 B --> D;
 B --> E;
 C --> F;
 C <--> G;
 D <--> G;
-E <-- F;
+F --> E;
+U -.-> A;
