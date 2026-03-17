@@ -6,7 +6,7 @@ import urllib.error
 from probes import get_probe
 
 # Config from Env
-TARGET = os.getenv('TARGET_CONTAINER_NAME')
+SERVER_UUID = os.getenv('SERVER_UUID')
 GAME_TYPE = os.getenv('GAME_TYPE', 'generic')
 API_URL = os.getenv('MANAGER_API_URL')
 THRESHOLD = int(os.getenv('IDLE_THRESHOLD_MINUTES', 15)) * 60 
@@ -22,7 +22,7 @@ sleep_secs = 2
 is_ready = False
 
 def send_manager_request(endpoint, payload=None):
-    url = f"{API_URL}/internal/servers/{TARGET}/{endpoint}"
+    url = f"{API_URL}/internal/servers/{SERVER_UUID}/{endpoint}"
     try:
         req = urllib.request.Request(url, method='POST')
         req.add_header('X-Sidecar-Token', SIDECAR_API_KEY)

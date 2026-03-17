@@ -4,13 +4,26 @@ export class ServerGridView {
         this.grid = document.getElementById('server-grid');
     }
 
-    renderServers(servers, onAction) {
+    renderServers(servers, onAction, pendingStates = new Map()) {
         this.grid.innerHTML = '';
 
         servers.forEach(server => {
             const isActive = server.status === 'online';
+			const pendingState = pendingStates.get(server.id);
+			const isLocked = pendingState !== undefined;
+			
+			let btnText = isActive ? 'Stop' : 'Start';
+			let btnClass = isActive ? 'btn-stop' : 'btn-start';
+			
+			if (pendingState === 'starting') {
+				btnText = 'Booting...';
+				btnClass = 'btn-start';
+			} else if (pendingState === 'stopping') {
+				btnText = 'Stopping...';
+				btnClass = 'btn-stop';
+			}
+			
             const card = document.createElement('section');
-            
 			card.className = 'server-card';
 			card.dataset.serverId = server.id; // Store ID for reference
             
@@ -23,7 +36,6 @@ export class ServerGridView {
 					<div class="stat-group">
 						<label>Players Online: <strong>${isActive ? server.players : 0}</strong></label>
 					</div>
-
 					<div class="stat-group">
 						<label>CPU: ${isActive ? server.cpu.toFixed(1) + '%' : 'N/A'}</label>
 						<div class="progress-bar"><div style="width: ${server.cpu}%"></div></div>
@@ -34,17 +46,14 @@ export class ServerGridView {
 					</div>
 				</div>
 				<div class="card-controls">
-                    <button class="action-btn ${isActive ? 'btn-stop' : 'btn-start'}">
-                        ${isActive ? 'Stop' : 'Start'}
+                    <button class="action-btn ${btnClass}" ${isLocked ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                        ${btnText}
                     </button>
                     <button class="btn-settings">Settings</button>
                 </div>
 			`;
 
-            // Attach listener via the passed 'onAction' handler
            const actionBtn = card.querySelector('.action-btn');
-        
-			// Use the handler passed from the controller
 			actionBtn.addEventListener('click', () => {
 				onAction(server.id, server.status);
 			});

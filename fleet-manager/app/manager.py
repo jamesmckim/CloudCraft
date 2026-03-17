@@ -107,6 +107,7 @@ class ServerManager:
                         {"name": "GAME_TYPE", "value": game_id},
                         {"name": "MANAGER_API_URL", "value": manager_api_url},
                         {"name": "SIDECAR_API_KEY", "value": sidecar_token},
+                        {"name": "SERVER_UUID", "value": str(logical_server_id)},
                         {
                             "name": "TARGET_CONTAINER_NAME",
                             "valueFrom": {
@@ -206,6 +207,25 @@ class ServerManager:
         except ApiException as e:
             if e.status != 404:
                 print(f"Error stopping server: {e}")
+    
+    def delete_server_and_data(self, server_id: str, logical_server_id: str):
+        """Stops the game server and permanently deletes the world data (PVC)."""
+        """ Not Yet implemented """
+        self.stop_server(server_id)
+        
+        pvc_name = f"world-pvc-{logical_server_id}"
+        try:
+            print(f"Permanently deleting storage volume: {pvc_name}")
+            self.core_v1.delete_namespaced_persistent_volume_claim(
+                name=pvc_name, 
+                namespace=self.namespace
+            )
+        except ApiException as e:
+            if e.status == 404:
+                print(f"Volume {pvc_name} already deleted or not found.")
+            else:
+                print(f"Error deleting PVC {pvc_name}: {e}")
+                raise e
 
     def list_all_servers(self):
         server_list = []

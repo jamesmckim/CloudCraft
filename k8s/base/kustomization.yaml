@@ -20,7 +20,7 @@ generatorOptions:
 
 configMapGenerator:
   - name: sidecar-scripts
-    namespace: craftcloud-system
+    namespace: valheim-workloads
     files:
       - main.py=core/sidecar-scripts/main.py
       - probes.py=core/sidecar-scripts/probes.py

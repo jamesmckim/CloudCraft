@@ -4,31 +4,37 @@ export class DashboardController {
         this.model = model;
         this.view = view;
 		this.navView = navView;
+		this.pendingStates = new Map();
+		this.currentServers = [];
     }
 
     async refresh() {
         try {
-            // FIRE BOTH REQUESTS AT THE SAME TIME
-            // This prevents a server-list crash from stopping the profile fetch!
             const [serverList, user] = await Promise.all([
-				this.model.getAllServers().catch(() => []), // Fallback to empty array if fails
+				this.model.getAllServers().catch(() => []),
 				this.model.getProfile()
             ]);
 			
 			this.updateUserUI(user);
 			
-            // Fetch details for EACH server
             if (serverList.length > 0) {
                 const detailPromises = serverList.map(server => 
                     this.model.getServerDetails(server.id)
                 );
-                const serversWithStats = await Promise.all(detailPromises);
+                this.currentServers = await Promise.all(detailPromises);
                 
-                // Render the grid
-                this.view.renderServers(serversWithStats, this.handleServerAction.bind(this));
+				this.currentServers.forEach(server => {
+                    const pending = this.pendingStates.get(server.id);
+                    if (pending === 'starting' && server.status === 'online') {
+                        this.pendingStates.delete(server.id);
+                    } else if (pending === 'stopping' && server.status === 'offline') {
+                        this.pendingStates.delete(server.id);
+                    }
+                });
+				
+                this.view.renderServers(this.currentServers, this.handleServerAction.bind(this), this.pendingStates);
             } else {
-                // Render an empty grid or "No servers" message
-                this.view.renderServers([], this.handleServerAction.bind(this));
+                this.view.renderServers([], this.handleServerAction.bind(this), this.pendingStates);
             }
 
         } catch (err) {
@@ -43,11 +49,22 @@ export class DashboardController {
     }
 
     async handleServerAction(serverId, currentStatus) {
+        if (this.pendingStates.has(serverId)) return;
+
         try {
             const action = (currentStatus === 'online') ? 'stop' : 'start';
+            
+            // 2. Mark as pending and immediately lock the UI
+            this.pendingStates.set(serverId, action === 'start' ? 'starting' : 'stopping');
+            this.view.renderServers(this.currentServers, this.handleServerAction.bind(this), this.pendingStates);
+
+            // 3. Send the command to the backend
             await this.model.sendPowerAction(serverId, action);
             await this.refresh(); 
         } catch (err) {
+            // 4. If it fails (e.g., out of credits), unlock the button so they can try again
+            this.pendingStates.delete(serverId);
+            this.refresh();
             alert(`Action failed: ${err.message}`);
         }
     }

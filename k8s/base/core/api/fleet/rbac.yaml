@@ -5,34 +5,3 @@ metadata:
   namespace: craftcloud-system
   labels:
     app: fleet-service
-
----
-# 2. THE PERMISSIONS LIST
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: fleet-manager-role
-  namespace: valheim-workloads
-rules:
-  - apiGroups: ["agones.dev"]
-    resources: ["gameservers", "fleets"]
-    verbs: ["get", "list", "watch", "create", "delete", "patch", "update"]
-  - apiGroups: [""]
-    resources: ["persistentvolumeclaims"]
-    verbs: ["get", "list", "watch", "create"]
-
----
-# 3. THE STAPLER
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: fleet-manager-binding
-  namespace: valheim-workloads
-subjects:
-  - kind: ServiceAccount
-    name: fleet-service-sa
-    namespace: craftcloud-system
-roleRef:
-  kind: Role
-  name: fleet-manager-role
-  apiGroup: rbac.authorization.k8s.io

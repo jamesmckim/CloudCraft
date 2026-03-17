@@ -16,9 +16,9 @@ def list_servers(
 ):
     """
     Lists all available servers. 
-    Requires valid auth (user_id), but lists global servers for now.
+    Requires valid auth (user_id)
     """
-    return service.list_servers()
+    return service.list_servers(user_id)
 
 @router.get("/{server_id}")
 def get_server_details(

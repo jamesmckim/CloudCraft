@@ -1,20 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: craftcloud-system
-
 # 1. Inherit everything from the base folder
 resources:
   - ../../base
-  - identity-secret.plain.yaml
-  - fleet-secret.plain.yaml
-  - telemetry-secret.plain.yaml
-  - postgres-secret.plain.yaml
+  - secrets/
 
 # 2. Automatically apply a label to EVERYTHING in this environment
 labels:
   - pairs:
       environment: dev
-# This should be used in prod but is a pain in dev  
-#generators:
-#  - secret-generator.yaml

@@ -26,31 +26,72 @@ class ServerService:
         self.redis = redis
         self.identity_client = identity_client
 
-    def list_servers(self):
-        """Wraps the manager's list function."""
-        return self.manager.list_all_servers()
+    def list_servers(self, user_id: str):
+        """Fetches servers from the database so the UUID is preserved and filtered by owner."""
+        
+        try:
+            user_id_int = int(user_id)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid user ID format.")
+            
+        db_servers = self.server_repo.get_by_owner(user_id_int) 
+        
+        server_list = []
+        for server_record in db_servers:
+            is_online = False
+            if server_record.active_pod_name:
+                container = self.manager.get_container(server_record.active_pod_name)
+                is_online = container is not None and container.status == "running"
+            
+            custom_name = None
+            if server_record.config:
+                custom_name = server_record.config.get("VALHEIM_SERVER_NAME")
+                
+            display_name = custom_name if custom_name else f"{server_record.game_id} Server".title()
+            
+            server_list.append({
+                "id": server_record.id,
+                "name": display_name,
+                "status": "online" if is_online else "offline",
+                "cpu": 0, 
+                "ram": 0, 
+                "players": 0 
+            })
+            
+        return server_list
 
     def get_server_details(self, server_id: str):
-        """Combines Docker container info with Redis stats."""
-        container = self.manager.get_container(server_id)
-        if not container:
-            raise HTTPException(status_code=404, detail="Server container not found")
+        """Combines K8s container info with Redis stats using the DB as the source of truth."""
+        server_record = self.server_repo.get(server_id)
+        if not server_record:
+            raise HTTPException(status_code=404, detail="Server not found in database")
+
+        container = None
+        if server_record.active_pod_name:
+            container = self.manager.get_container(server_record.active_pod_name)
 
         stats_key = f"server_stats:{server_id}"
         stats = self.redis.hgetall(stats_key)
 
-        # Handle potential byte returns from Redis depending on the client config
         cpu = float(stats.get(b"cpu", stats.get("cpu", 0)))
         ram = float(stats.get(b"ram", stats.get("ram", 0)))
         players = int(stats.get(b"players", stats.get("players", 0)))
 
+        is_online = container is not None and getattr(container, "status", "") == "running"
+
+        custom_name = None
+        if server_record.config:
+            custom_name = server_record.config.get("VALHEIM_SERVER_NAME")
+            
+        display_name = custom_name if custom_name else f"{server_record.game_id} Server".title()
+
         return {
-            "id": server_id,
-            "name": container.name,
-            "status": "online" if container.status == "running" else "offline",
-            "cpu": cpu,
-            "ram": ram,
-            "players": players
+            "id": server_record.id,
+            "name": display_name,
+            "status": "online" if is_online else "offline",
+            "cpu": cpu if is_online else 0,
+            "ram": ram if is_online else 0,
+            "players": players if is_online else 0
         }
 
     async def toggle_power(self, user_id: str, server_id: str, action: str):
