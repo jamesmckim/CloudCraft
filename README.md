@@ -4,7 +4,7 @@ graph LR
     user[User]
     lb[ingress/loadbalancer]
     
-    subgraph "Agones GameServer"
+    subgraph agones [Agones GameServer]
         %% Subgraph contains internal components
         direction TB
         game_server_list[Game Servers]
@@ -20,11 +20,11 @@ graph LR
 
     %% Connections and Protocols
     user --> lb
-    lb -->|UDP| "Agones GameServer"
+    lb -->|UDP| agones
     lb -.->|https| webui
     lb --> auth_billing
     
-    "Agones GameServer" --> webui
+    agones --> webui
     webui --> telemetry
     webui --> fleet_manager
     
