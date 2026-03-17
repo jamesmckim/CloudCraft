@@ -30,5 +30,5 @@ graph LR
     
     auth_billing <--> db_main
     db_main <--> fleet_manager
-    fleet_manager --> "Agones GameServer"
+    fleet_manager --> agones
     sidecar_list --> webui
