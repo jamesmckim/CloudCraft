@@ -7,16 +7,19 @@ flowchart LR
   U@{ shape: circle, label: "👤 User"}
   A@{ shape: rect, label: "Ingress controller" }
   B@{ shape: rect, label: "webui" }
-  C@{ shape: rect, label: "Fleet-Manager" }
-  G@{ shape: cyl, label: "mongoDB" }
-  D@{ shape: rect, label: "Auth/Billing" }
-  E@{ shape: rect, label: "Telemetry Service" }
 
   subgraph agones [Agones GameServer]
     direction TB
     F@{ shape: processes, label: "Game Servers" }
     S@{ shape: processes, label: "Sidecar" }
   end
+  
+  D@{ shape: rect, label: "Auth/Billing" }
+  G@{ shape: cyl, label: "mongoDB" }
+  C@{ shape: rect, label: "Fleet-Manager"}
+  E@{ shape: rect, label: "Telemetry Service" }
+
+
 
 A --> |HTTP| B;
 A <--> |UDP| F;
