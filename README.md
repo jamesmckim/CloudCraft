@@ -1,3 +1,4 @@
+```mermaid
 graph LR
     %% Definitions
     user[User]
