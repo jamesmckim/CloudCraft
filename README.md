@@ -1,6 +1,6 @@
 # Server Hosting Service
 
-A nginx container frontend using a REST API to communicate with a python backend, that has access to a mongoDB, that launches a game server in a pod that is expossed to the internet.
+A kubernetes native game server hosting service. 
 
 ```mermaid
 flowchart LR
