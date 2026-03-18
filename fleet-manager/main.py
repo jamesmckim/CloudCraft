@@ -1,6 +1,7 @@
 # /fleet-manager/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.api.routes import servers
 from app.core.database import engine, Base
 from app.models import models
