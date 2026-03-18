@@ -75,6 +75,7 @@ class ServerManager:
         
         app_settings = self.SETTINGS.get('app', {})
         manager_api_url = settings.MANAGER_API_URL
+        telemetry_api_url = settings.TELEMETRY_API_URL
         
         # 1. Grab the initContainers from the blueprint (if they exist)
         init_containers = copy.deepcopy(blueprint.get("initContainers", []))
@@ -106,6 +107,7 @@ class ServerManager:
                     "env": [
                         {"name": "GAME_TYPE", "value": game_id},
                         {"name": "MANAGER_API_URL", "value": manager_api_url},
+                        {"name": "TELEMETRY_API_URL", "value": telemetry_api_url},
                         {"name": "SIDECAR_API_KEY", "value": sidecar_token},
                         {"name": "SERVER_UUID", "value": str(logical_server_id)},
                         {
@@ -139,11 +141,12 @@ class ServerManager:
             "metadata": {
                 "generateName": f"{game_id}-{mod_state}-{user_id}-",
                 "labels": {
-                    "craftcloud.role": "game_server",
+                    "craftcloud.role": "game_sidecar",
                     "craftcloud.server_id": str(logical_server_id),
                     "game": game_id,
                     "mod_state": mod_state,
-                    "owner_id": str(user_id)
+                    "owner_id": str(user_id),
+                    "role": "game-sidecar"
                 }
             },
             "spec": {

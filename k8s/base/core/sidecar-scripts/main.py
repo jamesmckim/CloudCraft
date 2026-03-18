@@ -8,7 +8,8 @@ from probes import get_probe
 # Config from Env
 SERVER_UUID = os.getenv('SERVER_UUID')
 GAME_TYPE = os.getenv('GAME_TYPE', 'generic')
-API_URL = os.getenv('MANAGER_API_URL')
+MANAGER_API_URL = os.getenv('MANAGER_API_URL')
+TELEMETRY_API_URL = os.getenv('TELEMETRY_API_URL')
 THRESHOLD = int(os.getenv('IDLE_THRESHOLD_MINUTES', 15)) * 60 
 LOG_FILE_PATH = os.getenv('LOG_FILE_PATH', '/config/server.log')
 SIDECAR_API_KEY = os.getenv('SIDECAR_API_KEY')
@@ -17,12 +18,11 @@ AGONES_SDK_URL = "http://localhost:9358"
 
 probe = get_probe(GAME_TYPE)
 idle_seconds = 0
-# FIX 1: Must be less than the 5-second Agones health period
 sleep_secs = 2 
 is_ready = False
 
-def send_manager_request(endpoint, payload=None):
-    url = f"{API_URL}/internal/servers/{SERVER_UUID}/{endpoint}"
+def _make_http_request(url, payload=None):
+    """Helper function to keep HTTP logic DRY"""
     try:
         req = urllib.request.Request(url, method='POST')
         req.add_header('X-Sidecar-Token', SIDECAR_API_KEY)
@@ -33,7 +33,15 @@ def send_manager_request(endpoint, payload=None):
         with urllib.request.urlopen(req) as response:
             return response.read()
     except Exception as e:
-        print(f"Failed to contact manager at {endpoint}: {e}")
+        print(f"Failed to contact {url}: {e}")
+
+def send_manager_request(endpoint, payload=None):
+    url = f"{MANAGER_API_URL}/internal/servers/{SERVER_UUID}/{endpoint}"
+    return _make_http_request(url, payload)
+
+def send_telemetry_request(endpoint, payload=None):
+    url = f"{TELEMETRY_URL}/api/internal/servers/{SERVER_UUID}/{endpoint}" 
+    return _make_http_request(url, payload)
 
 def send_agones_request(endpoint):
     url = f"{AGONES_SDK_URL}/{endpoint}"
@@ -43,7 +51,7 @@ def send_agones_request(endpoint):
         with urllib.request.urlopen(req) as response:
             return response.read()
     except Exception as e:
-        pass # Suppress prints here to avoid log spam every 2 seconds
+        pass
 
 try:
     log_file = open(LOG_FILE_PATH, 'r')
@@ -84,7 +92,7 @@ while True:
 
         # 3. Report stats
         if is_ready:
-            send_manager_request("metrics", {"players": players})
+            send_telemetry_request("metrics", {"players": players})
         
         # 4. Tail Logs
         if log_file:
@@ -97,7 +105,7 @@ while True:
                 if clean_line:
                     new_logs.append(clean_line)
             if new_logs:
-                send_manager_request("logs", {"logs": new_logs})
+                send_telemetry_request("logs", {"logs": new_logs})
         else:
             try:
                 log_file = open(LOG_FILE_PATH, 'r')

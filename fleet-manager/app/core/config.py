@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     # Defaults to the Service names we found in your 'kubectl get pods'
     IDENTITY_SERVICE_URL: str = "http://identity-service:5000"
     MANAGER_API_URL: str = "http://fleet-service:5000"
+    TELEMETRY_API_URL: str = "http://telemetry-service.craftcloud-system.svc.cluster.local:5000"
     
     REDIS_HOST: str = "redis-broker"
     REDIS_PORT: int = 6379
