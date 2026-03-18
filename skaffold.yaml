@@ -1,0 +1,158 @@
+apiVersion: skaffold/v4beta7
+kind: Config
+metadata:
+  name: craftcloud
+
+build:
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+    - image: identity-api-image
+      context: identity-billing-service
+      docker:
+        dockerfile: Dockerfile
+
+    - image: fleet-api-image
+      context: fleet-manager
+      docker:
+        dockerfile: Dockerfile
+
+    - image: telemetry-api-image
+      context: telemetry-service
+      docker:
+        dockerfile: Dockerfile
+
+    - image: dashboard-image
+      context: webui
+      docker:
+        dockerfile: Dockerfile
+        
+    - image: mod-syncer-image
+      context: mod-syncer
+      docker:
+        dockerfile: Dockerfile
+        
+    - image: ai-rag-worker-image
+      context: worker
+      docker:
+        dockerfile: Dockerfile
+        
+    - image: valheim-sidecar-image
+      context: sidecar
+      docker:
+        dockerfile: Dockerfile
+
+profiles:
+  - name: offline
+    build:
+      artifacts:
+        - image: identity-api-image
+          context: identity-billing-service
+          docker:
+            buildArgs:
+              REGISTRY: "localhost:5000/"
+        - image: fleet-api-image
+          context: fleet-manager
+          docker:
+            buildArgs:
+              REGISTRY: "localhost:5000/"
+        - image: telemetry-api-image
+          context: telemetry-service
+          docker:
+            buildArgs:
+              REGISTRY: "localhost:5000/"
+        - image: dashboard-image
+          context: webui
+          docker:
+            buildArgs:
+              REGISTRY: "localhost:5000/"
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      local:
+        push: false
+        useDockerCLI: true
+      artifacts:
+       - image: identity-api-image
+         context: identity-billing-service
+         docker:
+           dockerfile: Dockerfile
+           target: dev
+         sync:
+           manual:
+             - src: 'app/**/*.py'
+               dest: /app
+               
+       - image: fleet-api-image
+         context: fleet-manager
+         docker:
+           dockerfile: Dockerfile
+           target: dev
+         sync:
+           manual:
+             - src: 'app/**/*.py'
+               dest: /app
+
+       - image: telemetry-api-image
+         context: telemetry-service
+         docker:
+           dockerfile: Dockerfile
+           target: dev
+         sync:
+           manual:
+             - src: 'app/**/*.py'
+               dest: /app
+
+       - image: dashboard-image
+         context: webui
+         docker:
+           target: dev
+           dockerfile: Dockerfile
+         sync:
+           manual:
+             - src: 'src/**/*'
+               dest: /app
+             - src: 'index.html'
+               dest: /app
+    manifests:
+      rawYaml:
+        - k8s/base/namespace.yaml
+      kustomize:
+        paths:
+          - k8s/overlays/dev
+    deploy:
+      kubectl: {}
+
+  - name: prod
+    manifests:
+      kustomize:
+        paths:
+          - k8s/overlays/prod
+        buildArgs:
+          - "--enable-alpha-plugins"
+    deploy:
+      kubectl: {}
+
+portForward:
+  - resourceType: service
+    resourceName: dashboard
+    namespace: craftcloud-system
+    port: 80
+    address: 127.0.0.1
+    localPort: 8080
+  - resourceType: service
+    resourceName: identity-service
+    namespace: craftcloud-system
+    port: 5000
+    localPort: 5000
+  - resourceType: service
+    resourceName: fleet-service
+    namespace: craftcloud-system
+    port: 5000
+    localPort: 5001
+  - resourceType: service
+    resourceName: telemetry-service
+    namespace: craftcloud-system
+    port: 5000
+    localPort: 5002

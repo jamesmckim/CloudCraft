@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: protected-gateway
+  namespace: craftcloud-system
+  labels:
+    app: craftcloud
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    # Apply API stripping AND ForwardAuth
+    traefik.ingress.kubernetes.io/router.middlewares: craftcloud-system-strip-api@kubernetescrd, craftcloud-system-auth-verify@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "localhost"
+      http:
+        paths:
+          # --- Protected Identity/Billing Routes ---
+          - path: /api/users
+            pathType: Prefix
+            backend:
+              service:
+                name: identity-service
+                port:
+                  number: 5000
+          - path: /api/payments
+            pathType: Prefix
+            backend:
+              service:
+                name: identity-service
+                port:
+                  number: 5000
+
+          # --- Protected Telemetry Routes ---
+          - path: /api/internal
+            pathType: Prefix
+            backend:
+              service:
+                name: telemetry-service
+                port:
+                  number: 5000
+          - path: /api/incidents
+            pathType: Prefix
+            backend:
+              service:
+                name: telemetry-service
+                port:
+                  number: 5000
+
+          # --- Protected Fleet Routes ---
+          - path: /api/servers
+            pathType: Prefix
+            backend:
+              service:
+                name: fleet-service
+                port:
+                  number: 5000

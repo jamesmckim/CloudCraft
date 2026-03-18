@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  fleet-manager:
+    build:
+      context: .
+      target: dev  # Targets the dev stage in your Dockerfile for live-reloading
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mounts your local code into the container so changes reflect immediately
+      - .:/app
+    environment:
+      # Match these to how your ServerService and Redis client are configured
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SECRET_KEY=super_secret_local_testing_key_123
+      - IDENTITY_SERVICE_URL=http://identity-service:8000/api
+      # If you switch away from SQLite, you can inject your Postgres URL here:
+      # - DATABASE_URL=postgresql://user:password@postgres-db:5432/fleet_db
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379" # Exposing this so you can inspect Redis locally if needed
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes # Persist data to disk
+
+volumes:
+  redis_data:

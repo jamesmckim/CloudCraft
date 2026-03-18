@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  telemetry_api:
+    build:
+      context: .
+      target: dev  # Ensures the --reload flag is used
+    container_name: telemetry_api
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://telemetry_user:secretpassword@telemetry_db:5432/telemetry_db
+      - REDIS_URL=redis://telemetry_redis:6379/0
+      - CELERY_BROKER_URL=redis://telemetry_redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://telemetry_redis:6379/2
+      - JWT_SECRET=your-shared-monolith-secret
+      - SIDECAR_API_KEY=super-secret-internal-key-change-me
+    depends_on:
+      telemetry_db:
+        condition: service_healthy
+      telemetry_redis:
+        condition: service_started
+    volumes:
+      - .:/app  # Maps the root to /app for live code updates
+
+  telemetry_db:
+    image: postgres:15-alpine
+    container_name: telemetry_db
+    environment:
+      POSTGRES_USER: telemetry_user
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: telemetry_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U telemetry_user -d telemetry_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  telemetry_redis:
+    image: redis:7-alpine
+    container_name: telemetry_redis

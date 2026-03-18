@@ -1,0 +1,21 @@
+# Secrets & Environments (Crucial to ignore)
+.env
+*.pem
+secrets/
+
+# Python caching and environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Git metadata
+.git/
+.gitignore
+
+# Docker-related files (the container doesn't need to see its own build instructions)
+.dockerignore
+Dockerfile
+docker-compose.yml

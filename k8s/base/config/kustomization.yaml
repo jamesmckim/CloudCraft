@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: craftcloud-system
+
+# This generates a ConfigMap named 'craftcloud-config'
+configMapGenerator:
+  - name: craftcloud-config
+    literals:
+      - GAME_TYPE=valheim
+      - LLM_URL=http://host.docker.internal:11434/v1
+      - QDRANT_URL=http://qdrant-db:6333
+      - REDIS_URL=redis://redis-broker:6379/0

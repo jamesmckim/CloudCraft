@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+commonLabels:
+  environment: prod
+
+# 2. Map the placeholder images to your actual GHCR images from your workflow
+images:
+  - name: manager-api-image
+    newName: ghcr.io/your-github-username/cloudcraft-manager-api
+    newTag: latest
+    
+  - name: dashboard-image
+    newName: ghcr.io/your-github-username/cloudcraft-dashboard
+    newTag: latest
+
+  - name: mod-syncer-image
+    newName: ghcr/io/your-github-username/mod-syncer-image
+    newTag: latest
+    
+  - name: ai-rag-worker-image
+    newName: ghcr/io/your-github-username/mod-syncer-image
+    newTag: latest
+    
+  - name: valheim-sidecar-image
+    newName: ghcr.io/your-github-username/valheim-sidecar
+    newTag: latest
+
+# 1. Override the dev secrets with production secrets!
+secretGenerator:
+  - name: craftcloud-secrets
+    behavior: replace # This tells Kustomize to overwrite the base secret
+    envs:
+      - prod-secrets.env # Create this file to hold your real DB passwords
+
+# 2. Apply production-specific patches
+patches:
+  - path: patch-resources.yaml

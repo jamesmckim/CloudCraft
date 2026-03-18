@@ -1,0 +1,31 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-api
+  namespace: craftcloud-system
+spec:
+  stripPrefix:
+    prefixes:
+      - /api
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: auth-verify
+  namespace: craftcloud-system
+spec:
+  forwardAuth:
+    address: http://identity-service.craftcloud-system.svc.cluster.local:5000/auth/verify
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-User-ID
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-external-user-id
+  namespace: craftcloud-system
+spec:
+  headers:
+    customRequestHeaders:
+      X-User-ID: "" # Strips the header if a client tries to spoof it on public routes

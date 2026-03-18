@@ -1,0 +1,33 @@
+# --- Enviroment Variables & Secrets
+.env
+*/env
+**/.env
+*.env
+
+# --- Databases ---
+backend/creaftcloud.db
+*.db
+*.sqlite3
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Node/Frontend ---
+webui/node_modules/
+npm-debug.log
+
+# Ignore decrypted SOPS files
+*.plain.yaml
+
+# --- OS Generated Files ---
+.DS_Store
+Thumbs.db
+
+# Ignore SSL certificates and keys
+certs/
+*.pem
+*.key
+*.crt

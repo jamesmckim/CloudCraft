@@ -1,0 +1,25 @@
+# Add strict memory and CPU limits to Qdrant so it doesn't starve your cluster
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qdrant-db
+spec:
+  template:
+    spec:
+      containers:
+      - name: qdrant
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
+---
+# Scale your Manager API to handle more web traffic
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manager-api
+spec:
+  replicas: 3 # Spinnng up 3 API pods instead of 1

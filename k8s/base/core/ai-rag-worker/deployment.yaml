@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-rag-worker
+  labels:
+    app: ai-rag-worker
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: ai-rag-worker
+  template:
+    metadata:
+      labels:
+        app: ai-rag-worker
+    spec:
+      containers:
+        - name: worker
+          image: ai-rag-worker-image 
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: craftcloud-config
+            - secretRef:
+                name: craftcloud-secrets

@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: public-gateway
+  namespace: craftcloud-system
+  labels:
+    app: craftcloud
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    # Apply API stripping AND Header stripping
+    traefik.ingress.kubernetes.io/router.middlewares: craftcloud-system-strip-api@kubernetescrd, craftcloud-system-strip-external-user-id@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "localhost"
+      http:
+        paths:
+          # --- Public Auth Routes (Register, Token) ---
+          - path: /api/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: identity-service
+                port:
+                  number: 5000
+
+          # --- Public Webhook Routes ---
+          # Because this path is longer than /api/payments, Traefik will 
+          # correctly route webhook traffic here instead of the protected ingress.
+          - path: /api/payments/webhook
+            pathType: Prefix
+            backend:
+              service:
+                name: identity-service
+                port:
+                  number: 5000
+
+          # --- Dashboard Route ---
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dashboard
+                port:
+                  number: 80

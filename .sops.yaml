@@ -1,0 +1,5 @@
+creation_rules:
+  - path_regex: 'k8s(/|\\)overlays(/|\\)dev(/|\\).*\.(sops|plain)\.yaml$'
+    age: age1xkwx4z6rzmf95xvqnan69agjyvt0lrh0305gzh6p5anndfaee9mqur9933,age1yngf5ztpu6g6da96xdlheheyv5pwuax2g7yale5d4tvwd6y02c7sc8gfm6
+  - path_regex: 'k8s(/|\\)overlays(/|\\)prod(/|\\).*\.sops\.yaml$'
+    age: <your-prod-age-public-key>

@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+redis>=5.0.0
+celery>=5.3.0
+kubernetes
+psycopg2-binary
+pydantic-settings

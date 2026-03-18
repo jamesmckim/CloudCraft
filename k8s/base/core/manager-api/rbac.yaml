@@ -1,0 +1,38 @@
+---
+# 1. THE ID BADGE
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: manager-api-sa
+  namespace: craftcloud-system
+  labels:
+    app: manager-api
+
+---
+# 2. THE PERMISSIONS LIST
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: agones-manager-role
+rules:
+  - apiGroups: ["agones.dev"]
+    resources: ["gameservers", "fleets"]
+    verbs: ["get", "list", "watch", "create", "delete", "patch", "update"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "create"]
+---
+# 3. THE STAPLER
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: agones-manager-binding
+  namespace: craftcloud-system
+subjects:
+  - kind: ServiceAccount
+    name: manager-api-sa
+    namespace: craftcloud-system
+roleRef:
+  kind: Role
+  name: agones-manager-role
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qdrant-db
+  labels:
+    app: qdrant-db
+spec:
+  serviceName: "qdrant-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qdrant-db
+  template:
+    metadata:
+      labels:
+        app: qdrant-db
+    spec:
+      containers:
+      - name: qdrant
+        image: qdrant/qdrant:v1.17.0
+        ports:
+        - containerPort: 6333
+        volumeMounts:
+        - name: storage
+          mountPath: /qdrant/storage
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: qdrant-pvc

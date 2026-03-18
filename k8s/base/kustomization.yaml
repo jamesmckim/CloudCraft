@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 1. Bring in all the sub-components
+resources:
+  - core/agones-sdk/rbac-sdk.yaml
+  - config/
+  - data/postgres/
+  - data/redis/
+  - data/qdrant/
+#  - core/ingress.yaml
+#  - core/manager-api/
+  - core/dashboard/
+  - core/mod-syncer/
+  - core/ai-rag-worker/
+  - core/api/
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: sidecar-scripts
+    namespace: valheim-workloads
+    files:
+      - main.py=core/sidecar-scripts/main.py
+      - probes.py=core/sidecar-scripts/probes.py
+    

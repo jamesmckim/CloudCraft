@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fleet-service-sa
+  namespace: craftcloud-system
+  labels:
+    app: fleet-service

@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 1. Inherit everything from the base folder
+resources:
+  - ../../base
+  - secrets/
+
+# 2. Automatically apply a label to EVERYTHING in this environment
+labels:
+  - pairs:
+      environment: dev

@@ -1,0 +1,93 @@
+# /backend/config/templates.yaml
+valheim:
+  vanilla:
+    image: lloesche/valheim-server:latest
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 2456
+        protocol: UDP
+      - name: query
+        portPolicy: Dynamic
+        containerPort: 2457
+        protocol: UDP
+    env_defaults:
+      - name: SERVER_PUBLIC
+        value: "1"
+  modded:
+    image: lloesche/valheim-server:latest
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 2456
+        protocol: UDP
+      - name: query
+        portPolicy: Dynamic
+        containerPort: 2457
+        protocol: UDP
+    env_defaults:
+      - name: SERVER_PUBLIC
+        value: "1"
+      - name: VALHEIM_PLUS
+        value: "true"
+    initContainers:
+      - name: mod-downloader
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        # This script expects a comma-separated list of download URLs in the MOD_URLS env var
+        args:
+          - |
+            echo "🚀 Starting Mod Download sequence..."
+            
+            # 1. Ensure the BepInEx plugin directory exists on the shared volume
+            mkdir -p /config/BepInEx/plugins
+            
+            # 2. Split the MOD_URLS string by comma and loop through them
+            IFS=','
+            for url in $MOD_URLS; do
+              if [ -n "$url" ]; then
+                echo "⬇️ Downloading: $url"
+                wget -qO /tmp/mod.zip "$url"
+                
+                # 3. Unzip directly into the plugins folder (overwriting conflicts)
+                echo "📦 Unpacking..."
+                unzip -q -o /tmp/mod.zip -d /config/BepInEx/plugins/
+                
+                # 4. Clean up the zip file
+                rm /tmp/mod.zip
+              fi
+            done
+            
+            echo "✅ All mods installed successfully!"
+        env:
+          # This is a placeholder. Your Manager API will overwrite this!
+          - name: MOD_URLS
+            value: "" 
+        volumeMounts:
+          - name: world-data
+            mountPath: /config
+minecraft:
+  vanilla:
+    image: itzg/minecraft-server:latest
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 25565
+        protocol: TCP
+    env_defaults:
+      - name: EULA
+        value: "TRUE"
+      - name: TYPE
+        value: "PAPER"
+  modded:
+    image: itzg/minecraft-server:latest
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 25565
+        protocol: TCP
+    env_defaults:
+      - name: EULA
+        value: "TRUE"
+      - name: TYPE
+        value: "FORGE"

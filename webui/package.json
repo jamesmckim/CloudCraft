@@ -1,0 +1,12 @@
+{
+  "name": "mvc-dashboard",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite --host --port 80",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mod-syncer-config
+data:
+  # ADD GAMES HERE (Comma separated, use Thunderstore subdomains)
+  target_games: "valheim,lethal-company,risk-of-rain-2,dyson-sphere-program"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mod-syncer-protected
+spec:
+  schedule: "0 2 * * *" # Runs at 2 AM daily
+  concurrencyPolicy: Forbid           # Prevents "Multi-Attach" file lock
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 300      # make sure it doesn't hang
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: syncer
+              image: mod-syncer-image
+              env:
+                - name: TARGET_GAMES
+                  valueFrom:
+                    configMapKeyRef:
+                      name: mod-syncer-config
+                      key: target_games
+                - name: DB_HOST
+                  value: "postgres-service"
+                - name: DB_NAME
+                  value: "thunderstore"
+                - name: DB_USER
+                  value: "syncer_user"
+                - name: DB_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: craftcloud-secrets
+                      key: SYNCER_DB_PASSWORD
+                - name: THUNDERSTORE_PROXY
+                  valueFrom:
+                    secretKeyRef:
+                      name: craftcloud-secrets
+                      key: THUNDERSTORE_PROXY_URL
+                      optional: true # Script will run without, but should probably have this
+          initContainers:
+            - name: wait-for-db
+              image: postgres:18.3-alpine
+              command:
+                - sh
+                - -c
+                - |
+                  echo "Waiting for database..."
+                  until pg_isready -h postgres-service -U syncer_user; do
+                    sleep 2
+                  done
+                  echo "Database is ready!"
