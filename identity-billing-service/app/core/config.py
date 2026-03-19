@@ -16,8 +16,10 @@ class Settings(BaseSettings):
 
     # Payments (Stripe & PayPal)
     STRIPE_SECRET_KEY: str | None = None
+    STRIPE_WEBHOOK_SECRET: str | None = None
     PAYPAL_CLIENT_ID: str | None = None
     PAYPAL_CLIENT_SECRET: str | None = None
+    PAYPAL_WEBHOOK_ID: str | None = None
     PAYPAL_MODE: str = "sandbox"  # 'sandbox' or 'live'
 
     model_config = SettingsConfigDict(

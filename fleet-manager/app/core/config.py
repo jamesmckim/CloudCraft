@@ -5,7 +5,6 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Fleet Manager API"
     
     # K8s Internal Service Discovery
-    # Defaults to the Service names we found in your 'kubectl get pods'
     IDENTITY_SERVICE_URL: str = "http://identity-service:5000"
     MANAGER_API_URL: str = "http://fleet-service:5000"
     TELEMETRY_API_URL: str = "http://telemetry-service.craftcloud-system.svc.cluster.local:5000"

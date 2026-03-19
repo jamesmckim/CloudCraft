@@ -24,14 +24,14 @@ class PaymentService:
 
         return provider.create_checkout_session(package_id, str(user_id))
 
-    def process_webhook(self, provider_name: str, payload: dict):
+    def process_webhook(self, provider_name: str, raw_payload: bytes, headers: dict):
         provider = self.providers.get(provider_name)
         if not provider:
             print(f"Webhook Error: Unknown provider {provider_name}")
             return {"status": "ignored", "reason": "Unknown provider"}
 
         try:
-            result = provider.verify_webhook(payload)
+            result = provider.verify_webhook(raw_payload, headers)
         except Exception as e:
             print(f"Webhook Verification Failed: {e}")
             return {"status": "failed", "error": str(e)}

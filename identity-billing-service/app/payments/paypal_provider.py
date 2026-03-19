@@ -1,7 +1,7 @@
 # /identity-billing-service/app/payments/paypal_provider.py
 import requests
 import os
-import base64
+import json
 
 from app.payments.driver import PaymentProvider
 from app.core.packages import CREDIT_PACKAGES
@@ -10,6 +10,7 @@ class PayPalProvider(PaymentProvider):
     def __init__(self):
         self.client_id = os.getenv("PAYPAL_CLIENT_ID")
         self.client_secret = os.getenv("PAYPAL_CLIENT_SECRET")
+        self.webhook_id = os.getenv("PAYPAL_WEBHOOK_ID")
         self.domain = os.getenv("DOMAIN_URL")
 
         # Check environment to switch between Sandbox and Live
@@ -95,12 +96,28 @@ class PayPalProvider(PaymentProvider):
         except Exception as e:
             print(f"PayPal Exception: {e}")
             raise Exception("PayPal creation failed")
-    def verify_webhook(self, request_data: dict):
+            
+    def verify_webhook(self, raw_payload: bytes, headers: dict):
         """
-        1. Checks if the event is CHECKOUT.ORDER.APPROVED
-        2. Captures the payment (Moves the money)
-        3. Returns the user and credit info
+        1. Calls PayPal API to verify the cryptographic signature.
+        2. Parses the JSON.
+        3. Captures the payment (Moves the money).
+        4. Returns the user and credit info.
         """
+        if not self.webhook_id:
+            raise Exception("PayPal Webhook ID is not configured.")
+
+        #Cryptographically verify the event via PayPal's API
+        verification_status = self._verify_signature_with_paypal(raw_payload, headers)
+        if verification_status != "SUCCESS":
+            raise Exception(f"PayPal signature verification failed: {verification_status}")
+
+        #Now that we know it's safe, parse the raw JSON payload
+        try:
+            request_data = json.loads(raw_payload.decode("utf-8"))
+        except json.JSONDecodeError:
+            raise Exception("Invalid JSON in PayPal webhook payload")
+            
         event_type = request_data.get('event_type')
 
         # We only care when the user has approved the payment
@@ -108,15 +125,14 @@ class PayPalProvider(PaymentProvider):
             resource = request_data.get('resource', {})
             order_id = resource.get('id')
 
-            # 1. Capture the payment (Critical Step!)
+            #Capture the payment (Critical Step!)
             try:
                 capture_details = self._capture_order(order_id)
             except Exception as e:
                 print(f"Capture Failed: {e}")
                 return None
 
-            # 2. Extract User and Package info from the webhook payload
-            # (We stored these in purchase_units during create_checkout_session)
+            #Extract User and Package info from the webhook payload
             purchase_unit = resource.get('purchase_units', [{}])[0]
             user_id = purchase_unit.get('custom_id')
             package_id = purchase_unit.get('reference_id')
@@ -131,6 +147,43 @@ class PayPalProvider(PaymentProvider):
                 }
 
         return None
+
+    def _verify_signature_with_paypal(self, raw_payload: bytes, headers: dict) -> str:
+        """
+        Helper to send the headers and payload back to PayPal for verification.
+        """
+        access_token = self._get_access_token()
+        url = f"{self.base_url}/v1/notifications/verify-webhook-signature"
+
+        # FastAPI converts headers to lowercase, so we safely retrieve them
+        headers_lower = {k.lower(): v for k, v in headers.items()}
+        
+        verification_payload = {
+            "auth_algo": headers_lower.get("paypal-auth-algo"),
+            "cert_url": headers_lower.get("paypal-cert-url"),
+            "transmission_id": headers_lower.get("paypal-transmission-id"),
+            "transmission_sig": headers_lower.get("paypal-transmission-sig"),
+            "transmission_time": headers_lower.get("paypal-transmission-time"),
+            "webhook_id": self.webhook_id,
+            # PayPal requires the body to be sent as a parsed JSON object inside this field
+            "webhook_event": json.loads(raw_payload.decode("utf-8")) 
+        }
+
+        req_headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {access_token}"
+        }
+
+        try:
+            response = requests.post(url, headers=req_headers, json=verification_payload)
+            if response.status_code not in [200, 201]:
+                print(f"PayPal Verification API Error: {response.text}")
+                return "FAILURE"
+            
+            return response.json().get("verification_status", "FAILURE")
+        except Exception as e:
+            print(f"PayPal Verification Request Failed: {e}")
+            return "FAILURE"
 
     def _capture_order(self, order_id):
         """

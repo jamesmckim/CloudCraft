@@ -32,9 +32,7 @@ async def payment_webhook(
     request: Request, 
     service: PaymentService = Depends(get_payment_service)
 ):
-    try:
-        payload = await request.json()
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid JSON")
-
-    return service.process_webhook(provider, payload)
+    raw_payload = await request.body()
+    headers = dict(request.headers)
+    
+    return service.process_webhook(provider, raw_payload, headers)
