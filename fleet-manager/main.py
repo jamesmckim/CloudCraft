@@ -1,16 +1,23 @@
 # /fleet-manager/main.py
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import servers
-from app.core.database import engine, Base
+from app.core.database import init_db
 from app.models import models
-Base.metadata.create_all(bind=engine)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Initializing fleet database...")
+    await init_db()
+    yield
 
 app = FastAPI(
     title="Fleet Manager API",
     description="Microservice responsible for Kubernetes game server deployments.",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 app.add_middleware(

@@ -1,5 +1,6 @@
 # /identity-billing-service/app/services/payment_service.py
 from fastapi import HTTPException
+from fastapi.concurrency import run_in_threadpool
 
 from app.repositories.user_repo import UserRepository
 from app.payments.stripe_provider import StripeProvider
@@ -14,7 +15,7 @@ class PaymentService:
             "paypal": PayPalProvider()
         }
 
-    def checkout(self, user_id: str, package_id: str, provider_name: str):
+    async def checkout(self, user_id: str, package_id: str, provider_name: str):
         if package_id not in CREDIT_PACKAGES:
             raise HTTPException(status_code=400, detail=f"Invalid package_id: {package_id}")
 
@@ -22,16 +23,20 @@ class PaymentService:
         if not provider:
             raise HTTPException(status_code=400, detail=f"Unsupported provider: {provider_name}")
 
-        return provider.create_checkout_session(package_id, str(user_id))
+        return await run_in_threadpool(
+            provider.create_checkout_session(package_id, str(user_id))
+        )
 
-    def process_webhook(self, provider_name: str, raw_payload: bytes, headers: dict):
+    async def process_webhook(self, provider_name: str, raw_payload: bytes, headers: dict):
         provider = self.providers.get(provider_name)
         if not provider:
             print(f"Webhook Error: Unknown provider {provider_name}")
             return {"status": "ignored", "reason": "Unknown provider"}
 
         try:
-            result = provider.verify_webhook(raw_payload, headers)
+            result = await run_in_threadpool(
+                provider.verify_webhook(raw_payload, headers)
+            )
         except Exception as e:
             print(f"Webhook Verification Failed: {e}")
             return {"status": "failed", "error": str(e)}
@@ -41,7 +46,7 @@ class PaymentService:
             credits_to_add = result["credits"]
 
             print(f"Payment Verified! Adding {credits_to_add} credits to User {user_id}")
-            self.user_repo.add_credits(user_id, credits_to_add)
+            await self.user_repo.add_credits(user_id, credits_to_add)
             
             return {"status": "success"}
 

@@ -11,3 +11,6 @@ pydantic[email]
 stripe
 paypal-server-sdk
 pydantic-settings
+asyncpg
+arq
+redis

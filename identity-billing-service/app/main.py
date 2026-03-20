@@ -1,6 +1,8 @@
 # /identity-billing-service/app/main.py
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from arq import create_pool
+from arq.connections import RedisSettings
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
@@ -12,11 +14,17 @@ from app.api.routers import auth, payments, users
 async def lifespan(app: FastAPI):
     # Startup: Initialize the database tables
     print("Initializing database...")
-    init_db()
+    await init_db()
     print("Database initialized.")
+    
+    print("Connecting to Redis...")
+    app.state.redis = await create_pool(RedisSettings.from_dsn(settings.REDIS_URL))
+    
     yield
-    # Shutdown logic can go here if needed
-    print("Shutting down Identity & Billing Service...")
+    
+    print("Shutting down...")
+    app.state.redis.close()
+    await app.stat.redis.wait_closed()
 
 # --- App Initialization ---
 app = FastAPI(

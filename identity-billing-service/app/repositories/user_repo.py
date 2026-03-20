@@ -1,44 +1,52 @@
 # /identity-billing-service/app/repositories/user_repo.py
-from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, or_
 
-from app.models.user import User 
+from app.models.user import User
 from app.repositories.base import BaseRepository
 
 class UserRepository(BaseRepository[User]):
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         super().__init__(db, User)
 
-    def get_by_id(self, user_id: int) -> User | None:
+    async def get_by_id(self, user_id: int) -> User | None:
         """Retrieve a user by their numeric database ID."""
-        return self.db.query(User).filter(User.id == user_id).first()
+        stmt = select(User).filter(User.id == user_id)
+        result = await self.db.execute(stmt)
+        return result.scalars().first()
 
-    def get_by_username(self, username: str) -> User | None:
+    async def get_by_username(self, username: str) -> User | None:
         """Retrieve a user by their unique username."""
-        return self.db.query(User).filter(User.username == username).first()
+        stmt = select(User).filter(User.username == username)
+        result = await self.db.execute(stmt)
+        return result.scalars().first()
 
-    def get_by_email(self, email: str) -> User | None:
+    async def get_by_email(self, email: str) -> User | None:
         """Retrieve a user by their unique email."""
-        return self.db.query(User).filter(User.email == email).first()
+        stmt = select(User).filter(User.email == email)
+        result = await self.db.execute(stmt)
+        return result.scalars().first()
 
-    def get_by_username_or_email(self, username: str, email: str) -> User | None:
+    async def get_by_username_or_email(self, username: str, email: str) -> User | None:
         """
         Checks if a user exists with either the given username OR email.
         """
-        return self.db.query(User).filter(
+        stmt = select(User).filter(
             or_(User.username == username, User.email == email)
-        ).first()
+        )
+        result = await self.db.execute(stmt)
+        return result.scalars().first()
     
-    def add_credits(self, user_id: str, amount: int):
+    async def add_credits(self, user_id: str, amount: int):
         try:
             db_id = int(user_id)
         except ValueError:
             return None 
             
-        user = self.db.query(User).filter(User.id == db_id).first()
+        user = await self.get_by_id(db_id)
         if user:
             user.credits += amount
-            self.db.commit()
-            self.db.refresh(user)
+            await self.db.commit()
+            await self.db.refresh(user)
             return user
         return None

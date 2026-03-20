@@ -1,6 +1,6 @@
 # /identity-billing-service/app/api/routers/users.py
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
 from app.schemas.user_schemas import UserProfile
@@ -12,7 +12,7 @@ router = APIRouter(tags=["Users"])
 @router.get("/me", response_model=UserProfile)
 async def get_user_profile(
     user_id: str = Depends(get_current_user_id), 
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     try:
         db_user_id = int(user_id)
@@ -20,7 +20,7 @@ async def get_user_profile(
         raise HTTPException(status_code=401, detail="Invalid user ID format in token")
     
     repo = UserRepository(db)
-    user = repo.get_by_id(db_user_id)
+    user = await repo.get_by_id(db_user_id)
     
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -31,7 +31,7 @@ async def get_user_profile(
 async def get_user_credits(
     user_id: int,
     requesting_user_id: str = Depends(get_current_user_id),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     if str(user_id) != str(requesting_user_id):
         raise HTTPException(
@@ -40,7 +40,7 @@ async def get_user_credits(
         )
     
     repo = UserRepository(db)
-    user = repo.get_by_id(user_id)
+    user = await repo.get_by_id(user_id)
     
     if not user:
         raise HTTPException(status_code=404, detail="User not found")

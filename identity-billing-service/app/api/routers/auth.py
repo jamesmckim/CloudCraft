@@ -36,7 +36,7 @@ async def register(
     user: UserRegister, 
     service: AuthService = Depends(get_auth_service)
 ):
-    new_user = service.register_user(user)
+    new_user = await service.register_user(user)
     return {"message": "Account created successfully", "user_id": new_user.id}
 
 @router.post("/token")
@@ -44,4 +44,4 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     service: AuthService = Depends(get_auth_service)
 ):
-    return service.authenticate_user(form_data.username, form_data.password)
+    return await service.authenticate_user(form_data.username, form_data.password)

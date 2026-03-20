@@ -10,7 +10,7 @@ from app.schemas.schemas import GameDeploymentPayload, PowerActionPayload
 router = APIRouter(tags=["Servers"])
 
 @router.get("")
-def list_servers(
+async def list_servers(
     user_id: str = Depends(get_current_user_id),
     service: ServerService = Depends(get_server_service)
 ):
@@ -21,7 +21,7 @@ def list_servers(
     return service.list_servers(user_id)
 
 @router.get("/{server_id}")
-def get_server_details(
+async def get_server_details(
     server_id: str, 
     user_id: str = Depends(get_current_user_id),
     service: ServerService = Depends(get_server_service)

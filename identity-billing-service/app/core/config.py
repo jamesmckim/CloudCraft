@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     PAYPAL_CLIENT_SECRET: str | None = None
     PAYPAL_WEBHOOK_ID: str | None = None
     PAYPAL_MODE: str = "sandbox"  # 'sandbox' or 'live'
+    
+    REDIS_URL: str = "redis://redis-broker:6379/0"
 
     model_config = SettingsConfigDict(
         env_file = ".env",
