@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-worker
+  namespace: craftcloud-system
+  labels:
+    app: payment-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-worker
+  template:
+    metadata:
+      labels:
+        app: payment-worker
+    spec:
+      containers:
+        - name: payment-worker
+          image: payment-worker-image
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: REDIS_URL
+              value: "redis://redis-broker.craftcloud-system.svc.cluster.local:6379/0"
+            - name: IDENTITY_API_URL
+              value: "http://identity-service.craftcloud-system.svc.cluster.local:5000"
+            - name: PAYPAL_MODE
+              value: "sandbox"
+            - name: INTERNAL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: INTERNAL_API_KEY
+            - name: STRIPE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: STRIPE_WEBHOOK_SECRET
+            - name: PAYPAL_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: PAYPAL_CLIENT_ID
+            - name: PAYPAL_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: PAYPAL_CLIENT_SECRET
+            - name: PAYPAL_WEBHOOK_ID
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: PAYPAL_WEBHOOK_ID

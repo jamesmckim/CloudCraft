@@ -1,0 +1,36 @@
+# /identity-billing-service/app/repositories/base.py
+from typing import TypeVar, Generic, Type
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
+from app.core.database import Base
+
+# Define a generic type variable that binds to our SQLAlchemy Base
+ModelType = TypeVar("ModelType", bound=Base)
+
+class BaseRepository(Generic[ModelType]):
+    def __init__(self, db: AsyncSession, model: Type[ModelType]):
+        self.db = db
+        self.model = model
+
+    async def get(self, id: int) -> ModelType | None:
+        """Retrieves a single record by its primary key ID."""
+        stmt = select(self.model).filter(self.model.id == id)
+        result = await self.db.execute(stmt)
+        return result.scalars().first()
+
+    async def create(self, obj_in: ModelType) -> ModelType:
+        """Adds a new record to the database and commits the transaction."""
+        self.db.add(obj_in)
+        await self.db.commit()
+        await self.db.refresh(obj_in)
+        return obj_in
+
+    async def delete(self, id: int) -> bool:
+        """Deletes a record by its ID."""
+        obj = await self.get(id)
+        if obj:
+            await self.db.delete(obj)
+            await self.db.commit()
+            return True
+        return False

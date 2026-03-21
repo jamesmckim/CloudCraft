@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+python-jose[cryptography]
+bcrypt
+python-dotenv
+sqlalchemy
+python-multipart
+psycopg2-binary
+email-validator
+pydantic[email]
+stripe
+paypal-server-sdk
+pydantic-settings
+asyncpg
+arq
+redis

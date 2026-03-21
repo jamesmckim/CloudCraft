@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: identity-allow-traefik
+  namespace: craftcloud-system
+spec:
+  podSelector:
+    matchLabels:
+      app: identity-service
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 5000
+    - from:
+        - podSelector:
+            matchLabels:
+              app: fleet-service
+        - podSelector:
+            matchLabels:
+              app: payment-worker
+      ports:
+        - protocol: TCP
+          port: 5000
