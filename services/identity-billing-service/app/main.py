@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import init_db
-from app.api.routers import auth, payments, users
+from app.api.routers import auth, payments, users, internal
 
 # --- Lifespan Events ---
 @asynccontextmanager
@@ -49,6 +49,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/auth")
 app.include_router(payments.router, prefix="/payments")
 app.include_router(users.router, prefix="/users")
+app.include_router(internal.router, prefix="/internal")
 
 @app.get("/health", tags=["System"])
 async def health_check():

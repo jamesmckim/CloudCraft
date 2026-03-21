@@ -3,12 +3,27 @@ import bcrypt
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
-from fastapi import Depends, HTTPException, status, Header
+from fastapi import Depends, HTTPException, status, Header, Security
+from fastapi.security.api_key import APIKeyHeader
 from fastapi.security import OAuth2PasswordBearer
 
 from app.core.config import settings
 
+internal_api_key_header = APIKeyHeader(name="X-Internal-Token", auto_error=True)
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def verify_internal_token(api_key: str = Security(internal_api_key_header)):
+    """
+    Used exclusively to authenticate requests coming from other internal 
+    microservices (like the payment-worker) bypassing JWTs.
+    """
+    if api_key != settings.INTERNAL_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Invalid internal communication token"
+        )
+    return True
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     password_bytes = plain_password.encode('utf-8')

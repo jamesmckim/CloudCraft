@@ -35,6 +35,11 @@ spec:
                 secretKeyRef:
                   name: identity-secrets
                   key: SECRET_KEY
+            - name: INTERNAL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: INTERNAL_API_KEY
       initContainers:
         - name: wait-for-db
           image: postgres:18-alpine
