@@ -3,9 +3,13 @@ import json
 import stripe
 import httpx
 from arq.connections import RedisSettings
+import asyncio
+import arq
 
 from config import settings
 
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 # --- 1. Verification Helpers ---
 
 async def verify_stripe(raw_payload: bytes, headers: dict) -> dict | None:
