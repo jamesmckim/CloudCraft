@@ -1,35 +1,32 @@
 # /telemetry-service/app/api/dependencies.py
-import os
+import redis.asyncio as aioredis
 from fastapi import Depends
-from sqlalchemy.orm import Session
-from redis import Redis
-from celery import Celery
+from sqlalchemy.ext.asyncio import AsyncSession
+from arq import create_pool
+from arq.connections import RedisSettings, ArqRedis
 
-from app.core.database import SessionLocal
+from app.core.config import settings
+from app.core.database import AsyncSessionLocal
 from app.repositories.incident_repo import IncidentRepository
 from app.services.incident_service import IncidentService
 from app.services.telemetry_service import TelemetryService
 
 # Global connection instances
-redis_client = Redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379/0"), decode_responses=True)
-celery_app = Celery("telemetry_tasks", broker=os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/1"), backend=os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/2"))
+redis_client = aioredis.from_url(settings.REDIS_URL, decode_responses=True)
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
 
-def get_redis() -> Redis:
+async def get_redis() -> aioredis.Redis:
     return redis_client
 
-def get_celery() -> Celery:
-    return celery_app
+async def get_arq_pool() -> ArqRedis:
+    return await create_pool(RedisSettings.from_dsn(settings.REDIS_URL))
 
-def get_incident_service(db: Session = Depends(get_db), celery: Celery = Depends(get_celery)) -> IncidentService:
+def get_incident_service(db: AsyncSession = Depends(get_db), arq_pool: ArqRedis = Depends(get_arq_pool)) -> IncidentService:
     repo = IncidentRepository(db)
-    return IncidentService(repo, celery)
+    return IncidentService(repo, arq_pool)
 
-def get_telemetry_service(redis: Redis = Depends(get_redis), celery: Celery = Depends(get_celery)) -> TelemetryService:
-    return TelemetryService(redis, celery)
+def get_telemetry_service(redis: aioredis.Redis = Depends(get_redis), arq_pool: ArqRedis = Depends(get_arq_pool)) -> TelemetryService:
+    return TelemetryService(redis, arq_pool)

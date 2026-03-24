@@ -1,16 +1,15 @@
 # /telemetry-service/app/services/incident_service.py
-from celery import Celery
-from celery.result import AsyncResult
 from fastapi import HTTPException
-from sqlalchemy.orm import Session
+from arq.jobs import Job, JobStatus
+from arq.connections import ArqRedis
 
 from app.models.models import IncidentReport
 from app.repositories.incident_repo import IncidentRepository
 
 class IncidentService:
-    def __init__(self, incident_repo: IncidentRepository, celery_app: Celery):
+    def __init__(self, incident_repo: IncidentRepository, arq_pool: ArqRedis):
         self.repo = incident_repo
-        self.celery = celery_app
+        self.arq_pool = arq_pool
 
     def get_server_incidents(self, server_id: str, limit: int = 10):
         # Retrieves the most recent incidents for a specific server.
@@ -18,6 +17,7 @@ class IncidentService:
 
     def resolve_ai_incident(self, server_id: str, task_id: str):
         # Checks the status of an AI analysis task. If successful, persists the result as a new IncidentReport.
+        
         result = AsyncResult(task_id, app=self.celery)
         
         if not result.ready():

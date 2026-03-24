@@ -1,55 +1,65 @@
 # worker/ai_worker.py
 import os
-from celery import Celery
-from qdrant_client import QdrantClient
+import asyncio
+from typing import Dict, Any
+from arq.connections import RedisSettings
+from qdrant_client import AsyncQdrantClient
 from qdrant_client.models import Distance, VectorParams
-from openai import OpenAI
+from openai import AsyncOpenAI
 
 # --- Configs ---
 REDIS_URL = os.getenv("REDIS_URL", "redis://redis-broker:6379/0")
 QDRANT_URL = os.getenv("QDRANT_URL", "http://qdrant-db:6333")
 LLM_URL = os.getenv("LLM_URL", "http://host.docker.internal:1234/v1")
-
-# Initialize the OpenAI Client to point to your local machine
-client = OpenAI(
-    base_url=LLM_URL, 
-    api_key="dummy-key-not-checked"
-)
-
-# --- Initialize ---
-celery_app = Celery("ai_worker", broker=REDIS_URL, backend=REDIS_URL)
-qdrant = QdrantClient(url=QDRANT_URL)
-
 COLLECTION_NAME = "server_knowledge"
 
-def get_embedding(text: str) -> list:
+async def startup(ctx: Dict[Any, Any]) -> None:
+    print("Starting AI RAG Worker. Initializing clients...")
+    
+    # Initialize Async Clients
+    llm_client = AsyncOpenAI(base_url=LLM_URL, api_key="dummy-key-not-checked")
+    qdrant_client = AsyncQdrantClient(url=QDRANT_URL)
+    
+    # Run setup once on boot
+    if not await qdrant_client.collection_exists(COLLECTION_NAME):
+        sample_response = await llm_client.embeddings.create(input="test", model="nomic-embed-text")
+        sample_embedding = sample_response.data[0].embedding
+        
+        await qdrant_client.create_collection(
+            collection_name=COLLECTION_NAME,
+            vectors_config=VectorParams(size=len(sample_embedding), distance=Distance.COSINE),
+        )
+    
+    # Attach clients to context for reuse in tasks
+    ctx['llm'] = llm_client
+    ctx['qdrant'] = qdrant_client
+    print("Worker initialization complete.")
+
+async def shutdown(ctx: Dict[Any, Any]) -> None:
+    print("Shutting down worker. Closing connections...")
+    await ctx['llm'].close()
+    # Qdrant async client handles its own cleanup natively
+
+async def get_embedding(client: AsyncOpenAI, text: str) -> list:
     """Calls OpenAI to convert text into a numeric vector array."""
-    response = client.embeddings.create(
+    response = await client.embeddings.create(
         input=text,
         model="nomic-embed-text"
     )
     return response.data[0].embedding
 
-def setup_collection():
-    if not qdrant.collection_exists(COLLECTION_NAME):
-        sample_embedding = get_embedding("test")
-        qdrant.create_collection(
-            collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(size=len(sample_embedding), distance=Distance.COSINE),
-        )
-
-# --- THE CELERY TASK ---
-@celery_app.task(name="analyze_logs_with_rag")
-def analyze_logs_with_rag_task(server_id: str, log_context: list, error_line: str):
-    setup_collection()
+def analyze_logs_with_rag(ctx: Dict[Any, Any], server_id: str, log_context: list, error_line: str):
+    llm = ctx['llm']
+    qdrant = ctx['qdrant']
+    
     print(f"[{server_id}] Worker pulled RAG task from Redis. Trigger: {error_line}")
     
     # 1. RETRIEVAL
-    error_vector = get_embedding(error_line)
+    error_vector = await get_embedding(error_line)
     retrieved_docs_text = "No historical documentation found."
 
     if error_vector:
-        search_results = qdrant.query_points(
+        search_results = await qdrant.query_points(
             collection_name=COLLECTION_NAME,
             query=error_vector,
             limit=3
@@ -84,7 +94,7 @@ def analyze_logs_with_rag_task(server_id: str, log_context: list, error_line: st
     ]
 
     try:
-        response = client.chat.completions.create(
+        response = await client.chat.completions.create(
             model="phi3",
             messages=messages,
             temperature=0.2 # Keep it analytical and factual
@@ -109,3 +119,9 @@ def analyze_logs_with_rag_task(server_id: str, log_context: list, error_line: st
             "error_line": error_line,
             "error_message": error_msg
         }
+
+class WorkerSettings:
+    functions = [analyze_logs_with_rag]
+    redis_settings = RedisSettings.from_dsn(REDIS_URL)
+    on_startup = startup
+    on_shutdown = shutdown

@@ -15,5 +15,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of your application code
 COPY . .
 
-# Start the Celery worker process
-CMD ["celery", "-A", "ai_worker.celery_app", "worker", "--loglevel=info"]
+# Start the ARQ worker process
+CMD ["arq", "ai_worker.WorkerSettings"]

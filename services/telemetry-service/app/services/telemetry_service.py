@@ -1,7 +1,7 @@
 # /telemetry-service/app/services/telemetry_service.py
 from typing import List
-from redis import Redis
-from celery import Celery
+import redis.asyncio as aioredis
+from arq.connections import ArqRedis
 
 from app.schemas.schemas import SidecarMetrics
 
@@ -11,11 +11,11 @@ class TelemetryService:
     TRIGGER_WORDS = ["error", "exception", "failed", "timeout", "critical", "crash"]
     METRICS_TTL = 60
 
-    def __init__(self, redis_client: Redis, celery_app: Celery):
+    def __init__(self, redis_client: aioredis.Redis, arq_pool: ArqRedis):
         self.redis = redis_client
-        self.celery = celery_app
+        self.arq_pool = arq_pool
 
-    def process_logs(self, server_id: str, logs: List[str]):
+    async def process_logs(self, server_id: str, logs: List[str]):
         log_key = f"server_logs:{server_id}"
         cooldown_key = f"ai_cooldown:{server_id}"
         
@@ -35,7 +35,7 @@ class TelemetryService:
         ai_task_id = None
 
         if ai_triggered:
-            can_trigger = self.redis.set(
+            can_trigger = await self.redis.set(
                 cooldown_key, 
                 "active", 
                 nx=True, 
@@ -43,13 +43,16 @@ class TelemetryService:
             )
             
             if can_trigger:
-                context_logs = self.redis.lrange(log_key, 0, -1)
+                context_logs = await self.redis.lrange(log_key, 0, -1)
                 # Ensure this matches the task name registered in your standalone worker container
-                task = self.celery.send_task(
+                job = await self.arq_pool.enqueue_job(
                     "analyze_logs_with_rag", 
-                    args=[server_id, context_logs, triggered_line]
+                    server_id,
+                    context_logs,
+                    triggered_line
                 )
-                ai_task_id = task.id
+                if job:
+                    ai_task_id = job.job_id
 
         return {
             "status": "logs_received", 

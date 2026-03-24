@@ -40,7 +40,7 @@ def send_manager_request(endpoint, payload=None):
     return _make_http_request(url, payload)
 
 def send_telemetry_request(endpoint, payload=None):
-    url = f"{TELEMETRY_URL}/api/internal/servers/{SERVER_UUID}/{endpoint}" 
+    url = f"{TELEMETRY_API_URL}/api/internal/servers/{SERVER_UUID}/{endpoint}" 
     return _make_http_request(url, payload)
 
 def send_agones_request(endpoint):
