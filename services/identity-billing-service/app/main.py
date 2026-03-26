@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
     
     print("Shutting down...")
     app.state.redis.close()
-    await app.stat.redis.wait_closed()
+    await app.state.redis.aclose()
 
 # --- App Initialization ---
 app = FastAPI(

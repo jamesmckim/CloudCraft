@@ -27,7 +27,7 @@ try:
 except config.ConfigException:
     auth_v1 = None # Fallback for local development outside the cluster
 
-async def verify_sidecar_token(authorization: str = Header(None)):
+def verify_sidecar_token(authorization: str = Header(None)):
     """
     Validates the Kubernetes Service Account token injected into the Game Sidecar.
     Used by internal metric ingestion routes.

@@ -18,7 +18,7 @@ async def list_servers(
     Lists all available servers. 
     Requires valid auth (user_id)
     """
-    return service.list_servers(user_id)
+    return await service.list_servers(user_id)
 
 @router.get("/{server_id}")
 async def get_server_details(

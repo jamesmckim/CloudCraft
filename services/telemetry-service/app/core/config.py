@@ -5,8 +5,6 @@ class Settings(BaseSettings):
     # Database & Redis
     DATABASE_URL: str
     REDIS_URL: str = "redis://telemetry-redis:6379/0"
-    CELERY_BROKER_URL: str = "redis://telemetry-redis:6379/1"
-    CELERY_RESULT_BACKEND: str = "redis://telemetry-redis:6379/2"
     
     # Auth & Security
     SECRET_KEY: str

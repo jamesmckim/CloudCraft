@@ -26,7 +26,7 @@ class ServerService:
         self.redis = redis
         self.identity_client = identity_client
 
-    def list_servers(self, user_id: str):
+    async def list_servers(self, user_id: str):
         """Fetches servers from the database so the UUID is preserved and filtered by owner."""
         
         try:
@@ -34,7 +34,7 @@ class ServerService:
         except ValueError:
             raise HTTPException(status_code=400, detail="Invalid user ID format.")
             
-        db_servers = self.server_repo.get_by_owner(user_id_int) 
+        db_servers = await self.server_repo.get_by_owner(user_id_int) 
         
         server_list = []
         for server_record in db_servers:

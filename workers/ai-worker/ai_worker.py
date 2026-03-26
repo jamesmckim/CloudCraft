@@ -48,14 +48,14 @@ async def get_embedding(client: AsyncOpenAI, text: str) -> list:
     )
     return response.data[0].embedding
 
-def analyze_logs_with_rag(ctx: Dict[Any, Any], server_id: str, log_context: list, error_line: str):
+async def analyze_logs_with_rag(ctx: Dict[Any, Any], server_id: str, log_context: list, error_line: str):
     llm = ctx['llm']
     qdrant = ctx['qdrant']
     
     print(f"[{server_id}] Worker pulled RAG task from Redis. Trigger: {error_line}")
     
     # 1. RETRIEVAL
-    error_vector = await get_embedding(error_line)
+    error_vector = await get_embedding(llm, error_line)
     retrieved_docs_text = "No historical documentation found."
 
     if error_vector:
@@ -94,7 +94,7 @@ def analyze_logs_with_rag(ctx: Dict[Any, Any], server_id: str, log_context: list
     ]
 
     try:
-        response = await client.chat.completions.create(
+        response = await llm.chat.completions.create(
             model="phi3",
             messages=messages,
             temperature=0.2 # Keep it analytical and factual
