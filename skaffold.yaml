@@ -1,4 +1,4 @@
-apiVersion: skaffold/v4beta7
+apiVersion: skaffold/v4beta13
 kind: Config
 metadata:
   name: craftcloud
@@ -13,7 +13,7 @@ build:
         dockerfile: Dockerfile
 
     - image: fleet-api-image
-      context: service/fleet-manager
+      context: services/fleet-manager
       docker:
         dockerfile: Dockerfile
 
@@ -141,6 +141,12 @@ profiles:
       kustomize:
         paths:
           - k8s/overlays/dev
+      helm:
+        releases:
+          - name: kube-prometheus-stack
+            repo: https://prometheus-community.github.io/helm-charts
+            remoteChart: kube-prometheus-stack
+            namespace: craftcloud-system
     deploy:
       kubectl: {}
 
@@ -151,6 +157,13 @@ profiles:
           - k8s/overlays/prod
         buildArgs:
           - "--enable-alpha-plugins"
+      helm:
+        releases:
+          - name: kube-prometheus-stack
+            repo: https://prometheus-community.github.io/helm-charts
+            remoteChart: kube-prometheus-stack
+            namespace: craftcloud-system
+      
     deploy:
       kubectl: {}
 
@@ -176,3 +189,13 @@ portForward:
     namespace: craftcloud-system
     port: 5000
     localPort: 5002
+  - resourceType: service
+    resourceName: kube-prometheus-stack-prometheus
+    namespace: craftcloud-system
+    port: 9090
+    localPort: 9090
+  - resourceType: service
+    resourceName: kube-prometheus-stack-grafana
+    namespace: craftcloud-system
+    port: 80
+    localPort: 3000
