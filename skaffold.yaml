@@ -141,12 +141,6 @@ profiles:
       kustomize:
         paths:
           - k8s/overlays/dev
-      helm:
-        releases:
-          - name: kube-prometheus-stack
-            repo: https://prometheus-community.github.io/helm-charts
-            remoteChart: kube-prometheus-stack
-            namespace: craftcloud-system
     deploy:
       kubectl: {}
 
@@ -157,13 +151,6 @@ profiles:
           - k8s/overlays/prod
         buildArgs:
           - "--enable-alpha-plugins"
-      helm:
-        releases:
-          - name: kube-prometheus-stack
-            repo: https://prometheus-community.github.io/helm-charts
-            remoteChart: kube-prometheus-stack
-            namespace: craftcloud-system
-      
     deploy:
       kubectl: {}
 
