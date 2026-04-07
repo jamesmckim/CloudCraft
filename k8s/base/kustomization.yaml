@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - infra/agones-sdk/rbac-sdk.yaml
   - config/
-  - data/postgres/
   - data/redis/
   - data/qdrant/
   - frontend/dashboard/

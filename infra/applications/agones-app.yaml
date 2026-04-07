@@ -6,9 +6,11 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
-    targetRevision: main
-    path: infra/agones
+    repoURL: 'https://agones.dev/chart/stable'
+    targetRevision: 1.40.0
+    chart: agones
+    helm:
+      releaseName: agones-system
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: agones-system
