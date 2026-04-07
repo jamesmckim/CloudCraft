@@ -6,9 +6,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
-    targetRevision: main
-    path: infra/prometheus
+    repoURL: 'https://prometheus-community.github.io/helm-charts'
+    targetRevision: 82.18.0
+    chart: kube-prometheus-stack
+    helm:
+      releaseName: prometheus-stack
+      values: |
+        prometheus:
+          prometheusSpec:
+            serviceMonitorSelectorNilUsesHelmValues: false
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: prometheus-system

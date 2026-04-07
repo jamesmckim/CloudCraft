@@ -4,6 +4,9 @@
 **/.env
 *.env
 
+# --- Skaffold ---
+skaffold
+
 # --- Databases ---
 backend/creaftcloud.db
 *.db

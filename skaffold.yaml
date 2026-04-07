@@ -176,13 +176,3 @@ portForward:
     namespace: craftcloud-system
     port: 5000
     localPort: 5002
-  - resourceType: service
-    resourceName: kube-prometheus-stack-prometheus
-    namespace: craftcloud-system
-    port: 9090
-    localPort: 9090
-  - resourceType: service
-    resourceName: kube-prometheus-stack-grafana
-    namespace: craftcloud-system
-    port: 80
-    localPort: 3000

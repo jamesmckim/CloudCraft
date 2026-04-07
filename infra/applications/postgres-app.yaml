@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-database
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://charts.bitnami.com/bitnami'
+    targetRevision: 15.5.x
+    chart: postgresql
+    helm:
+      releaseName: postgres
+      values: |
+        fullnameOverride: "postgres"
+        primary:
+          persistence:
+            size: 5Gi
+            
+          extraEnvVars:
+            - name: SYNCER_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: SYNCER_DB_PASSWORD
+
+          initdb:
+            scripts:
+              init-dbs.sh: |
+                #!/bin/bash
+                set -e
+                psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+                    CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
+                    CREATE DATABASE thunderstore;
+                    GRANT ALL PRIVILEGES ON DATABASE thunderstore TO syncer_user;
+                    GRANT SELECT ON ALL TABLES IN SCHEMA public TO "$POSTGRES_USER";
+                EOSQL
+
+        auth:
+          database: "craftcloud"
+          username: "user"
+          existingSecret: "postgres-secrets"
+          secretKeys:
+            userPasswordKey: "DB_PASS"
+            # Bitnami requires a postgres (admin) password even if you don't use it.
+            # You can map it to the same password, or add an ADMIN_PASS to your secret generator.
+            adminPasswordKey: "DB_PASS" 
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: craftcloud-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
