@@ -41,7 +41,7 @@ spec:
                     CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
                     CREATE DATABASE thunderstore;
                     GRANT ALL PRIVILEGES ON DATABASE thunderstore TO syncer_user;
-                    GRANT SELECT ON ALL TABLES IN SCHEMA public TO "$POSTGRES_USER";
+                    GRANT SELECT ON ALL TABLES IN SCHEMA public TO "$POSTGRESQL_USERNAME";
                 EOSQL
 
         auth:
