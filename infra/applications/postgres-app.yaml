@@ -38,7 +38,7 @@ spec:
                 #!/bin/bash
                 set -e
                 
-                export PGPASSWORD=$(cat "$POSTGRES_POSTGRES_PASSWORD_FILE")
+                export PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/DB_PASS)
                 
                 psql -v ON_ERROR_STOP=1 --username postgres --dbname postgres <<-EOSQL
                     CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
@@ -46,8 +46,8 @@ spec:
                     GRANT ALL PRIVILEGES ON DATABASE thunderstore TO syncer_user;
                 EOSQL
                 
-                psql -v ON_ERROR_STOP=1 --username postgres --dbname "$POSTGRES_DATABASE" <<-EOSQL
-                    GRANT SELECT ON ALL TABLES IN SCHEMA public TO "$POSTGRES_USER";
+                psql -v ON_ERROR_STOP=1 --username postgres --dbname craftcloud <<-EOSQL
+                    GRANT SELECT ON ALL TABLES IN SCHEMA public TO "user";
                 EOSQL
 
         auth:
