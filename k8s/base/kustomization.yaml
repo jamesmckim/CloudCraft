@@ -5,7 +5,6 @@ resources:
   - infra/agones-sdk/rbac-sdk.yaml
   - config/
   - data/redis/
-  - data/qdrant/
   - frontend/dashboard/
   - workers/mod-syncer/
   - workers/ai-rag-worker/

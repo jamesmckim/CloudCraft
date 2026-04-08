@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: qdrant-database
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://qdrant.github.io/qdrant-helm'
+    targetRevision: 1.17.x
+    chart: qdrant
+    helm:
+      releaseName: qdrant
+      values: |
+        persistence:
+          size: 5Gi
+        
+        # We disable the API key for local dev to keep things simple.
+        # If you want to use an API key later, you can map it to a secret just like Postgres!
+        apiKey: false 
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: craftcloud-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

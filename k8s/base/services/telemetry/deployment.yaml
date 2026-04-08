@@ -45,7 +45,7 @@ spec:
           image: postgres:18-alpine
           env:
             - name: PGHOST
-              value: "postgres-service"
+              value: "postgres"
             - name: PGUSER
               value: "user"
           command:
