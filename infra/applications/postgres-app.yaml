@@ -44,7 +44,7 @@ spec:
                 EOSQL
                 
                 psql -v ON_ERROR_STOP=1 --username postgres --dbname "$POSTGRES_DATABASE" <<-EOSQL
-                    GRANT SELECT ON ALL TABLES IN SCHEMA public TO "$POSTGRESQL_USERNAME";
+                    GRANT SELECT ON ALL TABLES IN SCHEMA public TO "$POSTGRES_USER";
                 EOSQL
 
         auth:
