@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-broker
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://charts.bitnami.com/bitnami'
+    targetRevision: 25.3.x
+    chart: redis
+    helm:
+      releaseName: redis-broker
+      values: |
+        fullnameOverride: "redis-broker"
+        architecture: standalone
+        
+        # Disable auth to match your previous raw deployment
+        auth:
+          enabled: false
+          
+        # Disable persistent storage so it acts as an in-memory broker
+        master:
+          persistence:
+            enabled: false
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: craftcloud-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

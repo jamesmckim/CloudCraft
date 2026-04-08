@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - infra/agones-sdk/rbac-sdk.yaml
   - config/
-  - data/redis/
   - frontend/dashboard/
   - workers/mod-syncer/
   - workers/ai-rag-worker/
