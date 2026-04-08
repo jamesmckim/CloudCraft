@@ -7,10 +7,44 @@ spec:
   project: default
   source:
     repoURL: 'https://agones.dev/chart/stable'
-    targetRevision: 1.40.0
+    targetRevision: 1.56.0
     chart: agones
     helm:
       releaseName: agones-system
+      values: |
+        agones:
+          controller:
+            resources:
+              requests:
+                cpu: "50m"
+                memory: "64Mi"
+              limits:
+                cpu: "200m"
+                memory: "256Mi"
+          allocator:
+            resources:
+              requests:
+                cpu: "20m"
+                memory: "32Mi"
+              limits:
+                cpu: "100m"
+                memory: "128Mi"
+          ping:
+            resources:
+              requests:
+                cpu: "10m"
+                memory: "16Mi"
+              limits:
+                cpu: "50m"
+                memory: "64Mi"
+          extensions:
+            resources:
+              requests:
+                cpu: "20m"
+                memory: "32Mi"
+              limits:
+                cpu: "100m"
+                memory: "128Mi"
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: agones-system
@@ -18,5 +52,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
