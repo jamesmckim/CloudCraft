@@ -37,10 +37,13 @@ spec:
               init-dbs.sh: |
                 #!/bin/bash
                 set -e
-                psql -v ON_ERROR_STOP=1 --username "$POSTGRESQL_USERNAME" --dbname "$POSTGRESQL_DATABASE" <<-EOSQL
+                psql -v ON_ERROR_STOP=1 --username postgres --dbname postgres <<-EOSQL
                     CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
                     CREATE DATABASE thunderstore;
                     GRANT ALL PRIVILEGES ON DATABASE thunderstore TO syncer_user;
+                EOSQL
+                
+                psql -v ON_ERROR_STOP=1 --username postgres --dbname "$POSTGRES_DATABASE" <<-EOSQL
                     GRANT SELECT ON ALL TABLES IN SCHEMA public TO "$POSTGRESQL_USERNAME";
                 EOSQL
 
