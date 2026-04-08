@@ -37,6 +37,9 @@ spec:
               init-dbs.sh: |
                 #!/bin/bash
                 set -e
+                
+                export PGPASSWORD=$(cat "$POSTGRES_POSTGRES_PASSWORD_FILE")
+                
                 psql -v ON_ERROR_STOP=1 --username postgres --dbname postgres <<-EOSQL
                     CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
                     CREATE DATABASE thunderstore;
