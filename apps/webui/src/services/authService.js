@@ -17,6 +17,7 @@ const Auth = {
 
     async login(username, password) {
         const params = new URLSearchParams();
+		params.append('grant_type', 'password');
         params.append('username', username);
         params.append('password', password);
 

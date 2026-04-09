@@ -4,7 +4,7 @@ exec > /var/log/cloudlab-setup.log 2>&1
 
 # The token is passed as the first argument from profile.py
 export CLUSTER_TOKEN=$1
-REPO_DIR="/local/repository/scripts"
+REPO_DIR="/tmp/bootstrap"
 
 echo "Installing base utilities..."
 apt-get update

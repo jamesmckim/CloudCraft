@@ -23,7 +23,7 @@ class AuthService:
                 detail="Username or Email already registered"
             )
 
-        hashed_pw = await run_in_threadpool(get_password_hash(user_data.password))
+        hashed_pw = await run_in_threadpool(get_password_hash, user_data.password)
 
         new_user = User(
             username=user_data.username,
@@ -47,7 +47,7 @@ class AuthService:
 
         if not user:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect username or password"
             )
 
