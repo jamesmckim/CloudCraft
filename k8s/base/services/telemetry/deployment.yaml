@@ -63,8 +63,8 @@ spec:
             - 'sh'
             - '-c'
             - >
-              echo "Waiting for redis-broker:6379...";
-              until nc -z redis-broker 6379; do
+              echo "Waiting for redis-broker-master:6379...";
+              until nc -z redis-broker-master 6379; do
                 sleep 2;
               done;
               echo "Redis is ready!";

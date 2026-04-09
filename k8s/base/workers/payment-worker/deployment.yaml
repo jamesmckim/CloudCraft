@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: REDIS_URL
-              value: "redis://redis-broker.craftcloud-system.svc.cluster.local:6379/0"
+              value: "redis://redis-broker-master.craftcloud-system.svc.cluster.local:6379/0"
             - name: IDENTITY_API_URL
               value: "http://identity-service.craftcloud-system.svc.cluster.local:5000"
             - name: PAYPAL_MODE
