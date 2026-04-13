@@ -18,6 +18,9 @@ def create_slice():
     print("Submitting slice request to NSF FABRIC...")
     slice.submit()
     print("Slice is active!")
+    
+    slice.wait_ssh()
+    print("All nodes are accessible via SSH!")
 
     # 5. THE HANDOFF: Extract the IPs to pass to your SSH script
     cluster_ips = {

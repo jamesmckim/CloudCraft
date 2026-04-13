@@ -6,14 +6,37 @@ from fabric import Connection, task
 with open('cluster_ips.json', 'r') as f:
     IPS = json.load(f)
 
-CLUSTER_TOKEN = "AgonesCloudLabSecureToken123"
+CLUSTER_TOKEN = "AgonesCloudLabSecureToken123" # <-- SECURITY RISK REMOVVE WITH EV
+
+# --- FABRIC SSH CONFIGURATION ---
+BASTION_USER = "jm1029804_0000480603" # <-- REPLACE THIS
+BASTION_HOST = "bastion.fabric-testbed.net"
+BASTION_KEY = "/home/fabric/.ssh/fabric-bastion-key"
+SLIVER_KEY = "/home/fabric/.ssh/slice_key"
+
+# Create the Bastion jump host connection
+bastion = Connection(
+    host=BASTION_HOST, 
+    user=BASTION_USER, 
+    connect_kwargs={"key_filename": BASTION_KEY}
+)
+
+def get_node_connection(ip):
+    """Helper function to create a proxied connection to a node"""
+    return Connection(
+        host=ip,
+        user="ubuntu",
+        gateway=bastion, # This tells Python Fabric to jump through the Bastion!
+        connect_kwargs={"key_filename": SLIVER_KEY}
+    )
 
 @task
 def setup_cluster(c):
     # 1. Setup Control Plane
     master_ip = IPS['master']
     print(f"Bootstrapping Control Plane at {master_ip}...")
-    master = Connection(host=master_ip, user="ubuntu") # Default FABRIC user
+    
+    master = get_node_connection(master_ip)
     
     master.put('./infra/bootstrap', '/tmp')
     master.run('chmod +x /tmp/booststrap/*.sh')
@@ -31,27 +54,28 @@ def setup_cluster(c):
         worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_ip}')
 
 @task
-def deploy_app(c):
-    """Uploads the project and runs Skaffold on the Control Plane"""
+def deploy_app(c, repo_url):
+    """Clones a Git repo onto the Control Plane and deploys it via Skaffold"""
     # Load the dynamic IP
     with open('cluster_ips.json', 'r') as f:
         master_ip = json.load(f)['master']
     
     print(f"Connecting to Control Plane ({master_ip}) to deploy app...")
-    master = Connection(host=master_ip, user="ubuntu")
+    master = get_node_connection(master_ip)
     
-    # 1. Create a directory for your project on the server
-    master.run('mkdir -p ~/my-game-platform')
+    repo_name = repo_url.split('/'[-1].replace('.git', ''))
+    target_dir = f"~/{repo_name}"
     
-    # 2. Upload your entire project directory using rsync (much faster than standard put for whole folders)
-    # Note: Requires rsync installed locally and on the server
-    print("Uploading project files...")
-    master.local(f'rsync -avz --exclude=".git" --exclude="node_modules" ./ {master.user}@{master.host}:~/my-game-platform')
-
+    print(f"Cloning repository from {repo_url}...")
+    master.run('sudo apt-get install -y git', hid=True)
+    
+    master.run(f'rm -rf {target_dir}')
+    master.run(f'git clone {repo_dir} {target_dir}')
+    
     # 3. Execute Skaffold using the k8s/overlays/prod environment
     print("Running Skaffold build and deploy...")
-    with master.cd('~/my-game-platform'):
+    with master.cd(target_dir):
         # Ensure kubeconfig is loaded so Skaffold can talk to K3s
         master.run('export KUBECONFIG=/etc/rancher/k3s/k3s.yaml && skaffold run -p prod')
         
-    print("🚀 Application successfully deployed!")
+    print("🚀 Application successfully deployed from Git!")
