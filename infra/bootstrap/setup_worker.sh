@@ -18,4 +18,4 @@ echo "Control plane is up! Joining the cluster..."
 curl -sfL https://get.k3s.io | K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN="$CLUSTER_TOKEN" sh -
 
 echo "Worker Setup Complete!"
-touch /local/setup_complete
+touch /tmp/setup_complete

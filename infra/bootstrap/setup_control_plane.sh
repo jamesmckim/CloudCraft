@@ -33,4 +33,4 @@ echo "Kubernetes is ready. Running Agones installer..."
 bash $REPO_DIR/install_agones.sh
 
 echo "Control Plane Setup Complete!"
-touch /local/setup_complete
+touch /tmp/setup_complete
