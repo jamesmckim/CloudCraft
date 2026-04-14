@@ -35,7 +35,7 @@ def get_node_connection(ip):
 def setup_cluster(c):
     
     print("Packaging bootstrap scipts...")
-    c.local('tar -czf bootstrap.tar.gz -C ./infra bootstrap')
+    c.run('tar -czf bootstrap.tar.gz -C ./infra bootstrap')
     
     # 1. Setup Control Plane
     master_ip = IPS['master']
@@ -59,6 +59,8 @@ def setup_cluster(c):
         
         # Pass BOTH the token and the master_ip to the worker script
         worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_ip}')
+    
+    c.run('rm bootstrap.tar.gz')
 
 @task
 def deploy_app(c, repo_url):
