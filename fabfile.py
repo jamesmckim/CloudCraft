@@ -39,15 +39,15 @@ def setup_cluster(c):
     
     # 1. Setup Control Plane
     master_ip = IPS['master']
-    print(f"Bootstrapping Control Plane at {master_ip}...")
     
+    print(f"Re-configuring Control Plane at {master_ip} for IPv6...")
     master = get_node_connection(master_ip)
 
     master.put('bootstrap.tar.gz', '/tmp/bootstrap.tar.gz')
     master.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
     
     master.run('chmod +x /tmp/bootstrap/*.sh')
-    master.run(f'sudo /tmp/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN}')
+    master.run(f'sudo /tmp/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN} {master_ip}')
 
     # 2. Setup Workers
     for worker_ip in IPS['workers']:
@@ -58,7 +58,7 @@ def setup_cluster(c):
         worker.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
         
         worker.run('chmod +x /tmp/bootstrap/*.sh')
-        worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_ip}')
+        worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_ip} {worker_ip}')
     
     c.run('rm bootstrap.tar.gz')
 
