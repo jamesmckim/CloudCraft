@@ -69,19 +69,19 @@ def deploy_app(c, repo_url):
     """Clones a Git repo onto the Control Plane and deploys it via Skaffold"""
     # Load the dynamic IP
     with open('cluster_ips.json', 'r') as f:
-        master_ip = json.load(f)['master']
+        master_ssh = json.load(f)['master']
     
-    print(f"Connecting to Control Plane ({master_ip}) to deploy app...")
-    master = get_node_connection(master_ip)
+    print(f"Connecting to Control Plane ({master_ssh}) to deploy app...")
+    master = get_node_connection(master_ssh)
     
-    repo_name = repo_url.split('/'[-1].replace('.git', ''))
-    target_dir = f"~/{repo_name}"
+    repo_name = repo_url.split('/')[-1].replace('.git', '')
+    target_dir = f"~/home/ubuntu/{repo_name}"
     
     print(f"Cloning repository from {repo_url}...")
-    master.run('sudo apt-get install -y git', hid=True)
+    master.run('sudo apt-get update && sudo apt-get install -y git', hide=True)
     
     master.run(f'rm -rf {target_dir}')
-    master.run(f'git clone {repo_dir} {target_dir}')
+    master.run(f'git clone {repo_url} {target_dir}')
     
     # 3. Execute Skaffold using the k8s/overlays/prod environment
     print("Running Skaffold build and deploy...")
