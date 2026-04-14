@@ -33,32 +33,34 @@ def get_node_connection(ip):
 
 @task
 def setup_cluster(c):
-    
     print("Packaging bootstrap scipts...")
     c.run('tar -czf bootstrap.tar.gz -C ./infra bootstrap')
     
     # 1. Setup Control Plane
-    master_ip = IPS['master']
+    master_ssh = IPS['master']['ssh_ip']
+    master_internal = IPS['master']['internal_ip']
     
-    print(f"Re-configuring Control Plane at {master_ip} for IPv6...")
-    master = get_node_connection(master_ip)
-
+    print(f"Bootstrapping Control Plane at {master_internal}...")
+    master = get_node_connection(master_ssh)
     master.put('bootstrap.tar.gz', '/tmp/bootstrap.tar.gz')
     master.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
-    
     master.run('chmod +x /tmp/bootstrap/*.sh')
-    master.run(f'sudo /tmp/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN} {master_ip}')
+    
+    # Pass internal IP to script
+    master.run(f'sudo /tmp/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN} {master_internal}')
 
     # 2. Setup Workers
-    for worker_ip in IPS['workers']:
-        print(f"Bootstrapping Worker at {worker_ip}...")
-        worker = get_node_connection(worker_ip)
+    for worker_data in IPS['workers']:
+        worker_ssh = worker_data['ssh_ip']
+        worker_internal = worker_data['internal_ip']
         
+        print(f"Bootstrapping Worker at {worker_internal}...")
+        worker = get_node_connection(worker_ssh)
         worker.put('bootstrap.tar.gz', '/tmp/bootstrap.tar.gz')
         worker.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
-        
         worker.run('chmod +x /tmp/bootstrap/*.sh')
-        worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_ip} {worker_ip}')
+        
+        worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_internal} {worker_internal}')
     
     c.run('rm bootstrap.tar.gz')
 

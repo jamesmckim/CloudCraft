@@ -9,25 +9,42 @@ def create_slice():
 
     # 2. Add a Control Plane Node
     master = slice.add_node(name="control-plane", site="TACC", image="default_ubuntu_22")
-    
-    # 3. Add Worker Nodes
     worker1 = slice.add_node(name="worker-1", site="TACC", image="default_ubuntu_22")
     worker2 = slice.add_node(name="worker-2", site="TACC", image="default_ubuntu_22")
+
+    iface_m = master.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
+    iface_w1 = worker1.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
+    iface_w2 = worker2.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
+
+    # 3. Create a Local Area Network (LAN) connecting them
+    net = slice.add_l2network(name="k8s-lan", interfaces=[iface_m, iface_w1, iface_w2])
+
 
     # 4. Submit the request and wait for the hardware to boot
     print("Submitting slice request to NSF FABRIC...")
     slice.submit()
-    print("Slice is active!")
-    
+    print("Slice is active! Waiting for SSH")
     slice.wait_ssh()
-    print("All nodes are accessible via SSH!")
+    
+    print("Configuring Internal Network (10.10.10.x)...")
+    iface_m.ip_addr_add(addr="10.10.10.10", subnet=24)
+    iface_m.ip_link_up()
 
+    iface_w1.ip_addr_add(addr="10.10.10.11", subnet=24)
+    iface_w1.ip_link_up()
+
+    iface_w2.ip_addr_add(addr="10.10.10.12", subnet=24)
+    iface_w2.ip_link_up()
+    
     # 5. THE HANDOFF: Extract the IPs to pass to your SSH script
     cluster_ips = {
-        "master": slice.get_node("control-plane").get_management_ip(),
+        "master": {
+            "ssh_ip": master.get_management_ip(),
+            "internal_ip": "10.10.10.10"
+        },
         "workers": [
-            slice.get_node("worker-1").get_management_ip(),
-            slice.get_node("worker-2").get_management_ip()
+            {"ssh_ip": worker1.get_management_ip(), "internal_ip": "10.10.10.11"},
+            {"ssh_ip": worker2.get_management_ip(), "internal_ip": "10.10.10.12"}
         ]
     }
     
