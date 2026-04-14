@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-exec > /var/log/cloudlab-setup.log 2>&1
+# exec > /var/log/cloudlab-setup.log 2>&1
 
 # The token is passed as the first argument from profile.py
 export CLUSTER_TOKEN=$1
