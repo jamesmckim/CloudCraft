@@ -1,3 +1,5 @@
+import json
+import ipaddress
 from fabrictestbed_extensions.fablib.fablib import FablibManager
 
 fablib = FablibManager()
@@ -26,14 +28,16 @@ def create_slice():
     print("Slice is active! Waiting for SSH")
     slice.wait_ssh()
     
+    lan_subnet = ipaddress.IPv4Network("10.10.10.0/24")
+    
     print("Configuring Internal Network (10.10.10.x)...")
-    iface_m.ip_addr_add(addr="10.10.10.10", subnet=24)
+    iface_m.ip_addr_add(addr="10.10.10.10", subnet=lan_subnet)
     iface_m.ip_link_up()
 
-    iface_w1.ip_addr_add(addr="10.10.10.11", subnet=24)
+    iface_w1.ip_addr_add(addr="10.10.10.11", subnet=lan_subnet)
     iface_w1.ip_link_up()
 
-    iface_w2.ip_addr_add(addr="10.10.10.12", subnet=24)
+    iface_w2.ip_addr_add(addr="10.10.10.12", subnet=lan_subnet)
     iface_w2.ip_link_up()
     
     # 5. THE HANDOFF: Extract the IPs to pass to your SSH script
@@ -49,7 +53,6 @@ def create_slice():
     }
     
     # Save these IPs to a file so fabfile.py can read them
-    import json
     with open('cluster_ips.json', 'w') as f:
         json.dump(cluster_ips, f)
     print("Saved IPs to cluster_ips.json")
