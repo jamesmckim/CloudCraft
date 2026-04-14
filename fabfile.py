@@ -46,7 +46,7 @@ def setup_cluster(c):
     master.put('bootstrap.tar.gz', '/tmp/bootstrap.tar.gz')
     master.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
     
-    master.run('chmod +x /tmp/booststrap/*.sh')
+    master.run('chmod +x /tmp/bootstrap/*.sh')
     master.run(f'sudo /tmp/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN}')
 
     # 2. Setup Workers
