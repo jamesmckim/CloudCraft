@@ -28,6 +28,14 @@ def create_slice():
     print("Slice is active! Waiting for SSH")
     slice.wait_ssh()
     
+    master = slice.get_node("control-plane")
+    worker1 = slice.get_node("worker-1")
+    worker2 = slice.get_node("worker-2")
+    
+    iface_m = master.get_interface(network_name="k8s-lan")
+    iface_w1 = worker1.get_interface(network_name="k8s-lan")
+    iface_w2 = worker2.get_interface(network_name="k8s-lan")
+    
     lan_subnet = ipaddress.IPv4Network("10.10.10.0/24")
     
     print("Configuring Internal Network (10.10.10.x)...")
