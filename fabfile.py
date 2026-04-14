@@ -52,12 +52,12 @@ def setup_cluster(c):
     # 2. Setup Workers
     for worker_ip in IPS['workers']:
         print(f"Bootstrapping Worker at {worker_ip}...")
-        worker = Connection(host=worker_ip, user="ubuntu")
+        worker = get_node_connection(worker_ip)
         
-        worker.put('./infra/bootstrap', '/tmp')
+        worker.put('bootstrap.tar.gz', '/tmp/bootstrap.tar.gz')
+        worker.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
+        
         worker.run('chmod +x /tmp/bootstrap/*.sh')
-        
-        # Pass BOTH the token and the master_ip to the worker script
         worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_ip}')
     
     c.run('rm bootstrap.tar.gz')
