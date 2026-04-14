@@ -33,20 +33,21 @@ def get_node_connection(ip):
 
 @task
 def setup_cluster(c):
+    
+    print("Packaging bootstrap scipts...")
+    c.local('tar -czf bootstrap.tar.gz -C ./infra bootstrap')
+    
     # 1. Setup Control Plane
     master_ip = IPS['master']
     print(f"Bootstrapping Control Plane at {master_ip}...")
     
     master = get_node_connection(master_ip)
+
+    master.put('bootstrap.tar.gz', '/tmp/bootstrap.tar.gz')
+    master.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
     
-    master.run('mkdir -p /home/ubuntu/booststrap')
-    
-    for script in os.listdir('./infra/bootstrap'):
-        if script.endswith('.sh'):
-            master.put(f'./infra/bootstrap/{script}', f'/home/ubuntu/bootstrap/{script}')
-    
-    master.run('chmod +x /home/ubuntu/booststrap/*.sh')
-    master.run(f'sudo /home/ubuntu/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN}')
+    master.run('chmod +x /tmp/booststrap/*.sh')
+    master.run(f'sudo /tmp/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN}')
 
     # 2. Setup Workers
     for worker_ip in IPS['workers']:
@@ -54,10 +55,10 @@ def setup_cluster(c):
         worker = Connection(host=worker_ip, user="ubuntu")
         
         worker.put('./infra/bootstrap', '/tmp')
-        worker.run('chmod +x /home/ubuntu/bootstrap/*.sh')
+        worker.run('chmod +x /tmp/bootstrap/*.sh')
         
         # Pass BOTH the token and the master_ip to the worker script
-        worker.run(f'sudo /home/ubuntu/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_ip}')
+        worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_ip}')
 
 @task
 def deploy_app(c, repo_url):
