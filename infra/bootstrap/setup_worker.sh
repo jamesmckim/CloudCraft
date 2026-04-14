@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-exec > /var/log/cloudlab-setup.log 2>&1
+# exec > /var/log/cloudlab-setup.log 2>&1
 
 export CLUSTER_TOKEN=$1
 export MASTER_IP=$2
