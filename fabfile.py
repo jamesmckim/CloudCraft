@@ -39,6 +39,8 @@ def setup_cluster(c):
     
     master = get_node_connection(master_ip)
     
+    master.run('mkdir -p /tmp/booststrap')
+    
     for script in os.listdir('./infra/bootstrap'):
         if script.endswith('.sh'):
             master.put(f'./infra/bootstrap/{script}', f'/tmp/bootstrap/{script}')
