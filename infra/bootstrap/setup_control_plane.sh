@@ -4,6 +4,7 @@ set -e
 
 # The token is passed as the first argument from profile.py
 export CLUSTER_TOKEN=$1
+export MASTER_IP=$2
 REPO_DIR="/tmp/bootstrap"
 
 echo "Installing base utilities..."
@@ -17,7 +18,7 @@ bash $REPO_DIR/install_skaffold.sh
 bash $REPO_DIR/install_helm.sh
 
 echo "Spinning up Kubernetes (K3s Control Plane)..."
-curl -sfL https://get.k3s.io | K3S_TOKEN="$CLUSTER_TOKEN" sh -s - server --cluster-init
+curl -sfL https://get.k3s.io | K3S_TOKEN="$CLUSTER_TOKEN" sh -s - server --cluster-init --node-ip="$MASTER_IP" --bind-address="$MASTER_IP"
 
 # Set up kubeconfig so the root user can use kubectl and helm
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
