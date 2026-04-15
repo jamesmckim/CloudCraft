@@ -75,13 +75,18 @@ def deploy_app(c, repo_url):
     master = get_node_connection(master_ssh)
     
     repo_name = repo_url.split('/')[-1].replace('.git', '')
-    target_dir = f"~/home/ubuntu/{repo_name}"
+    target_dir = repo_name
     
     print(f"Cloning repository from {repo_url}...")
     master.run('sudo apt-get update && sudo apt-get install -y git', hide=True)
     
     master.run(f'rm -rf {target_dir}')
     master.run(f'git clone {repo_url} {target_dir}')
+    
+    # Securely copy the kubeconfig so the 'ubuntu' user can read it
+    master.run('mkdir -p ~/.kube')
+    master.run('sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config')
+    master.run('sudo chown -R $USER:$USER ~/.kube')
     
     # 3. Execute Skaffold using the k8s/overlays/prod environment
     print("Running Skaffold build and deploy...")
