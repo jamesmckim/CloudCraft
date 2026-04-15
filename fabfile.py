@@ -47,7 +47,7 @@ def setup_cluster(c):
     master.run('chmod +x /tmp/bootstrap/*.sh')
     
     # Pass internal IP to script
-    master.run(f'sudo /tmp/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN} {master_internal}')
+    master.run(f'sudo /tmp/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN} {master_internal}', pty=True)
 
     # 2. Setup Workers
     for worker_data in IPS['workers']:
@@ -60,7 +60,7 @@ def setup_cluster(c):
         worker.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
         worker.run('chmod +x /tmp/bootstrap/*.sh')
         
-        worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_internal} {worker_internal}')
+        worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_internal} {worker_internal}', pty=True)
     
     c.run('rm bootstrap.tar.gz')
 
