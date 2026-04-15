@@ -69,7 +69,7 @@ def deploy_app(c, repo_url):
     """Clones a Git repo onto the Control Plane and deploys it via Skaffold"""
     # Load the dynamic IP
     with open('cluster_ips.json', 'r') as f:
-        master_ssh = json.load(f)['master']
+        master_ssh = json.load(f)['master']['ssh_ip']
     
     print(f"Connecting to Control Plane ({master_ssh}) to deploy app...")
     master = get_node_connection(master_ssh)
