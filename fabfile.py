@@ -92,6 +92,6 @@ def deploy_app(c, repo_url):
     print("Running Skaffold build and deploy...")
     with master.cd(target_dir):
         # Ensure kubeconfig is loaded so Skaffold can talk to K3s
-        master.run('export KUBECONFIG=/etc/rancher/k3s/k3s.yaml && skaffold run -p prod')
+        master.run('KUBECONFIG=/home/ubuntu/.kube/config skaffold run -p prod')
         
     print("🚀 Application successfully deployed from Git!")
