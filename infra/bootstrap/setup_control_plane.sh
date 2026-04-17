@@ -33,5 +33,8 @@ done
 echo "Kubernetes is ready. Running Agones installer..."
 bash $REPO_DIR/install_agones.sh
 
+echo "Running ArgoCD bootstrap..."
+bash $REPO_DIR/install_argocd.sh
+
 echo "Control Plane Setup Complete!"
 touch /tmp/setup_complete
