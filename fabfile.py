@@ -72,7 +72,7 @@ def setup_cluster(c):
     time.sleep(15) 
     
     # Apply the root application file directly from your raw GitHub content
-    raw_app_url = "https://raw.githubusercontent.com/jamesmckim/CloudCraft/project/infra/applications/argocd-app.yaml"
+    raw_app_url = "https://raw.githubusercontent.com/jamesmckim/CloudCraft/project/infra/applications/argocd_app.yaml"
     master.run(f'sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl apply -f {raw_app_url}')
     
     print("🚀 GitOps Pipeline Initialized! ArgoCD is now pulling your game servers.")
