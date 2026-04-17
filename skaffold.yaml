@@ -134,7 +134,6 @@ profiles:
            manual:
              - src: '**/*.py'
                dest: /app
-
     manifests:
       rawYaml:
         - k8s/base/namespace.yaml
@@ -145,6 +144,9 @@ profiles:
       kubectl: {}
 
   - name: prod
+    build:
+      local:
+        push: true
     manifests:
       kustomize:
         paths:
