@@ -100,7 +100,7 @@ def argocd(c):
     time.sleep(15) 
     
     raw_app_url = "https://raw.githubusercontent.com/jamesmckim/CloudCraft/main/infra/applications/argocd-app.yaml"
-    master.run(f'sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl apply -f {raw_app_url}')
+    master.run(f'sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl apply --server-side -f {raw_app_url}')
     print("🚀 GitOps Pipeline Initialized! ArgoCD is now pulling your game servers.")
 
 @task(default=True)

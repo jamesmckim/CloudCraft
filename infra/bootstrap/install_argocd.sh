@@ -5,7 +5,7 @@ source /tmp/bootstrap/utils.sh
 
 # 1. Create namespace and install
 kubectl get namespace argocd >/dev/null 2>&1 || kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply --server-side -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 # 2. Wait for the Application CRD to be established so we can feed it our repo
 echo "Waiting for ArgoCD CRDs to initialize..."
