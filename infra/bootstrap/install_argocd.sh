@@ -11,6 +11,6 @@ kubectl wait --for=condition=established --timeout=120s crd/applications.argopro
 
 # 3. Wait for the server pod to be ready
 echo "Waiting for ArgoCD Server to spin up..."
-kubectl wait --for=condition=Ready pods --all -n argocd --timeout=300s
+kubectl wait --for=condition=Available deployment/argocd-server -n argocd --timeout=300s
 
 echo "ArgoCD Installation Complete!"
