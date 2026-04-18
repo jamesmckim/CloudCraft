@@ -49,11 +49,8 @@ def cleanup(c):
 
     # 2. Clean the Workers
     for worker_data in IPS['workers']:
-        w_ssh = worker_data['ssh_ip']
-        w_internal = worker_data['internal_ip']
-        
         print(f"🧹 Wiping Worker at {worker_data['internal_ip']}...")
-        worker = get_node_connection(worker_ssh)
+        worker = get_node_connection(worker_data['ss_ip'])
         # Workers use a slightly different script name
         worker.run('sudo /usr/local/bin/k3s-agent-uninstall.sh', warn=True)
         worker.run('sudo rm -rf /tmp/bootstrap /tmp/bootstrap.tar.gz /temp/setup_complete', warn=True)
