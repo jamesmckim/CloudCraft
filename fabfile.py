@@ -8,7 +8,7 @@ from fabric import Connection, task
 with open('cluster_ips.json', 'r') as f:
     IPS = json.load(f)
 
-CLUSTER_TOKEN = "AgonesCloudLabSecureToken123" # <-- SECURITY RISK REMOVVE WITH EV
+CLUSTER_TOKEN = "AgonesCloudLabSecureToken123" # <-- SECURITY RISK REMOVE WITH EV
 
 # --- FABRIC SSH CONFIGURATION ---
 BASTION_USER = "jm1029804_0000480603" # <-- REPLACE THIS
@@ -28,51 +28,74 @@ def get_node_connection(ip):
     return Connection(
         host=ip,
         user="ubuntu",
-        gateway=bastion, # This tells Python Fabric to jump through the Bastion!
+        gateway=bastion,
         connect_kwargs={"key_filename": SLIVER_KEY}
     )
 
+def _ensure_tarball(c):
+    """Mundane helper: Just makes sure the zip exists if a sub-task is run directly."""
+    if not os.path.exists('bootstrap.tar.gz'):
+        c.run('tar -czf bootstrap.tar.gz -C ./infra bootstrap')
+
 @task
-def setup_cluster(c):
-    print("Packaging bootstrap scipts...")
-    c.run('tar -czf bootstrap.tar.gz -C ./infra bootstrap')
-    
-    # 1. Setup Control Plane
+def control_plane(c):
+    """Sets up the K3s master node."""
+    _ensure_tarball(c)
     master_ssh = IPS['master']['ssh_ip']
     master_internal = IPS['master']['internal_ip']
     
-    print(f"Bootstrapping Control Plane at {master_internal}...")
+    print(f"👑 Bootstrapping Control Plane at {master_internal}...")
     master = get_node_connection(master_ssh)
     master.put('bootstrap.tar.gz', '/tmp/bootstrap.tar.gz')
     master.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
     master.run('chmod +x /tmp/bootstrap/*.sh')
     
-    # Pass internal IP to script
     master.run(f'sudo /tmp/bootstrap/setup_control_plane.sh {CLUSTER_TOKEN} {master_internal}', pty=True)
 
-    # 2. Setup Workers
+@task
+def workers(c):
+    """Sets up all K3s worker nodes."""
+    _ensure_tarball(c)
+    master_internal = IPS['master']['internal_ip']
+
     for worker_data in IPS['workers']:
         worker_ssh = worker_data['ssh_ip']
         worker_internal = worker_data['internal_ip']
         
-        print(f"Bootstrapping Worker at {worker_internal}...")
+        print(f"👷 Bootstrapping Worker at {worker_internal}...")
         worker = get_node_connection(worker_ssh)
         worker.put('bootstrap.tar.gz', '/tmp/bootstrap.tar.gz')
         worker.run('tar -xzf /tmp/bootstrap.tar.gz -C /tmp')
         worker.run('chmod +x /tmp/bootstrap/*.sh')
         
         worker.run(f'sudo /tmp/bootstrap/setup_worker.sh {CLUSTER_TOKEN} {master_internal} {worker_internal}', pty=True)
-    
-    c.run('rm bootstrap.tar.gz')
-    
-    # 3. Hand control over to ArgoCD
-    print("Handing control over to ArgoCD...")
-    
-    # Wait 15 seconds to ensure K3s and ArgoCD have fully settled
+
+@task
+def argocd(c):
+    """Applies the ArgoCD GitOps pipeline."""
+    master_ssh = IPS['master']['ssh_ip']
+    master = get_node_connection(master_ssh)
+
+    print("🔄 Handing control over to ArgoCD...")
     time.sleep(15) 
     
-    # Apply the root application file directly from your raw GitHub content
     raw_app_url = "https://raw.githubusercontent.com/jamesmckim/CloudCraft/main/infra/applications/argocd-app.yaml"
     master.run(f'sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl apply -f {raw_app_url}')
-    
     print("🚀 GitOps Pipeline Initialized! ArgoCD is now pulling your game servers.")
+
+@task(default=True)
+def setup_cluster(c):
+    """Master task: Runs the entire setup process from start to finish."""
+    # 1. Mundane Setup
+    print("📦 Packaging bootstrap scripts...")
+    c.run('tar -czf bootstrap.tar.gz -C ./infra bootstrap')
+    
+    # 2. The Heavy Lifting
+    control_plane(c)
+    workers(c)
+    argocd(c)
+    
+    # 3. Mundane Cleanup
+    print("🧹 Cleaning up local files...")
+    c.run('rm -f bootstrap.tar.gz')
+    print("✨ All done!")

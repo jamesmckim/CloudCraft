@@ -1,0 +1,1724 @@
+ Volume in drive C is OS
+ Volume Serial Number is 5E96-AD5C
+
+ Directory of C:\Users\james\Desktop\CloudCraft
+
+04/17/2026  07:42 PM    <DIR>          .
+04/17/2026  07:42 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          .github
+04/13/2026  12:08 PM               447 .gitignore
+04/13/2026  12:08 PM               331 .sops.yaml
+04/13/2026  12:08 PM    <DIR>          apps
+04/16/2026  10:50 PM               509 deploy_everything.sh
+04/17/2026  07:16 PM             2,933 fabfile.py
+04/13/2026  12:08 PM    <DIR>          infra
+04/16/2026  09:05 PM             8,454 Jupityer_helper_fabric.ipynb
+04/13/2026  12:08 PM    <DIR>          k8s
+04/17/2026  07:42 PM                 0 out.txt
+04/14/2026  07:41 PM             2,618 provision_fabric.py
+04/13/2026  12:08 PM               673 README.md
+04/13/2026  12:08 PM            67,417 Resume_JamesMcKim.pdf
+04/13/2026  12:08 PM    <DIR>          services
+04/13/2026  12:08 PM    <DIR>          sidecar
+04/16/2026  08:43 PM             4,435 skaffold.yaml
+04/16/2026  09:45 PM    <DIR>          workers
+              10 File(s)         87,817 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git
+
+04/17/2026  07:16 PM                 6 COMMIT_EDITMSG
+04/13/2026  12:08 PM               303 config
+04/13/2026  12:08 PM                73 description
+04/13/2026  12:08 PM                21 HEAD
+04/13/2026  12:08 PM    <DIR>          hooks
+04/17/2026  07:16 PM            19,093 index
+04/13/2026  12:08 PM    <DIR>          info
+04/13/2026  12:08 PM    <DIR>          logs
+04/17/2026  07:16 PM    <DIR>          objects
+04/13/2026  12:08 PM               254 packed-refs
+04/13/2026  12:08 PM    <DIR>          refs
+               6 File(s)         19,750 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\hooks
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               478 applypatch-msg.sample
+04/13/2026  12:08 PM               896 commit-msg.sample
+04/13/2026  12:08 PM             4,726 fsmonitor-watchman.sample
+04/13/2026  12:08 PM               189 post-update.sample
+04/13/2026  12:08 PM               424 pre-applypatch.sample
+04/13/2026  12:08 PM             1,643 pre-commit.sample
+04/13/2026  12:08 PM               416 pre-merge-commit.sample
+04/13/2026  12:08 PM             1,374 pre-push.sample
+04/13/2026  12:08 PM             4,898 pre-rebase.sample
+04/13/2026  12:08 PM               544 pre-receive.sample
+04/13/2026  12:08 PM             1,492 prepare-commit-msg.sample
+04/13/2026  12:08 PM             2,783 push-to-checkout.sample
+04/13/2026  12:08 PM             2,308 sendemail-validate.sample
+04/13/2026  12:08 PM             3,650 update.sample
+              14 File(s)         25,821 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\info
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               240 exclude
+               1 File(s)            240 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\logs
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/17/2026  07:16 PM             6,491 HEAD
+04/13/2026  12:08 PM    <DIR>          refs
+               1 File(s)          6,491 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\logs\refs
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          heads
+04/13/2026  12:08 PM    <DIR>          remotes
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\logs\refs\heads
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/17/2026  07:16 PM             6,491 main
+               1 File(s)          6,491 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\logs\refs\remotes
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  03:19 PM    <DIR>          origin
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\logs\refs\remotes\origin
+
+04/13/2026  03:19 PM    <DIR>          .
+04/13/2026  03:19 PM    <DIR>          ..
+04/13/2026  12:08 PM               216 HEAD
+04/17/2026  07:17 PM             5,742 main
+               2 File(s)          5,958 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects
+
+04/17/2026  07:16 PM    <DIR>          .
+04/17/2026  07:16 PM    <DIR>          ..
+04/14/2026  06:35 PM    <DIR>          00
+04/14/2026  09:55 AM    <DIR>          01
+04/14/2026  11:02 AM    <DIR>          02
+04/14/2026  10:02 PM    <DIR>          04
+04/16/2026  10:51 PM    <DIR>          05
+04/14/2026  09:33 PM    <DIR>          07
+04/13/2026  09:21 PM    <DIR>          08
+04/14/2026  08:35 PM    <DIR>          09
+04/14/2026  09:11 PM    <DIR>          0b
+04/13/2026  09:37 PM    <DIR>          0d
+04/17/2026  07:16 PM    <DIR>          0e
+04/14/2026  08:53 AM    <DIR>          10
+04/14/2026  12:08 PM    <DIR>          12
+04/13/2026  03:19 PM    <DIR>          1b
+04/14/2026  10:02 PM    <DIR>          1f
+04/14/2026  11:02 AM    <DIR>          20
+04/17/2026  08:05 AM    <DIR>          21
+04/13/2026  09:50 PM    <DIR>          22
+04/14/2026  07:47 PM    <DIR>          25
+04/13/2026  08:38 PM    <DIR>          27
+04/14/2026  07:32 PM    <DIR>          28
+04/14/2026  09:59 AM    <DIR>          29
+04/14/2026  07:21 PM    <DIR>          2b
+04/16/2026  08:46 PM    <DIR>          2c
+04/17/2026  07:50 AM    <DIR>          2e
+04/13/2026  08:13 PM    <DIR>          30
+04/14/2026  07:41 PM    <DIR>          33
+04/14/2026  08:55 PM    <DIR>          34
+04/13/2026  08:13 PM    <DIR>          35
+04/14/2026  12:08 PM    <DIR>          38
+04/16/2026  09:02 PM    <DIR>          3a
+04/16/2026  09:00 PM    <DIR>          3b
+04/16/2026  10:51 PM    <DIR>          3e
+04/13/2026  03:19 PM    <DIR>          40
+04/17/2026  07:50 AM    <DIR>          41
+04/13/2026  09:50 PM    <DIR>          42
+04/16/2026  10:51 PM    <DIR>          44
+04/16/2026  09:00 PM    <DIR>          46
+04/13/2026  09:56 PM    <DIR>          47
+04/14/2026  09:59 AM    <DIR>          48
+04/16/2026  10:51 PM    <DIR>          49
+04/14/2026  09:48 PM    <DIR>          4b
+04/14/2026  09:11 PM    <DIR>          4d
+04/14/2026  08:53 AM    <DIR>          54
+04/17/2026  07:37 AM    <DIR>          57
+04/14/2026  07:32 PM    <DIR>          58
+04/14/2026  10:27 AM    <DIR>          59
+04/16/2026  08:46 PM    <DIR>          5b
+04/14/2026  12:08 PM    <DIR>          64
+04/14/2026  08:35 PM    <DIR>          65
+04/16/2026  10:51 PM    <DIR>          6a
+04/14/2026  07:41 PM    <DIR>          6d
+04/14/2026  09:11 PM    <DIR>          70
+04/14/2026  10:27 AM    <DIR>          71
+04/13/2026  03:19 PM    <DIR>          73
+04/17/2026  07:16 PM    <DIR>          74
+04/16/2026  10:51 PM    <DIR>          76
+04/17/2026  08:05 AM    <DIR>          7a
+04/13/2026  03:18 PM    <DIR>          7b
+04/14/2026  11:02 AM    <DIR>          7c
+04/14/2026  09:55 AM    <DIR>          7e
+04/13/2026  03:18 PM    <DIR>          80
+04/14/2026  07:21 PM    <DIR>          84
+04/17/2026  08:04 AM    <DIR>          85
+04/16/2026  10:51 PM    <DIR>          89
+04/14/2026  07:21 PM    <DIR>          8e
+04/14/2026  07:41 PM    <DIR>          90
+04/13/2026  03:19 PM    <DIR>          91
+04/13/2026  03:18 PM    <DIR>          92
+04/13/2026  09:56 PM    <DIR>          93
+04/14/2026  08:55 PM    <DIR>          95
+04/13/2026  08:13 PM    <DIR>          98
+04/14/2026  06:35 PM    <DIR>          99
+04/14/2026  08:55 PM    <DIR>          9a
+04/16/2026  08:46 PM    <DIR>          9c
+04/14/2026  12:08 PM    <DIR>          a1
+04/13/2026  08:28 PM    <DIR>          a4
+04/14/2026  11:02 AM    <DIR>          a5
+04/14/2026  09:55 AM    <DIR>          a9
+04/16/2026  10:51 PM    <DIR>          b1
+04/13/2026  09:37 PM    <DIR>          b7
+04/16/2026  10:51 PM    <DIR>          b8
+04/17/2026  07:16 PM    <DIR>          b9
+04/14/2026  07:21 PM    <DIR>          ba
+04/14/2026  07:21 PM    <DIR>          bd
+04/13/2026  08:27 PM    <DIR>          c1
+04/13/2026  08:38 PM    <DIR>          c4
+04/14/2026  09:33 PM    <DIR>          c6
+04/14/2026  09:59 AM    <DIR>          c7
+04/17/2026  07:50 AM    <DIR>          c8
+04/13/2026  03:18 PM    <DIR>          c9
+04/16/2026  09:00 PM    <DIR>          cc
+04/14/2026  08:53 AM    <DIR>          ce
+04/14/2026  07:47 PM    <DIR>          d1
+04/16/2026  09:00 PM    <DIR>          d2
+04/13/2026  09:21 PM    <DIR>          d3
+04/16/2026  09:00 PM    <DIR>          d5
+04/16/2026  09:02 PM    <DIR>          d6
+04/14/2026  08:55 PM    <DIR>          d8
+04/14/2026  10:02 PM    <DIR>          da
+04/14/2026  12:08 PM    <DIR>          db
+04/16/2026  10:51 PM    <DIR>          df
+04/14/2026  07:21 PM    <DIR>          e2
+04/14/2026  09:59 AM    <DIR>          e6
+04/17/2026  07:36 AM    <DIR>          e9
+04/14/2026  09:54 AM    <DIR>          ec
+04/13/2026  08:13 PM    <DIR>          ed
+04/13/2026  08:28 PM    <DIR>          ee
+04/13/2026  08:13 PM    <DIR>          f4
+04/14/2026  07:21 PM    <DIR>          fb
+04/13/2026  08:13 PM    <DIR>          fc
+04/14/2026  09:48 PM    <DIR>          fd
+04/17/2026  07:37 AM    <DIR>          fe
+04/13/2026  12:08 PM    <DIR>          info
+04/13/2026  12:08 PM    <DIR>          pack
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\00
+
+04/14/2026  06:35 PM    <DIR>          .
+04/14/2026  06:35 PM    <DIR>          ..
+04/14/2026  09:59 AM               527 833363f9780f60d9c241ca1f87d2d64d8365ec
+04/14/2026  06:35 PM             1,399 8da0e19c1ed84ea373d731d2478b0ffc6bdbc0
+04/13/2026  08:13 PM               147 be34cb0f521d2d9d5727f5662f1e873c241bc5
+               3 File(s)          2,073 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\01
+
+04/14/2026  09:55 AM    <DIR>          .
+04/14/2026  09:55 AM    <DIR>          ..
+04/14/2026  09:55 AM               137 52145b807108d6a51bdfc90b839f7720bc5bb8
+               1 File(s)            137 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\02
+
+04/14/2026  11:02 AM    <DIR>          .
+04/14/2026  11:02 AM    <DIR>          ..
+04/14/2026  11:02 AM               183 94640527dd002cbf3cba77ab7868737c4f1610
+04/14/2026  09:59 AM               254 db76f1dd3c2f426a9264bbe48b86503a7f3abf
+               2 File(s)            437 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\04
+
+04/14/2026  10:02 PM    <DIR>          .
+04/14/2026  10:02 PM    <DIR>          ..
+04/14/2026  10:02 PM               528 ada6b67e1d4ca740bb822ec59f730eefff19d2
+               1 File(s)            528 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\05
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/16/2026  10:51 PM               283 99dca530ac0844c807e6014cac697bb5ca0c53
+               1 File(s)            283 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\07
+
+04/14/2026  09:33 PM    <DIR>          .
+04/14/2026  09:33 PM    <DIR>          ..
+04/14/2026  09:33 PM               527 7eb7a8315837e1b35588759d9a9c1689fc574f
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\08
+
+04/13/2026  09:21 PM    <DIR>          .
+04/13/2026  09:21 PM    <DIR>          ..
+04/13/2026  09:21 PM               186 6dc6940a7abeb80201be0a63f184f62b3b4b37
+               1 File(s)            186 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\09
+
+04/14/2026  08:35 PM    <DIR>          .
+04/14/2026  08:35 PM    <DIR>          ..
+04/14/2026  08:35 PM               528 93dc88ecb47641903bf06db9ed864b11d3967a
+               1 File(s)            528 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\0b
+
+04/14/2026  09:11 PM    <DIR>          .
+04/14/2026  09:11 PM    <DIR>          ..
+04/13/2026  09:21 PM             1,413 81a0618a843083f55b3b725b273a8882dcfe77
+04/14/2026  09:11 PM               527 f07885b5533139ebae4b93bf25c2b9639a45da
+               2 File(s)          1,940 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\0d
+
+04/13/2026  09:37 PM    <DIR>          .
+04/13/2026  09:37 PM    <DIR>          ..
+04/13/2026  09:37 PM               528 95e9f9a7678e366cfd728e798b59086e6fda29
+               1 File(s)            528 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\0e
+
+04/17/2026  07:16 PM    <DIR>          .
+04/17/2026  07:16 PM    <DIR>          ..
+04/17/2026  07:16 PM               175 fdc5e0357ca7fb867f17d2829fd1d108aea8d8
+               1 File(s)            175 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\10
+
+04/14/2026  08:53 AM    <DIR>          .
+04/14/2026  08:53 AM    <DIR>          ..
+04/14/2026  08:53 AM               527 9974e9065ee44a9e81542d6869ee2701e0dfaf
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\12
+
+04/14/2026  12:08 PM    <DIR>          .
+04/14/2026  12:08 PM    <DIR>          ..
+04/14/2026  12:08 PM               635 ee5ddbc3aed2933e9ff2898495aa5332b27a5d
+               1 File(s)            635 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\1b
+
+04/13/2026  03:19 PM    <DIR>          .
+04/13/2026  03:19 PM    <DIR>          ..
+04/13/2026  03:19 PM                73 f724f4295a78ba2125f7d60cf576e7b1f8f2e6
+               1 File(s)             73 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\1f
+
+04/14/2026  10:02 PM    <DIR>          .
+04/14/2026  10:02 PM    <DIR>          ..
+04/14/2026  10:02 PM               186 204f561d893dc45f08e16bba94dbf20fef1ec7
+04/14/2026  08:53 AM               254 c6a00ce76c2555e4746d5380a953e6356ee77b
+               2 File(s)            440 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\20
+
+04/14/2026  11:02 AM    <DIR>          .
+04/14/2026  11:02 AM    <DIR>          ..
+04/14/2026  08:53 AM               604 09d405d0bdaaa3b6c6065a4b43d3dd4a4c5f19
+04/14/2026  09:55 AM               191 112de40d694b5ad54b3d249712941f886fe7da
+04/14/2026  11:02 AM               527 a6aaf06a760a5edfc1a1ebbdd02c226c1e4c57
+               3 File(s)          1,322 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\21
+
+04/17/2026  08:05 AM    <DIR>          .
+04/17/2026  08:05 AM    <DIR>          ..
+04/14/2026  08:55 PM               527 83576718617aa4793728b93b867be47878e6c2
+04/17/2026  08:05 AM               190 86cf5c2d5db8f9748ecbfae0f6ef88222fc33a
+04/16/2026  09:01 PM             1,562 db5d4980a7b4fc637be5126bb267c1a70e6a71
+               3 File(s)          2,279 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\22
+
+04/13/2026  09:50 PM    <DIR>          .
+04/13/2026  09:50 PM    <DIR>          ..
+04/13/2026  09:50 PM               527 16bf6851b756e42958d38bd3e8775f17b30139
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\25
+
+04/14/2026  07:47 PM    <DIR>          .
+04/14/2026  07:47 PM    <DIR>          ..
+04/14/2026  07:47 PM               186 2eb106914f29152e11a52afb41b7e2f3a501b3
+               1 File(s)            186 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\27
+
+04/13/2026  08:38 PM    <DIR>          .
+04/13/2026  08:38 PM    <DIR>          ..
+04/13/2026  08:38 PM               527 15c33519342d39a503a724636894f0fa4e0331
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\28
+
+04/14/2026  07:32 PM    <DIR>          .
+04/14/2026  07:32 PM    <DIR>          ..
+04/14/2026  07:32 PM               188 4c6587664c0e8126f2ea031f18773c8232feed
+               1 File(s)            188 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\29
+
+04/14/2026  09:59 AM    <DIR>          .
+04/14/2026  09:59 AM    <DIR>          ..
+04/14/2026  09:59 AM               137 ff731688072ea761de11f9f07b24c5ebc543e2
+               1 File(s)            137 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\2b
+
+04/14/2026  07:21 PM    <DIR>          .
+04/14/2026  07:21 PM    <DIR>          ..
+04/14/2026  07:21 PM             1,461 b5a2ac14a01009920dd6f9d984e466f657474c
+               1 File(s)          1,461 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\2c
+
+04/16/2026  08:46 PM    <DIR>          .
+04/16/2026  08:46 PM    <DIR>          ..
+04/16/2026  08:46 PM               207 c8e3965e372ea59c6a905a627d63efdfbfacc0
+               1 File(s)            207 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\2e
+
+04/17/2026  07:50 AM    <DIR>          .
+04/17/2026  07:50 AM    <DIR>          ..
+04/17/2026  07:50 AM               179 1a30f68e0cdf86d02b960e9c3fbdb9dca648f4
+               1 File(s)            179 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\30
+
+04/13/2026  08:13 PM    <DIR>          .
+04/13/2026  08:13 PM    <DIR>          ..
+04/13/2026  08:13 PM               334 123cfbc45bd600b53b439eb4b9f5d9cd425cbf
+               1 File(s)            334 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\33
+
+04/14/2026  07:41 PM    <DIR>          .
+04/14/2026  07:41 PM    <DIR>          ..
+04/13/2026  08:13 PM               602 3f2611c178050a89f58cfc36f92920ef07cca8
+04/14/2026  07:41 PM               992 f07c1a55bd0cb0553a9151a043109fbd749c1f
+               2 File(s)          1,594 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\34
+
+04/14/2026  08:55 PM    <DIR>          .
+04/14/2026  08:55 PM    <DIR>          ..
+04/14/2026  08:55 PM               186 6a759ad34d82e2129d6dc33cc7b8f00f201c6f
+               1 File(s)            186 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\35
+
+04/13/2026  08:13 PM    <DIR>          .
+04/13/2026  08:13 PM    <DIR>          ..
+04/13/2026  08:13 PM               527 218c335654816b21e86192b78fce341142e9b3
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\38
+
+04/14/2026  12:08 PM    <DIR>          .
+04/14/2026  12:08 PM    <DIR>          ..
+04/14/2026  12:08 PM               254 c49ae38764492640be1cc0147327e227e7fbb8
+               1 File(s)            254 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\3a
+
+04/16/2026  09:02 PM    <DIR>          .
+04/16/2026  09:02 PM    <DIR>          ..
+04/16/2026  09:02 PM               192 a8485c2c19322a9236e660445d72d0cd6e96f0
+               1 File(s)            192 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\3b
+
+04/16/2026  09:00 PM    <DIR>          .
+04/16/2026  09:00 PM    <DIR>          ..
+04/13/2026  03:18 PM               653 3b9dcbfe040311efca1664293ee5b1dc081feb
+04/16/2026  09:00 PM               200 e70f70e42b5a4ff8461fb9c2ae40e2281450ae
+               2 File(s)            853 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\3e
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/16/2026  10:51 PM               137 229ca27b3bbfed6271d89b016e8608958c8f93
+               1 File(s)            137 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\40
+
+04/13/2026  03:19 PM    <DIR>          .
+04/13/2026  03:19 PM    <DIR>          ..
+04/13/2026  03:19 PM               244 51af683a3b5fc6e67b5a8a1a6d5eb9f8fd3dc6
+               1 File(s)            244 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\41
+
+04/17/2026  07:50 AM    <DIR>          .
+04/17/2026  07:50 AM    <DIR>          ..
+04/17/2026  07:50 AM               572 022c2bf6a61d7250529a3983293912a4e9c013
+04/14/2026  08:35 PM               188 2d6b820ff618112044ad2724bffb12f5cc7ba8
+               2 File(s)            760 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\42
+
+04/13/2026  09:50 PM    <DIR>          .
+04/13/2026  09:50 PM    <DIR>          ..
+04/13/2026  09:50 PM             1,430 9bd77c1ce22247b6b4b15d49bfa72e6252ea56
+04/13/2026  09:36 PM             1,421 af5b06bd4fafc51dade5c09a9173454425f3b6
+               2 File(s)          2,851 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\44
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/16/2026  08:46 PM             1,562 6cb71340b36bbfdb1a0c6d53c5cabc56fb4b83
+04/16/2026  10:51 PM               251 cbd1ed6ec4f569b06c68131a56d48810e28027
+04/13/2026  08:13 PM               147 f57262dd3272f6fb60a342975d06e7c1929f8f
+               3 File(s)          1,960 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\46
+
+04/16/2026  09:00 PM    <DIR>          .
+04/16/2026  09:00 PM    <DIR>          ..
+04/16/2026  09:00 PM               527 9a81fa30e3d9cb314bf6037e574812f5ee7074
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\47
+
+04/13/2026  09:56 PM    <DIR>          .
+04/13/2026  09:56 PM    <DIR>          ..
+04/13/2026  09:56 PM             1,424 20fc9fea15ac14f58733d2ef00c29941ef56cf
+               1 File(s)          1,424 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\48
+
+04/14/2026  09:59 AM    <DIR>          .
+04/14/2026  09:59 AM    <DIR>          ..
+04/14/2026  09:59 AM               601 a9c6825b5a8e937da5b33401d469404049caa3
+               1 File(s)            601 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\49
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/16/2026  10:51 PM               195 dd49f7e512d8666b86dd2f49121e7fff4b1e59
+               1 File(s)            195 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\4b
+
+04/14/2026  09:48 PM    <DIR>          .
+04/14/2026  09:48 PM    <DIR>          ..
+04/14/2026  09:48 PM               527 11d862563faa5c72239987608c4307fb264d6b
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\4d
+
+04/14/2026  09:11 PM    <DIR>          .
+04/14/2026  09:11 PM    <DIR>          ..
+04/14/2026  09:11 PM               187 01ec42907c8f843c67d4dbeb8f1112e9feada0
+               1 File(s)            187 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\54
+
+04/14/2026  08:53 AM    <DIR>          .
+04/14/2026  08:53 AM    <DIR>          ..
+04/14/2026  08:53 AM               137 4eebd2bdb6627ddb532ad093cf32587b1503e5
+               1 File(s)            137 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\57
+
+04/17/2026  07:37 AM    <DIR>          .
+04/17/2026  07:37 AM    <DIR>          ..
+04/17/2026  07:37 AM               176 26e16a4cc5b246b329db3e6f69bf4899ad743a
+               1 File(s)            176 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\58
+
+04/14/2026  07:32 PM    <DIR>          .
+04/14/2026  07:32 PM    <DIR>          ..
+04/14/2026  07:32 PM               527 8784739dcb53e9a864a3b06362b092e9442968
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\59
+
+04/14/2026  10:27 AM    <DIR>          .
+04/14/2026  10:27 AM    <DIR>          ..
+04/14/2026  10:27 AM               187 bcb47f8e9c125e981d30ae4eebea09e6e2febb
+               1 File(s)            187 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\5b
+
+04/16/2026  08:46 PM    <DIR>          .
+04/16/2026  08:46 PM    <DIR>          ..
+04/16/2026  08:46 PM               916 6ac43260047a2fc27cce31bd42845012efd3bb
+               1 File(s)            916 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\64
+
+04/14/2026  12:08 PM    <DIR>          .
+04/14/2026  12:08 PM    <DIR>          ..
+04/14/2026  12:08 PM               187 62efbcb792801b009b8f12d49d6e10885bb6f3
+               1 File(s)            187 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\65
+
+04/14/2026  08:35 PM    <DIR>          .
+04/14/2026  08:35 PM    <DIR>          ..
+04/13/2026  09:56 PM               528 0351f45cfcfc62c51b57ebea53aadb1510b270
+04/14/2026  06:35 PM               176 690287b1ddbf077e9c10d3593f1de623c2329d
+04/14/2026  08:35 PM             1,478 6bb5dfeb1b885f951061973424e695fcceff21
+04/13/2026  03:19 PM               137 ac5baaef6db7164dbbb0e20b537fd30b9481eb
+               4 File(s)          2,319 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\6a
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/16/2026  10:51 PM               348 1e6ddb75966ed620b6e08f226c20dd140f17dc
+               1 File(s)            348 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\6d
+
+04/14/2026  07:41 PM    <DIR>          .
+04/14/2026  07:41 PM    <DIR>          ..
+04/14/2026  07:41 PM               187 67682368416d45e642150784548cb8d3d8a5ea
+               1 File(s)            187 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\70
+
+04/14/2026  09:11 PM    <DIR>          .
+04/14/2026  09:11 PM    <DIR>          ..
+04/14/2026  09:11 PM             1,476 b5ce8b6b2410b67a3c3aa90f03a52ef7d38bcf
+               1 File(s)          1,476 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\71
+
+04/14/2026  10:27 AM    <DIR>          .
+04/14/2026  10:27 AM    <DIR>          ..
+04/14/2026  10:27 AM               527 aa60b218aa6c4d19ac2d2322b37a8119931786
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\73
+
+04/13/2026  03:19 PM    <DIR>          .
+04/13/2026  03:19 PM    <DIR>          ..
+04/13/2026  03:19 PM               204 fd2a343a32dc30473e418330447b9359f1b7c5
+               1 File(s)            204 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\74
+
+04/17/2026  07:16 PM    <DIR>          .
+04/17/2026  07:16 PM    <DIR>          ..
+04/17/2026  07:16 PM               572 0f736dee21d49adbc8238726913347eba58b73
+04/16/2026  10:51 PM               572 ad15e923f18792c07afbdc902ed12a203ef349
+               2 File(s)          1,144 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\76
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/14/2026  10:27 AM             1,385 ad48e4b7afd083ff3721232df69b2c07c144ac
+04/16/2026  10:51 PM               272 db44cbd134a0d422facc6fc62c26703203c49d
+               2 File(s)          1,657 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\7a
+
+04/17/2026  08:05 AM    <DIR>          .
+04/17/2026  08:05 AM    <DIR>          ..
+04/17/2026  08:05 AM               572 21a1f9a58373d6b6d1278ab1cc1dc957000efc
+04/13/2026  03:18 PM               467 906d71540fc9a6f9fce410a0434c60b6a5eddb
+               2 File(s)          1,039 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\7b
+
+04/13/2026  03:18 PM    <DIR>          .
+04/13/2026  03:18 PM    <DIR>          ..
+04/13/2026  03:18 PM             2,118 2d302748c5d772a105dfb7fb22d1fc4a6c0a6e
+               1 File(s)          2,118 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\7c
+
+04/14/2026  11:02 AM    <DIR>          .
+04/14/2026  11:02 AM    <DIR>          ..
+04/14/2026  11:02 AM               137 7312b0375c00efea189830c98286b5e5b69c93
+               1 File(s)            137 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\7e
+
+04/14/2026  09:55 AM    <DIR>          .
+04/14/2026  09:55 AM    <DIR>          ..
+04/14/2026  09:55 AM               527 cb33c2c02dbb1638401c3fa45006c110f927e6
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\80
+
+04/13/2026  03:18 PM    <DIR>          .
+04/13/2026  03:18 PM    <DIR>          ..
+04/13/2026  03:18 PM             1,597 966f0b1afbf4b96465e1fe7def168bdedb909c
+               1 File(s)          1,597 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\84
+
+04/14/2026  07:21 PM    <DIR>          .
+04/14/2026  07:21 PM    <DIR>          ..
+04/14/2026  07:21 PM               528 7af229f1a26fe497a8da6ea58d84d2394f3b86
+               1 File(s)            528 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\85
+
+04/17/2026  08:04 AM    <DIR>          .
+04/17/2026  08:04 AM    <DIR>          ..
+04/17/2026  08:04 AM             1,331 7b29c996620528a12713095b0d1151b57197a7
+               1 File(s)          1,331 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\89
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/16/2026  10:51 PM               653 c4068d652ff6638d679419c56a499fd504a822
+               1 File(s)            653 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\8e
+
+04/14/2026  07:21 PM    <DIR>          .
+04/14/2026  07:21 PM    <DIR>          ..
+04/14/2026  07:21 PM               254 81986fd57f75f3cb978667b8116a2b451eb006
+               1 File(s)            254 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\90
+
+04/14/2026  07:41 PM    <DIR>          .
+04/14/2026  07:41 PM    <DIR>          ..
+04/14/2026  07:41 PM               528 b5250327ce95060384b489e349dffe9eff5e22
+               1 File(s)            528 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\91
+
+04/13/2026  03:19 PM    <DIR>          .
+04/13/2026  03:19 PM    <DIR>          ..
+04/13/2026  03:19 PM               527 1f9032b2972b3d95ac0cb5dfe26769c5404647
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\92
+
+04/13/2026  03:18 PM    <DIR>          .
+04/13/2026  03:18 PM    <DIR>          ..
+04/13/2026  03:18 PM             1,701 1e4ac2a729d7473394bb848748fe80eb8bc9cc
+               1 File(s)          1,701 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\93
+
+04/13/2026  09:56 PM    <DIR>          .
+04/13/2026  09:56 PM    <DIR>          ..
+04/13/2026  09:56 PM               188 f7c8a902b772beb549e5121c2097b43a8dba96
+               1 File(s)            188 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\95
+
+04/14/2026  08:55 PM    <DIR>          .
+04/14/2026  08:55 PM    <DIR>          ..
+04/14/2026  08:55 PM               433 21db4674dc7f51de8bb92115eb314a5acd820b
+               1 File(s)            433 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\98
+
+04/13/2026  08:13 PM    <DIR>          .
+04/13/2026  08:13 PM    <DIR>          ..
+04/13/2026  08:13 PM               457 b9b9f896c77d72116c229aca98cca1774fca0f
+               1 File(s)            457 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\99
+
+04/14/2026  06:35 PM    <DIR>          .
+04/14/2026  06:35 PM    <DIR>          ..
+04/14/2026  06:35 PM               527 b6c617114129e68daf9b359cf1a1536396c857
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\9a
+
+04/14/2026  08:55 PM    <DIR>          .
+04/14/2026  08:55 PM    <DIR>          ..
+04/14/2026  08:55 PM               137 c283abb97df048d4d26139d13c61a649de42d6
+               1 File(s)            137 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\9c
+
+04/16/2026  08:46 PM    <DIR>          .
+04/16/2026  08:46 PM    <DIR>          ..
+04/16/2026  08:46 PM               527 6b037ae061fc47adeca0b917b7feebcffac8b2
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\a1
+
+04/14/2026  12:08 PM    <DIR>          .
+04/14/2026  12:08 PM    <DIR>          ..
+04/14/2026  12:08 PM               527 4560460f006b7a1b797d9aed3f179193d3c3e6
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\a4
+
+04/13/2026  08:28 PM    <DIR>          .
+04/13/2026  08:28 PM    <DIR>          ..
+04/13/2026  08:28 PM               203 849472fd93657a3eb5f91dcdca3a3ad608196b
+               1 File(s)            203 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\a5
+
+04/14/2026  11:02 AM    <DIR>          .
+04/14/2026  11:02 AM    <DIR>          ..
+04/14/2026  11:02 AM               254 f3ac9646b79a9cbb791e85b4233d62171f123f
+               1 File(s)            254 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\a9
+
+04/14/2026  09:55 AM    <DIR>          .
+04/14/2026  09:55 AM    <DIR>          ..
+04/14/2026  09:55 AM               254 ef8c9e6df8d3ce7d8268c3f2224d383519a75e
+               1 File(s)            254 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\b1
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/16/2026  10:51 PM             1,839 aa6686b4cefb4ee2ff525563644a305859d6da
+               1 File(s)          1,839 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\b7
+
+04/13/2026  09:37 PM    <DIR>          .
+04/13/2026  09:37 PM    <DIR>          ..
+04/13/2026  08:13 PM               188 6911ef528d56849100a791c5996f2f5d070cd8
+04/13/2026  09:37 PM               188 7286d10c786a6dbdbac0e922cc2a93e9620056
+               2 File(s)            376 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\b8
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/14/2026  07:32 PM               923 594f3532257e73002649ad0db817d7e2aa00d1
+04/16/2026  10:51 PM               276 663aeff39e78358e48ed6c33a0600213a5f957
+               2 File(s)          1,199 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\b9
+
+04/17/2026  07:16 PM    <DIR>          .
+04/17/2026  07:16 PM    <DIR>          ..
+04/17/2026  07:16 PM             1,328 dc9d11f12ccdf6fd6f3d61d60a6d1574fd534d
+04/14/2026  09:48 PM             1,542 fe867801e86f1735e7b28317b8b52fad8119a3
+               2 File(s)          2,870 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\ba
+
+04/14/2026  07:21 PM    <DIR>          .
+04/14/2026  07:21 PM    <DIR>          ..
+04/14/2026  12:08 PM               419 80646a02cd6c7dd6086c14057946338482b56f
+04/14/2026  07:21 PM               887 abe7659b009ef887e2c5f6e223236d4853cb15
+               2 File(s)          1,306 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\bd
+
+04/14/2026  07:21 PM    <DIR>          .
+04/14/2026  07:21 PM    <DIR>          ..
+04/14/2026  07:21 PM               187 21c2c2cc8bfc0d1e95131799fe58f10ec3e292
+               1 File(s)            187 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\c1
+
+04/13/2026  08:27 PM    <DIR>          .
+04/13/2026  08:27 PM    <DIR>          ..
+04/13/2026  08:27 PM             1,398 818097aa5504b710202f4d5fa5de9bf5690151
+               1 File(s)          1,398 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\c4
+
+04/13/2026  08:38 PM    <DIR>          .
+04/13/2026  08:38 PM    <DIR>          ..
+04/13/2026  08:38 PM               176 f71991bf08a3dbf2e5157240e3f0343c41b102
+               1 File(s)            176 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\c6
+
+04/14/2026  09:33 PM    <DIR>          .
+04/14/2026  09:33 PM    <DIR>          ..
+04/13/2026  03:19 PM                78 6cd724592dba0b6d15ff3a5fb0959579056b2a
+04/14/2026  09:33 PM               187 bc63b4f4a16349938b80f43e5a6dadd6af65c4
+               2 File(s)            265 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\c7
+
+04/14/2026  09:59 AM    <DIR>          .
+04/14/2026  09:59 AM    <DIR>          ..
+04/14/2026  09:59 AM               335 66b7d29402bfe504586edcd7f6f13b8ad4c4d1
+               1 File(s)            335 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\c8
+
+04/17/2026  07:50 AM    <DIR>          .
+04/17/2026  07:50 AM    <DIR>          ..
+04/17/2026  07:50 AM             1,327 63af0cc26879562b5c554d069236104ec3c8f1
+               1 File(s)          1,327 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\c9
+
+04/13/2026  03:18 PM    <DIR>          .
+04/13/2026  03:18 PM    <DIR>          ..
+04/13/2026  03:18 PM             1,333 f6aae9c4f70d663116340998569b18e5f84e8b
+               1 File(s)          1,333 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\cc
+
+04/16/2026  09:00 PM    <DIR>          .
+04/16/2026  09:00 PM    <DIR>          ..
+04/16/2026  09:00 PM                64 90abafffc9533731bc1e80db2e33a6dee61287
+               1 File(s)             64 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\ce
+
+04/14/2026  08:53 AM    <DIR>          .
+04/14/2026  08:53 AM    <DIR>          ..
+04/14/2026  08:53 AM               185 163b02165571eb0485a27e1d46ac44494bd42b
+               1 File(s)            185 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\d1
+
+04/14/2026  07:47 PM    <DIR>          .
+04/14/2026  07:47 PM    <DIR>          ..
+04/14/2026  07:47 PM               528 a9b542ae37b0c9eb243653dadc8d49812925d4
+               1 File(s)            528 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\d2
+
+04/16/2026  09:00 PM    <DIR>          .
+04/16/2026  09:00 PM    <DIR>          ..
+04/16/2026  09:00 PM               536 d891fc13af0092101654a933a5b3a37fcae9a1
+               1 File(s)            536 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\d3
+
+04/13/2026  09:21 PM    <DIR>          .
+04/13/2026  09:21 PM    <DIR>          ..
+04/13/2026  09:21 PM               527 b8c793483b5512eae17ed1ef50a7317f3e3ba2
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\d5
+
+04/16/2026  09:00 PM    <DIR>          .
+04/16/2026  09:00 PM    <DIR>          ..
+04/16/2026  09:00 PM                52 dd626cd5afaa945333b3485a716daf4f911a79
+               1 File(s)             52 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\d6
+
+04/16/2026  09:02 PM    <DIR>          .
+04/16/2026  09:02 PM    <DIR>          ..
+04/16/2026  09:02 PM               527 75a1de9d815822d502f5cd0ba0130ddacce692
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\d8
+
+04/14/2026  08:55 PM    <DIR>          .
+04/14/2026  08:55 PM    <DIR>          ..
+04/14/2026  08:55 PM               254 a1ecded9dd476a5463b53fa68661330a419442
+               1 File(s)            254 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\da
+
+04/14/2026  10:02 PM    <DIR>          .
+04/14/2026  10:02 PM    <DIR>          ..
+04/14/2026  10:02 PM             1,539 36c74c33ef9e81f39bfbd360dccb6d1ec517ba
+04/13/2026  08:38 PM             1,408 38dc55b70eb6a4d01a3fa6e0a5b74782745636
+04/13/2026  08:13 PM               254 75151dba9db8d25135e6c64ac0438b94824b4e
+               3 File(s)          3,201 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\db
+
+04/14/2026  12:08 PM    <DIR>          .
+04/14/2026  12:08 PM    <DIR>          ..
+04/14/2026  12:08 PM               137 82decf04a522da5ed188ac8a969771f0341308
+               1 File(s)            137 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\df
+
+04/16/2026  10:51 PM    <DIR>          .
+04/16/2026  10:51 PM    <DIR>          ..
+04/13/2026  08:13 PM               137 abddbe7c0a56f50fac87bbcd515b9d3a7ef6ab
+04/16/2026  10:51 PM             1,331 e6e71bbb2f1353e19b1522bee584a605d18e99
+               2 File(s)          1,468 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\e2
+
+04/14/2026  07:21 PM    <DIR>          .
+04/14/2026  07:21 PM    <DIR>          ..
+04/14/2026  07:21 PM               363 a67807257bcd64ea118b03fbce6b90dad62499
+               1 File(s)            363 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\e6
+
+04/14/2026  09:59 AM    <DIR>          .
+04/14/2026  09:59 AM    <DIR>          ..
+04/14/2026  09:59 AM               189 a03a10bb9802568240f35f874d6f6e0f43c504
+               1 File(s)            189 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\e9
+
+04/17/2026  07:36 AM    <DIR>          .
+04/17/2026  07:36 AM    <DIR>          ..
+04/13/2026  09:50 PM               181 3d3934c059ef462458aaf154dcbb5173757d57
+04/14/2026  11:01 AM               394 bd841432a0cbdf259ad1b39cdc4ab06a23baf5
+04/17/2026  07:36 AM             1,330 dfb19c176e29a2bc7103b98154c271852962f9
+               3 File(s)          1,905 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\ec
+
+04/14/2026  09:54 AM    <DIR>          .
+04/14/2026  09:54 AM    <DIR>          ..
+04/14/2026  09:54 AM               335 e152f24db030f92f8da49dc783ed4cb59dd315
+               1 File(s)            335 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\ed
+
+04/13/2026  08:13 PM    <DIR>          .
+04/13/2026  08:13 PM    <DIR>          ..
+04/13/2026  08:13 PM               121 ef497495cd4675bc62060311f1b0b102b17cfc
+               1 File(s)            121 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\ee
+
+04/13/2026  08:28 PM    <DIR>          .
+04/13/2026  08:28 PM    <DIR>          ..
+04/13/2026  08:28 PM               527 f148d73b6b6fc81e164d333e4f8edff5abb9da
+               1 File(s)            527 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\f4
+
+04/13/2026  08:13 PM    <DIR>          .
+04/13/2026  08:13 PM    <DIR>          ..
+04/13/2026  08:13 PM               219 2bdf60d4dbcc1329bbd45368fda0d53cdc6d9f
+               1 File(s)            219 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\fb
+
+04/14/2026  07:21 PM    <DIR>          .
+04/14/2026  07:21 PM    <DIR>          ..
+04/14/2026  07:21 PM               137 70d64038f696e476c4dadd55a0d40a5cfbf69e
+               1 File(s)            137 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\fc
+
+04/13/2026  08:13 PM    <DIR>          .
+04/13/2026  08:13 PM    <DIR>          ..
+04/13/2026  08:13 PM               242 4468928d8137813778fc4bc0e94627f9d978f8
+               1 File(s)            242 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\fd
+
+04/14/2026  09:48 PM    <DIR>          .
+04/14/2026  09:48 PM    <DIR>          ..
+04/14/2026  07:47 PM             1,471 d447f8b95b418592d73200e4f0b2beef895649
+04/14/2026  09:48 PM               187 f7dec1bcea8ffce847f8ed3dce95694a6440e9
+               2 File(s)          1,658 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\fe
+
+04/17/2026  07:37 AM    <DIR>          .
+04/17/2026  07:37 AM    <DIR>          ..
+04/17/2026  07:37 AM               572 5a18f642531e8492d98b748ef4db9f1a35f268
+04/14/2026  09:33 PM             1,540 d0baf46c199f2a2973f750001008378d5a5e4e
+               2 File(s)          2,112 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\info
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\objects\pack
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM            38,536 pack-48c3b03dc246949ef4af7223101c8112a577f240.idx
+04/13/2026  03:19 PM           658,964 pack-48c3b03dc246949ef4af7223101c8112a577f240.pack
+04/13/2026  12:08 PM             5,404 pack-48c3b03dc246949ef4af7223101c8112a577f240.rev
+               3 File(s)        702,904 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\refs
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/17/2026  07:16 PM    <DIR>          heads
+04/13/2026  12:08 PM    <DIR>          remotes
+04/13/2026  12:08 PM    <DIR>          tags
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\refs\heads
+
+04/17/2026  07:16 PM    <DIR>          .
+04/17/2026  07:16 PM    <DIR>          ..
+04/17/2026  07:16 PM                41 main
+               1 File(s)             41 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\refs\remotes
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/17/2026  07:17 PM    <DIR>          origin
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\refs\remotes\origin
+
+04/17/2026  07:17 PM    <DIR>          .
+04/17/2026  07:17 PM    <DIR>          ..
+04/13/2026  12:08 PM                30 HEAD
+04/17/2026  07:17 PM                41 main
+               2 File(s)             71 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.git\refs\tags
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.github
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          workflows
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\.github\workflows
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/16/2026  09:00 PM               990 docker-publish.yaml
+               1 File(s)            990 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\apps
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          webui
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\apps\webui
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM                75 .dockerignore
+04/13/2026  12:08 PM               225 default.conf
+04/13/2026  12:08 PM               610 Dockerfile
+04/13/2026  12:08 PM             3,716 index.html
+04/13/2026  12:08 PM               224 package.json
+04/13/2026  12:08 PM    <DIR>          src
+               5 File(s)          4,850 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\apps\webui\src
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,994 app.js
+04/13/2026  12:08 PM    <DIR>          controllers
+04/13/2026  12:08 PM    <DIR>          models
+04/13/2026  12:08 PM    <DIR>          services
+04/13/2026  12:08 PM             5,904 style.css
+04/13/2026  12:08 PM    <DIR>          views
+               2 File(s)          7,898 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\apps\webui\src\controllers
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             3,736 authController.js
+04/13/2026  12:08 PM             2,769 dashboardController.js
+04/13/2026  12:08 PM             1,530 gameController.js
+04/13/2026  12:08 PM               869 storeController.js
+               4 File(s)          8,904 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\apps\webui\src\models
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             2,484 dashboardModel.js
+04/13/2026  12:08 PM               622 gameModel.js
+               2 File(s)          3,106 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\apps\webui\src\services
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             2,445 authService.js
+04/13/2026  12:08 PM               954 paymentService.js
+               2 File(s)          3,399 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\apps\webui\src\views
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,609 gameView.js
+04/13/2026  12:08 PM             1,281 navigationView.js
+04/13/2026  12:08 PM             2,278 serverGridView.js
+04/13/2026  12:08 PM             2,222 storeView.js
+               4 File(s)          7,390 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\infra
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/16/2026  10:42 PM    <DIR>          applications
+04/16/2026  10:36 PM    <DIR>          bootstrap
+04/13/2026  12:08 PM               430 master-infra-app.yaml
+               1 File(s)            430 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\infra\applications
+
+04/16/2026  10:42 PM    <DIR>          .
+04/16/2026  10:42 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,341 agones-app.yaml
+04/16/2026  10:42 PM               420 argocd-app.yaml
+04/13/2026  12:08 PM               385 namespaces.yaml
+04/13/2026  12:08 PM             2,122 postgres-app.yaml
+04/13/2026  12:08 PM             1,755 prometheus-app.yaml
+04/13/2026  12:08 PM               714 qdrant-app.yaml
+04/13/2026  12:08 PM               813 redis-app.yaml
+               7 File(s)          7,550 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\infra\bootstrap
+
+04/16/2026  10:36 PM    <DIR>          .
+04/16/2026  10:36 PM    <DIR>          ..
+04/13/2026  08:12 PM               368 install_age.sh
+04/13/2026  08:13 PM               208 install_agones.sh
+04/16/2026  10:37 PM               625 install_argocd.sh
+04/13/2026  08:13 PM               124 install_helm.sh
+04/13/2026  08:13 PM               188 install_skaffold.sh
+04/13/2026  08:13 PM               339 install_sops.sh
+04/16/2026  10:40 PM             1,226 setup_control_plane.sh
+04/14/2026  08:55 PM               681 setup_worker.sh
+               8 File(s)          3,759 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          base
+04/13/2026  12:08 PM    <DIR>          overlays
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          config
+04/13/2026  12:08 PM    <DIR>          frontend
+04/13/2026  12:08 PM    <DIR>          infra
+04/13/2026  12:08 PM               501 kustomization.yaml
+04/13/2026  12:08 PM               107 namespace.yaml
+04/13/2026  12:08 PM    <DIR>          services
+04/13/2026  12:08 PM    <DIR>          workers
+               2 File(s)            608 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\config
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               389 kustomization.yaml
+               1 File(s)            389 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\frontend
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          dashboard
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\frontend\dashboard
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               225 default.conf
+04/13/2026  12:08 PM               728 deployment.yaml
+04/13/2026  12:08 PM               238 kustomization.yaml
+04/13/2026  12:08 PM               238 service.yaml
+               4 File(s)          1,429 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\infra
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          agones-sdk
+04/13/2026  12:08 PM    <DIR>          sidecar-scripts
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\infra\agones-sdk
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               641 rbac-sdk.yaml
+               1 File(s)            641 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\infra\sidecar-scripts
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             4,017 main.py
+04/13/2026  12:08 PM             1,033 probes.py
+               2 File(s)          5,050 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\services
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          fleet
+04/13/2026  12:08 PM    <DIR>          identity
+04/13/2026  12:08 PM               193 kustomization.yaml
+04/13/2026  12:08 PM               737 middleware.yaml
+04/13/2026  12:08 PM             1,676 protected-ingress.yaml
+04/13/2026  12:08 PM             1,418 public-ingress.yaml
+04/13/2026  12:08 PM    <DIR>          telemetry
+               4 File(s)          4,024 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\services\fleet
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,358 deployment.yaml
+04/13/2026  12:08 PM               177 kustomization.yaml
+04/13/2026  12:08 PM               425 networkpolicy.yaml
+04/13/2026  12:08 PM               140 rbac.yaml
+04/13/2026  12:08 PM               230 service.yaml
+04/13/2026  12:08 PM               801 valheim-rbac.yaml
+               6 File(s)          3,131 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\services\identity
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,930 deployment.yaml
+04/13/2026  12:08 PM               139 kustomization.yaml
+04/13/2026  12:08 PM               767 networkpolicy.yaml
+04/13/2026  12:08 PM               236 service.yaml
+               4 File(s)          3,072 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\services\telemetry
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,936 deployment.yaml
+04/13/2026  12:08 PM               139 kustomization.yaml
+04/13/2026  12:08 PM               629 networkpolicy.yaml
+04/13/2026  12:08 PM               238 service.yaml
+               4 File(s)          2,942 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\workers
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          ai-rag-worker
+04/13/2026  12:08 PM    <DIR>          mod-syncer
+04/13/2026  12:08 PM    <DIR>          payment-worker
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\workers\ai-rag-worker
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               542 deployment.yaml
+04/13/2026  12:08 PM               131 kustomization.yaml
+               2 File(s)            673 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\workers\mod-syncer
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             2,096 cronjob.yaml
+04/13/2026  12:08 PM               128 kustomization.yaml
+               2 File(s)          2,224 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\base\workers\payment-worker
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,678 deployment.yaml
+04/13/2026  12:08 PM                99 kustomization.yaml
+               2 File(s)          1,777 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\overlays
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          dev
+04/13/2026  12:08 PM    <DIR>          prod
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\overlays\dev
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               315 kustomization.yaml
+04/13/2026  12:08 PM             1,072 patch-resources.yaml
+04/13/2026  12:08 PM    <DIR>          secrets
+               2 File(s)          1,387 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\overlays\dev\secrets
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             2,597 fleet-secret.sops.yaml
+04/13/2026  03:18 PM             3,514 identity-secret.sops.yaml
+04/13/2026  12:08 PM               326 kustomization.yaml
+04/13/2026  03:17 PM             2,607 postgres-secret.sops.yaml
+04/13/2026  12:08 PM               221 secret-generator.yaml
+04/13/2026  03:18 PM             2,742 telemetry-secret.sops.yaml
+               6 File(s)         12,007 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\k8s\overlays\prod
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,151 kustomization.yaml
+04/13/2026  12:08 PM               569 patch-resources.yaml
+               2 File(s)          1,720 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          fleet-manager
+04/13/2026  12:08 PM    <DIR>          identity-billing-service
+04/13/2026  12:08 PM    <DIR>          telemetry-service
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          app
+04/13/2026  12:08 PM             1,279 Dockerfile
+04/13/2026  12:08 PM             1,053 main.py
+04/13/2026  12:08 PM               174 requirements.txt
+               3 File(s)          2,506 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          api
+04/13/2026  12:08 PM    <DIR>          clients
+04/13/2026  12:08 PM    <DIR>          config
+04/13/2026  12:08 PM    <DIR>          core
+04/13/2026  12:08 PM             1,410 dependencies.py
+04/13/2026  12:08 PM            10,996 manager.py
+04/13/2026  12:08 PM    <DIR>          models
+04/13/2026  12:08 PM    <DIR>          repositories
+04/13/2026  12:08 PM    <DIR>          schemas
+04/13/2026  12:08 PM    <DIR>          services
+               2 File(s)         12,406 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app\api
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          routes
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app\api\routes
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,737 servers.py
+               1 File(s)          1,737 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app\clients
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,393 identity_client.py
+               1 File(s)          1,393 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app\config
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               799 reader.py
+04/13/2026  12:08 PM               391 settings.yaml
+04/13/2026  12:08 PM             2,691 templates.yaml
+               3 File(s)          3,881 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app\core
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               775 config.py
+04/13/2026  12:08 PM             1,083 database.py
+04/13/2026  12:08 PM               538 security.py
+               3 File(s)          2,396 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app\models
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,168 models.py
+               1 File(s)          1,168 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app\repositories
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,179 base.py
+04/13/2026  12:08 PM               602 server_repo.py
+               2 File(s)          1,781 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app\schemas
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,621 schemas.py
+               1 File(s)          1,621 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\fleet-manager\app\services
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             7,519 server_service.py
+               1 File(s)          7,519 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          app
+04/13/2026  12:08 PM               974 Dockerfile
+04/13/2026  12:08 PM               214 requirements.txt
+04/13/2026  12:08 PM             2,052 seed_db.py
+               3 File(s)          3,240 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service\app
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          api
+04/13/2026  12:08 PM    <DIR>          core
+04/13/2026  12:08 PM             1,862 main.py
+04/13/2026  12:08 PM    <DIR>          models
+04/13/2026  12:08 PM    <DIR>          payments
+04/13/2026  12:08 PM    <DIR>          repositories
+04/13/2026  12:08 PM    <DIR>          schemas
+04/13/2026  12:08 PM    <DIR>          services
+               1 File(s)          1,862 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service\app\api
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          routers
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service\app\api\routers
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,760 auth.py
+04/13/2026  12:08 PM             1,295 internal.py
+04/13/2026  12:08 PM             1,359 payments.py
+04/13/2026  12:08 PM             1,655 users.py
+               4 File(s)          6,069 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service\app\core
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               989 config.py
+04/13/2026  12:08 PM               909 database.py
+04/13/2026  12:08 PM               520 packages.py
+04/13/2026  12:08 PM             3,126 security.py
+               4 File(s)          5,544 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service\app\models
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               438 user.py
+               1 File(s)            438 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service\app\payments
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               337 driver.py
+04/13/2026  12:08 PM             7,967 paypal_provider.py
+04/13/2026  12:08 PM             2,337 stripe_provider.py
+               3 File(s)         10,641 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service\app\repositories
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,290 base.py
+04/13/2026  12:08 PM             1,955 user_repo.py
+               2 File(s)          3,245 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service\app\schemas
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               608 user_schemas.py
+               1 File(s)            608 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\identity-billing-service\app\services
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             2,362 auth_service.py
+04/13/2026  12:08 PM             2,139 payment_service.py
+               2 File(s)          4,501 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\telemetry-service
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          app
+04/13/2026  12:08 PM             1,128 Dockerfile
+04/13/2026  12:08 PM               117 requirements.txt
+               2 File(s)          1,245 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\telemetry-service\app
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          api
+04/13/2026  12:08 PM    <DIR>          core
+04/13/2026  12:08 PM               901 main.py
+04/13/2026  12:08 PM    <DIR>          models
+04/13/2026  12:08 PM    <DIR>          repositories
+04/13/2026  12:08 PM    <DIR>          schemas
+04/13/2026  12:08 PM    <DIR>          services
+               1 File(s)            901 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\telemetry-service\app\api
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             1,289 dependencies.py
+04/13/2026  12:08 PM    <DIR>          routes
+               1 File(s)          1,289 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\telemetry-service\app\api\routes
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               935 incidents.py
+04/13/2026  12:08 PM             1,102 internal.py
+               2 File(s)          2,037 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\telemetry-service\app\core
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             2,358 auth.py
+04/13/2026  12:08 PM               566 config.py
+04/13/2026  12:08 PM               426 database.py
+               3 File(s)          3,350 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\telemetry-service\app\models
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               481 models.py
+               1 File(s)            481 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\telemetry-service\app\repositories
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               285 base.py
+04/13/2026  12:08 PM               808 incident_repo.py
+               2 File(s)          1,093 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\telemetry-service\app\schemas
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               355 schemas.py
+               1 File(s)            355 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\services\telemetry-service\app\services
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             2,303 incident_service.py
+04/13/2026  12:08 PM             2,326 telemetry_service.py
+               2 File(s)          4,629 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\sidecar
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM                81 .dockerignore
+04/13/2026  12:08 PM               397 Dockerfile
+04/13/2026  12:08 PM             4,047 main.py
+04/13/2026  12:08 PM             1,030 probes.py
+               4 File(s)          5,555 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\workers
+
+04/16/2026  09:45 PM    <DIR>          .
+04/16/2026  09:45 PM    <DIR>          ..
+04/13/2026  12:08 PM    <DIR>          ai-worker
+04/13/2026  12:08 PM    <DIR>          mod-syncer
+04/13/2026  12:08 PM    <DIR>          payment-worker
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\workers\ai-worker
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM             4,495 ai_worker.py
+04/13/2026  12:08 PM               523 Dockerfile
+04/13/2026  12:08 PM                89 requirements.txt
+               3 File(s)          5,107 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\workers\mod-syncer
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               335 .dockerignore
+04/13/2026  12:08 PM               367 Dockerfile
+04/13/2026  12:08 PM                27 requirements.txt
+04/13/2026  12:08 PM             3,805 scraper.py
+               4 File(s)          4,534 bytes
+
+ Directory of C:\Users\james\Desktop\CloudCraft\workers\payment-worker
+
+04/13/2026  12:08 PM    <DIR>          .
+04/13/2026  12:08 PM    <DIR>          ..
+04/13/2026  12:08 PM               666 config.py
+04/13/2026  12:08 PM               336 Dockerfile
+04/13/2026  12:08 PM                44 requirements.txt
+04/13/2026  12:08 PM             5,180 worker.py
+               4 File(s)          6,226 bytes
+
+     Total Files Listed:
+             336 File(s)      1,136,012 bytes
+             590 Dir(s)  137,234,776,064 bytes free
