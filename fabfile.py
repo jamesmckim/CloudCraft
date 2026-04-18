@@ -45,15 +45,18 @@ def cleanup(c):
     master = get_node_connection(IPS['master']['ssh_ip'])
     # K3s provides an official uninstall script upon installation
     master.run('sudo /usr/local/bin/k3s-uninstall.sh', warn=True) 
-    master.run('sudo rm -rf /tmp/bootstrap /tmp/bootstrap.tar.gz')
+    master.run('sudo rm -rf /tmp/bootstrap /tmp/bootstrap.tar.gz /tmp/setup_complet', warn=True)
 
     # 2. Clean the Workers
     for worker_data in IPS['workers']:
+        w_ssh = worker_data['ssh_ip']
+        w_internal = worker_data['internal_ip']
+        
         print(f"🧹 Wiping Worker at {worker_data['internal_ip']}...")
         worker = get_node_connection(worker_ssh)
         # Workers use a slightly different script name
         worker.run('sudo /usr/local/bin/k3s-agent-uninstall.sh', warn=True)
-        worker.run('sudo rm -rf /tmp/bootstrap /tmp/bootstrap.tar.gz')
+        worker.run('sudo rm -rf /tmp/bootstrap /tmp/bootstrap.tar.gz /temp/setup_complete', warn=True)
 
     print("✨ Nodes are clean. You are back to a blank-slate Ubuntu environment.")
 
