@@ -110,7 +110,7 @@ def agones(c):
     master = get_node_connection(master_ssh)
     
     print("🎮 Installing Agones Core...")
-    master.run('sudo KUBECONFIG=/ect/rancher/k3s/k3s.yaml /tmp/bootstrap/install_agones.sh', pty=True)
+    master.run('sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml /tmp/bootstrap/install_agones.sh', pty=True)
 
 
 @task(default=True)
