@@ -3,6 +3,8 @@ set -e
 
 source /tmp/bootstrap/utils.sh
 
+export KUBECONFIG=/ect/rancher/k3s/k3s.yaml
+
 echo "Installing Agones via Helm..."
 helm repo add agones https://agones.dev/chart/stable
 helm repo update
