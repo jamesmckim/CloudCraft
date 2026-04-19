@@ -16,7 +16,7 @@ until curl -k -s https://${MASTER_IP}:6443 > /dev/null 2>&1; do
 done
 
 echo "Control plane is up! Joining the cluster..."
-curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_START=true K3S_URL=https://${MASTER_IP}:6443 K3S_TOKEN="$CLUSTER_TOKEN" sh -s - --node-ip="$WORKER_IP"
+curl -sfL https://get.k3s.io | K3S_URL=https://${MASTER_IP}:6443 K3S_TOKEN="$CLUSTER_TOKEN" sh -s - --node-ip="$WORKER_IP"
 
 echo "Starting K3s agent in the background..."
 systemctl start k3s-agent --no-block
