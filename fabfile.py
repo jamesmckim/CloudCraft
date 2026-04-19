@@ -55,6 +55,10 @@ def cleanup(c):
         worker.run('sudo /usr/local/bin/k3s-agent-uninstall.sh', warn=True)
         worker.run('sudo rm -rf /tmp/bootstrap /tmp/bootstrap.tar.gz /tmp/setup_complete', warn=True)
 
+    # 3. Clean Local Machine
+    print("🧹 Cleaning local files...")
+    c.run('rm -f bootstrap.tar.gz')
+    
     print("✨ Nodes are clean. You are back to a blank-slate Ubuntu environment.")
 
 @task
