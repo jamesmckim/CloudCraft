@@ -62,6 +62,36 @@ def cleanup(c):
     print("✨ Nodes are clean. You are back to a blank-slate Ubuntu environment.")
 
 @task
+def wait_for_nodes(c):
+    """Polls the K3s API until all nodes are registered and Ready."""
+    master_ssh = IPS['master']['ssh_ip']
+    master = get_node_connection(master_ssh)
+    
+    # Calculate total expected nodes (1 master + X workers)
+    expected_nodes = 1 + len(IPS['workers'])
+    
+    print(f"⏳ Waiting for all {expected_nodes} nodes to join and become 'Ready'...")
+    
+    # This bash command counts the number of lines containing the exact word "Ready"
+    check_cmd = "sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl get nodes --no-headers | grep -w 'Ready' | wc -l"
+    
+    while True:
+        # Run the command silently
+        result = master.run(check_cmd, hide=True)
+        ready_count = int(result.stdout.strip())
+        
+        if ready_count == expected_nodes:
+            print(f"✅ All {expected_nodes} nodes are registered, healthy, and Ready!")
+            break
+            
+        print(f"   ... {ready_count}/{expected_nodes} nodes ready. Checking again in 5 seconds...")
+        time.sleep(5)
+    
+    print("⏳ Waiting for Kubernetes internal system pods (CoreDNS, etc.) to spin up...")
+    master.run("sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl wait --for=condition=Ready pods --all -n kube-system --timeout=120s", hide=True)
+    print("🚀 Cluster is 100% stable and ready for applications!")
+
+@task
 def control_plane(c):
     """Sets up the K3s master node."""
     _ensure_tarball(c)
@@ -127,6 +157,7 @@ def setup_cluster(c):
     # 2. The Heavy Lifting
     control_plane(c)
     workers(c)
+    wait_for_nodes(c) # <==  Transition::!!!:: infastructure-to-application boundary!!!
     agones(c)
     argocd(c)
     
