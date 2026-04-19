@@ -30,11 +30,5 @@ until [ -f /etc/rancher/k3s/k3s.yaml ] && kubectl get nodes &> /dev/null; do
     sleep 3
 done
 
-echo "Kubernetes is ready. Running Agones installer..."
-bash $REPO_DIR/install_agones.sh
-
-echo "Running ArgoCD bootstrap..."
-bash $REPO_DIR/install_argocd.sh
-
 echo "Control Plane Setup Complete!"
 touch /tmp/setup_complete

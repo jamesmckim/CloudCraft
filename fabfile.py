@@ -103,6 +103,16 @@ def argocd(c):
     master.run(f'sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl apply --server-side -f {raw_app_url}')
     print("🚀 GitOps Pipeline Initialized! ArgoCD is now pulling your game servers.")
 
+@task
+def agones(c):
+    """Installs Agones after the full cluster is assembled."""
+    master_ssh = IPS['master']['ssh_ip']
+    master = get_node_connection(master_ssh)
+    
+    print("🎮 Installing Agones Core...")
+    master.run('sudo /tmp/bootstrap/install_agones.sh', pty=True)
+
+
 @task(default=True)
 def setup_cluster(c):
     """Master task: Runs the entire setup process from start to finish."""
@@ -113,6 +123,7 @@ def setup_cluster(c):
     # 2. The Heavy Lifting
     control_plane(c)
     workers(c)
+    agones(c)
     argocd(c)
     
     # 3. Mundane Cleanup
