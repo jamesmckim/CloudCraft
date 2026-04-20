@@ -66,7 +66,7 @@ worker-2 ansible_host={worker2.get_management_ip()} internal_ip=10.10.10.12
 [all:vars]
 ansible_user=ubuntu
 ansible_ssh_private_key_file=~/.ssh/slice_key
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -i $HOME/.ssh/fabric-bastion-key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {bastion_user}@{bastion_host}"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W [%h]:%p -i $HOME/.ssh/fabric-bastion-key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {bastion_user}@{bastion_host}"'
 """
     
     # Save it to a file Ansible natively understands
