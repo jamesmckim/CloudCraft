@@ -1,0 +1,4 @@
+---
+age_version: "v1.3.1"
+sops_version: "v3.12.2"
+helm_version: "v3.14.3"

@@ -1,0 +1,16 @@
+---
+- name: Add Agones Helm repository
+  kubernetes.core.helm_repository:
+    name: agones
+    repo_url: https://agones.dev/chart/stable
+
+- name: Deploy Agones via Helm
+  kubernetes.core.helm:
+    name: my-release
+    chart_ref: agones/agones
+    namespace: agones-system
+    create_namespace: yes
+    kubeconfig: "~/.kube/cloudlab_config"
+    state: present
+    wait: yes # This natively replaces your wait_for_deployment bash loop!
+    timeout: 300s

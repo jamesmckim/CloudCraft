@@ -1,0 +1,25 @@
+---
+# 1. Setup the Brain (Control Plane)
+- name: Bootstrap K3s Control Plane
+  hosts: master
+  become: yes
+  roles:
+    - common
+    - k3s_master
+
+# 2. Attach the Limbs (Workers)
+- name: Bootstrap K3s Workers
+  hosts: workers
+  become: yes
+  roles:
+    - common
+    - k3s_worker
+
+# 3. Deploy the Software (GitOps & Game Servers)
+- name: Deploy Cluster Applications
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles:
+    - agones
+    - argocd

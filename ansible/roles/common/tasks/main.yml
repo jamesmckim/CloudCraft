@@ -1,0 +1,49 @@
+---
+- name: Ensure apt cache is updated
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600 # Don't update if updated in the last hour
+
+- name: Install base system utilities
+  ansible.builtin.apt:
+    name:
+      - curl
+      - wget
+      - apt-transport-https
+      - jq
+      - tar
+    state: present
+
+- name: Install Age (Encryption Tool)
+  ansible.builtin.unarchive:
+    src: "https://github.com/FiloSottile/age/releases/download/{{ age_version }}/age-{{ age_version }}-linux-amd64.tar.gz"
+    dest: /usr/local/bin/
+    remote_src: yes
+    # Extract only the binaries, stripping the parent directory in the tarball
+    extra_opts:
+      - --strip-components=1
+      - age/age
+      - age/age-keygen
+    creates: /usr/local/bin/age
+
+- name: Install SOPS (Secrets OPerationS)
+  ansible.builtin.get_url:
+    url: "https://github.com/getsops/sops/releases/download/{{ sops_version }}/sops-{{ sops_version }}.linux.amd64"
+    dest: /usr/local/bin/sops
+    mode: '0755'
+
+- name: Install Skaffold
+  ansible.builtin.get_url:
+    url: "https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64"
+    dest: /usr/local/bin/skaffold
+    mode: '0755'
+
+- name: Install Helm
+  ansible.builtin.unarchive:
+    src: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
+    dest: /usr/local/bin/
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+      - linux-amd64/helm
+    creates: /usr/local/bin/helm

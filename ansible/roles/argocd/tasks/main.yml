@@ -1,0 +1,44 @@
+---
+- name: Ensure ArgoCD namespace exists
+  kubernetes.core.k8s:
+    name: argocd
+    kind: Namespace
+    kubeconfig: "~/.kube/cloudlab_config"
+    state: present
+
+- name: Apply ArgoCD Core Manifests
+  kubernetes.core.k8s:
+    src: https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    namespace: argocd
+    kubeconfig: "~/.kube/cloudlab_config"
+    state: present
+
+- name: Wait for ArgoCD Server to become Available
+  kubernetes.core.k8s_info:
+    kind: Deployment
+    name: argocd-server
+    namespace: argocd
+    kubeconfig: "~/.kube/cloudlab_config"
+    wait: yes
+    wait_condition:
+      type: Available
+      status: "True"
+    wait_timeout: 300
+
+- name: Wait for ArgoCD Application Controller to become Available
+  kubernetes.core.k8s_info:
+    kind: Deployment
+    name: argocd-application-controller
+    namespace: argocd
+    kubeconfig: "~/.kube/cloudlab_config"
+    wait: yes
+    wait_condition:
+      type: Available
+      status: "True"
+    wait_timeout: 300
+
+- name: Apply GitOps Application Manifest
+  kubernetes.core.k8s:
+    src: https://raw.githubusercontent.com/jamesmckim/CloudCraft/main/infra/applications/master-infra-app.yaml
+    kubeconfig: "~/.kube/cloudlab_config"
+    state: present

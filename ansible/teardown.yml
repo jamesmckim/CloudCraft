@@ -1,0 +1,43 @@
+---
+# 1. Wipe the Limbs (Workers)
+- name: Teardown K3s Workers
+  hosts: workers
+  become: yes
+  tasks:
+    - name: Execute K3s agent uninstall script
+      ansible.builtin.command: /usr/local/bin/k3s-agent-uninstall.sh
+      args:
+        removes: /usr/local/bin/k3s-agent-uninstall.sh
+      ignore_errors: yes # Proceed even if the script throws a minor exit code
+
+    - name: Clean up temporary installation scripts
+      ansible.builtin.file:
+        path: /tmp/install_k3s_agent.sh
+        state: absent
+
+# 2. Wipe the Brain (Control Plane)
+- name: Teardown K3s Control Plane
+  hosts: master
+  become: yes
+  tasks:
+    - name: Execute K3s server uninstall script
+      ansible.builtin.command: /usr/local/bin/k3s-uninstall.sh
+      args:
+        removes: /usr/local/bin/k3s-uninstall.sh
+      ignore_errors: yes
+
+    - name: Clean up temporary installation scripts
+      ansible.builtin.file:
+        path: /tmp/install_k3s.sh
+        state: absent
+
+# 3. Wipe the Local Runner (Cleanup)
+- name: Clean Local Environment
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Remove fetched kubeconfig
+      ansible.builtin.file:
+        path: ~/.kube/cloudlab_config
+        state: absent

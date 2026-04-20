@@ -1,0 +1,39 @@
+---
+- name: Download K3s installation script
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: /tmp/install_k3s.sh
+    mode: '0700'
+
+- name: Install K3s Control Plane
+  ansible.builtin.shell: >
+    /tmp/install_k3s.sh server 
+    --node-ip="{{ internal_ip }}" 
+    --advertise-address="{{ internal_ip }}" 
+    --node-name="master-{{ internal_ip }}"
+  environment:
+    K3S_TOKEN: "{{ k3s_cluster_token }}"
+  args:
+    creates: /etc/rancher/k3s/k3s.yaml
+  # 'creates' ensures this only runs once. If the yaml exists, Ansible skips this task.
+
+- name: Wait for K3s API port to become available
+  ansible.builtin.wait_for:
+    port: 6443
+    state: started
+    timeout: 300
+    msg: "Timeout waiting for K3s API to come online."
+
+- name: Fetch kubeconfig to the Ansible control node
+  ansible.builtin.fetch:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: ~/.kube/cloudlab_config
+    flat: yes
+
+- name: Update local kubeconfig to use the Master's SSH IP
+  ansible.builtin.replace:
+    path: ~/.kube/cloudlab_config
+    regexp: '127\.0\.0\.1'
+    replace: "{{ ansible_host }}"
+  delegate_to: localhost
+  become: no

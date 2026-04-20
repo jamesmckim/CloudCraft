@@ -49,21 +49,31 @@ def create_slice():
     iface_w2.ip_link_up()
     
     # 5. THE HANDOFF: Extract the IPs to pass to your SSH script
-    cluster_ips = {
-        "master": {
-            "ssh_ip": master.get_management_ip(),
-            "internal_ip": "10.10.10.10"
-        },
-        "workers": [
-            {"ssh_ip": worker1.get_management_ip(), "internal_ip": "10.10.10.11"},
-            {"ssh_ip": worker2.get_management_ip(), "internal_ip": "10.10.10.12"}
-        ]
-    }
+    # 5. THE HANDOFF: Generate Ansible Inventory
+    print("Generating Ansible inventory.ini...")
     
-    # Save these IPs to a file so fabfile.py can read them
-    with open('cluster_ips.json', 'w') as f:
-        json.dump(cluster_ips, f)
-    print("Saved IPs to cluster_ips.json")
+    bastion_user = "jm1029804_0000480603" # From your old fabfile
+    bastion_host = "bastion.fabric-testbed.net"
+    
+    # We write this as an INI formatted string
+    inventory_content = f"""[master]
+control-plane ansible_host={master.get_management_ip()} internal_ip=10.10.10.10
+
+[workers]
+worker-1 ansible_host={worker1.get_management_ip()} internal_ip=10.10.10.11
+worker-2 ansible_host={worker2.get_management_ip()} internal_ip=10.10.10.12
+
+[all:vars]
+ansible_user=ubuntu
+# This tells Ansible how to route traffic through the FABRIC Bastion host natively
+ansible_ssh_common_args='-J {bastion_user}@{bastion_host}'
+"""
+    
+    # Save it to a file Ansible natively understands
+    with open('ansible/inventory.ini', 'w') as f:
+        f.write(inventory_content)
+        
+    print("✅ Saved IPs and SSH configs to inventory.ini")
 
 if __name__ == "__main__":
     create_slice()
