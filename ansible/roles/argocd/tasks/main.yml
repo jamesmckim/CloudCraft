@@ -48,3 +48,78 @@
     src: https://raw.githubusercontent.com/jamesmckim/CloudCraft/main/infra/master-infra-app.yaml
     kubeconfig: /etc/rancher/k3s/k3s.yaml
     state: present
+
+- name: Inject Age Private Key into ArgoCD
+  kubernetes.core.k8s:
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: sops-age-key
+        namespace: argocd
+      type: Opaque
+      stringData:
+        # Replace this with your actual Ansible Vault variable referencing the key
+        keys.txt: "{{ vault_sops_age_private_key }}"
+
+- name: Create SOPS Configuration Management Plugin
+  kubernetes.core.k8s:
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cmp-sops
+        namespace: argocd
+      data:
+        plugin.yaml: |
+          apiVersion: argoproj.io/v1alpha1
+          kind: ConfigManagementPlugin
+          metadata:
+            name: sops
+          spec:
+            generate:
+              command: ["sh", "-c"]
+              # Decrypts all SOPS files in the temp directory, then builds Kustomize
+              args: ["find . -name '*.sops.yaml' -exec sops -d -i {} \\; && kustomize build ."]
+
+- name: Inject SOPS Sidecar into ArgoCD Repo Server
+  kubernetes.core.k8s:
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: argocd-repo-server
+        namespace: argocd
+      spec:
+        template:
+          spec:
+            volumes:
+              - name: cmp-tmp
+                emptyDir: {}
+              - name: sops-age-key
+                secret:
+                  secretName: sops-age-key
+            containers:
+              - name: sops-plugin
+                # A lightweight alpine image with SOPS already installed
+                image: mozilla/sops:v3.12.2
+                command: [/var/run/argocd/argocd-cmp-server]
+                env:
+                  - name: SOPS_AGE_KEY_FILE
+                    value: /app/sops/keys.txt
+                volumeMounts:
+                  - name: var-files
+                    mountPath: /var/run/argocd
+                  - name: plugins
+                    mountPath: /home/argocd/cmp-server/plugins
+                  - name: cmp-tmp
+                    mountPath: /tmp
+                  - name: sops-age-key
+                    mountPath: /app/sops/keys.txt
+                    readOnly: true
