@@ -17,8 +17,8 @@
 
 # 3. Deploy the Software (GitOps & Game Servers)
 - name: Deploy Cluster Applications
-  hosts: localhost
-  connection: local
+  hosts: master
+  become: yes
   gather_facts: false
   roles:
     - argocd

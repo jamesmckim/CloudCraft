@@ -1,16 +1,22 @@
 ---
+- name: Ensure Python Kubernetes client is installed natively on the Master
+  ansible.builtin.apt:
+    name: python3-kubernetes
+    state: present
+    update_cache: yes
+    
 - name: Ensure ArgoCD namespace exists
   kubernetes.core.k8s:
     name: argocd
     kind: Namespace
-    kubeconfig: "~/.kube/cloudlab_config"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
     state: present
 
 - name: Apply ArgoCD Core Manifests
   kubernetes.core.k8s:
     src: https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
     namespace: argocd
-    kubeconfig: "~/.kube/cloudlab_config"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
     state: present
 
 - name: Wait for ArgoCD Server to become Available
@@ -18,7 +24,7 @@
     kind: Deployment
     name: argocd-server
     namespace: argocd
-    kubeconfig: "~/.kube/cloudlab_config"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
     wait: yes
     wait_condition:
       type: Available
@@ -30,7 +36,7 @@
     kind: Deployment
     name: argocd-application-controller
     namespace: argocd
-    kubeconfig: "~/.kube/cloudlab_config"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
     wait: yes
     wait_condition:
       type: Available
@@ -40,5 +46,5 @@
 - name: Apply GitOps Application Manifest
   kubernetes.core.k8s:
     src: https://raw.githubusercontent.com/jamesmckim/CloudCraft/main/infra/master-infra-app.yaml
-    kubeconfig: "~/.kube/cloudlab_config"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
     state: present
