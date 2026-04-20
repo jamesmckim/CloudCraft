@@ -11,6 +11,10 @@
     kind: Namespace
     kubeconfig: /etc/rancher/k3s/k3s.yaml
     state: present
+  register: api_check
+  until: api_check is not failed
+  retries: 12
+  delay: 5
 
 - name: Apply ArgoCD Core Manifests
   kubernetes.core.k8s:
