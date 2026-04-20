@@ -24,17 +24,3 @@
     state: started
     timeout: 300
     msg: "Timeout waiting for K3s API to come online."
-
-- name: Fetch kubeconfig to the Ansible control node
-  ansible.builtin.fetch:
-    src: /etc/rancher/k3s/k3s.yaml
-    dest: ~/.kube/cloudlab_config
-    flat: yes
-
-- name: Update local kubeconfig to use the Master's SSH IP
-  ansible.builtin.replace:
-    path: ~/.kube/cloudlab_config
-    regexp: '127\.0\.0\.1'
-    replace: "{{ ansible_host }}"
-  delegate_to: localhost
-  become: no
