@@ -9,7 +9,7 @@ echo "➡️  LAYER 1: Provisioning Infrastructure on NSF FABRIC..."
 python provision_fabric.py
 
 echo "➡️  LAYER 2: Configuring Kubernetes (K3s)..."
-fab setup-cluster
+ansible/ansible-playbook site.yml --ask-vault-pass
 
 echo "=========================================="
 echo "✅ DEPLOYMENT COMPLETE!"
