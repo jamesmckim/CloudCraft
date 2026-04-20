@@ -39,6 +39,6 @@
 
 - name: Apply GitOps Application Manifest
   kubernetes.core.k8s:
-    src: https://raw.githubusercontent.com/jamesmckim/CloudCraft/main/infra/applications/master-infra-app.yaml
+    src: https://raw.githubusercontent.com/jamesmckim/CloudCraft/main/infra/master-infra-app.yaml
     kubeconfig: "~/.kube/cloudlab_config"
     state: present

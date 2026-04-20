@@ -4,7 +4,7 @@
     url: https://get.k3s.io
     dest: /tmp/install_k3s.sh
     mode: '0700'
-
+#--flannel-backend=host-gw needs to go once I leave fabric
 - name: Install K3s Control Plane
   ansible.builtin.shell: >
     /tmp/install_k3s.sh server 
