@@ -65,8 +65,8 @@ worker-2 ansible_host={worker2.get_management_ip()} internal_ip=10.10.10.12
 
 [all:vars]
 ansible_user=ubuntu
-# This tells Ansible how to route traffic through the FABRIC Bastion host natively
-ansible_ssh_common_args='-J {bastion_user}@{bastion_host}'
+ansible_ssh_private_key_file=~/.ssh/slice_key
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -i ~/.ssh/fabric-bastion-key {bastion_user}@{bastion_host}"'
 """
     
     # Save it to a file Ansible natively understands
