@@ -11,6 +11,7 @@
     --node-ip="{{ internal_ip }}" 
     --advertise-address="{{ internal_ip }}" 
     --node-name="master-{{ internal_ip }}"
+    --flannel-backend=host-gw
   environment:
     K3S_TOKEN: "{{ k3s_cluster_token }}"
   args:
