@@ -1,0 +1,6 @@
+persistence:
+  size: 5Gi
+
+# We disable the API key for local dev to keep things simple.
+# If you want to use an API key later, you can map it to a secret just like Postgres!
+apiKey: false

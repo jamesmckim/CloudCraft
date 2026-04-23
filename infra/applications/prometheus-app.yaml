@@ -11,54 +11,7 @@ spec:
     chart: kube-prometheus-stack
     helm:
       releaseName: prometheus-stack
-      values: |
-        prometheus:
-          prometheusSpec:
-            serviceMonitorSelectorNilUsesHelmValues: false
-            resources:
-              requests:
-                cpu: "100m"
-                memory: "512Mi"
-              limits:
-                cpu: "500m"
-                memory: "1Gi"
-               
-        grafana:
-          resources:
-            requests:
-              cpu: "50m"
-              memory: "128Mi"
-            limits:
-              cpu: "200m"
-              memory: "256Mi"
-        
-        prometheus-node-exporter:
-          resources:
-            requests:
-              cpu: "50m"
-              memory: "50Mi"
-            limits:
-              cpu: "100m"
-              memory: "100Mi"
-        
-        promethusOperator:
-          resources:
-            requests:
-              cpu: "50m"
-              memory: "64Mi"
-            limits:
-              cpu: "200m"
-              memory: "32Mi"
-              
-        kubeStateMetrics:
-          resources:
-            requests:
-              cpu: "20m"
-              memory: "32Mi"
-            limits:
-              cpu: "100m"
-              memory: "128Mi"
-            
+
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: prometheus-system

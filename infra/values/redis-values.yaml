@@ -1,0 +1,11 @@
+fullnameOverride: "redis-broker"
+architecture: standalone
+
+# Disable auth to match your previous raw deployment
+auth:
+  enabled: false
+  
+# Disable persistent storage so it acts as an in-memory broker
+master:
+  persistence:
+    enabled: false

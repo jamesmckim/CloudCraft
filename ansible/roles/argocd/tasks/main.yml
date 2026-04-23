@@ -47,12 +47,6 @@
       status: "True"
     wait_timeout: 300
 
-- name: Apply GitOps Application Manifest
-  kubernetes.core.k8s:
-    src: https://raw.githubusercontent.com/jamesmckim/CloudCraft/main/infra/master-infra-app.yaml
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
-    state: present
-
 - name: Inject Age Private Key into ArgoCD
   kubernetes.core.k8s:
     kubeconfig: /etc/rancher/k3s/k3s.yaml
@@ -85,9 +79,12 @@
           metadata:
             name: sops
           spec:
+            # 1. Added the discover phase so ArgoCD knows to use this plugin if it sees a .sops.yaml file
+            discover:
+              find:
+                command: [ "sh", "-c", "find . -name '*.sops.yaml' | grep -q ." ]
             generate:
               command: ["sh", "-c"]
-              # Decrypts all SOPS files in the temp directory, then builds Kustomize
               args: ["find . -name '*.sops.yaml' -exec sops -d -i {} \\; && kustomize build ."]
 
 - name: Inject SOPS Sidecar into ArgoCD Repo Server
@@ -106,24 +103,50 @@
             volumes:
               - name: cmp-tmp
                 emptyDir: {}
+              - name: custom-tools
+                emptyDir: {}
               - name: sops-age-key
                 secret:
                   secretName: sops-age-key
+              - name: cmp-plugin
+                configMap:
+                  name: cmp-sops
+            initContainers:
+              - name: download-tools
+                image: alpine:3.18
+                command: [sh, -c]
+                args:
+                  - wget -O /custom-tools/sops https://github.com/getsops/sops/releases/download/v3.8.1/sops-v3.8.1.linux.amd64 && chmod +x /custom-tools/sops
+                volumeMounts:
+                  - mountPath: /custom-tools
+                    name: custom-tools
             containers:
               - name: sops-plugin
-                # A lightweight alpine image with SOPS already installed
-                image: mozilla/sops:v3.12.2
+                image: quay.io/argoproj/argocd:v2.10.4 
                 command: [/var/run/argocd/argocd-cmp-server]
                 env:
                   - name: SOPS_AGE_KEY_FILE
                     value: /app/sops/keys.txt
                 volumeMounts:
-                  - name: var-files
-                    mountPath: /var/run/argocd
-                  - name: plugins
-                    mountPath: /home/argocd/cmp-server/plugins
-                  - name: cmp-tmp
-                    mountPath: /tmp
-                  - name: sops-age-key
-                    mountPath: /app/sops/keys.txt
+                  - mountPath: /var/run/argocd
+                    name: var-files
+                  - mountPath: /home/argocd/cmp-server/plugins
+                    name: plugins
+                  - mountPath: /tmp
+                    name: cmp-tmp
+                  - mountPath: /app/sops/keys.txt
+                    subPath: keys.txt
+                    name: sops-age-key
                     readOnly: true
+                  - mountPath: /usr/local/bin/sops
+                    name: custom-tools
+                    subPath: sops
+                  - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+                    subPath: plugin.yaml
+                    name: cmp-plugin
+
+- name: Apply GitOps Application Manifest
+  kubernetes.core.k8s:
+    src: https://raw.githubusercontent.com/jamesmckim/CloudCraft/main/infra/master-infra-app.yaml
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    state: present

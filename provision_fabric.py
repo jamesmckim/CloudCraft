@@ -36,7 +36,7 @@ def create_slice():
     iface_w1 = worker1.get_interface(network_name="k8s-lan")
     iface_w2 = worker2.get_interface(network_name="k8s-lan")
     
-    lan_subnet = ipaddress.IPv4Network("10.10.10.0/24")
+    lan_subnet = ipaddress.IPv4Network("10.10.10.0/24") # This needs to be changed to dynamic ipv6 scaling
     
     print("Configuring Internal Network (10.10.10.x)...")
     iface_m.ip_addr_add(addr="10.10.10.10", subnet=lan_subnet)

@@ -11,54 +11,6 @@ spec:
     chart: postgresql
     helm:
       releaseName: postgres
-      values: |
-        fullnameOverride: "postgres"
-        primary:
-          persistence:
-            size: 5Gi
-          
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "256Mi"
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
-            
-          extraEnvVars:
-            - name: SYNCER_DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secrets
-                  key: SYNCER_DB_PASSWORD
-
-          initdb:
-            scripts:
-              init-dbs.sh: |
-                #!/bin/bash
-                set -e
-                
-                export PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/DB_PASS)
-                
-                psql -v ON_ERROR_STOP=1 --username postgres --dbname postgres <<-EOSQL
-                    CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
-                    CREATE DATABASE thunderstore;
-                    GRANT ALL PRIVILEGES ON DATABASE thunderstore TO syncer_user;
-                EOSQL
-                
-                psql -v ON_ERROR_STOP=1 --username postgres --dbname craftcloud <<-EOSQL
-                    GRANT SELECT ON ALL TABLES IN SCHEMA public TO "user";
-                EOSQL
-
-        auth:
-          database: "craftcloud"
-          username: "user"
-          existingSecret: "postgres-secrets"
-          secretKeys:
-            userPasswordKey: "DB_PASS"
-            # Bitnami requires a postgres (admin) password even if you don't use it.
-            # You can map it to the same password, or add an ADMIN_PASS to your secret generator.
-            adminPasswordKey: "DB_PASS" 
 
   destination:
     server: 'https://kubernetes.default.svc'
