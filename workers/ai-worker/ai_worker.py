@@ -10,6 +10,7 @@ from openai import AsyncOpenAI
 # --- Configs ---
 REDIS_URL = os.getenv("REDIS_URL", "redis://redis-broker:6379/0")
 QDRANT_URL = os.getenv("QDRANT_URL", "http://qdrant-db:6333")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 LLM_URL = os.getenv("LLM_URL", "http://host.docker.internal:1234/v1")
 COLLECTION_NAME = "server_knowledge"
 
@@ -18,7 +19,7 @@ async def startup(ctx: Dict[Any, Any]) -> None:
     
     # Initialize Async Clients
     llm_client = AsyncOpenAI(base_url=LLM_URL, api_key="dummy-key-not-checked")
-    qdrant_client = AsyncQdrantClient(url=QDRANT_URL)
+    qdrant_client = AsyncQdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
     
     # Run setup once on boot
     if not await qdrant_client.collection_exists(COLLECTION_NAME):

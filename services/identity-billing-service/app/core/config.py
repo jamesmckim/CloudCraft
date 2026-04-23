@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     PAYPAL_WEBHOOK_ID: str | None = None
     PAYPAL_MODE: str = "sandbox"  # 'sandbox' or 'live'
     
+    REDIS_PASSWORD: str | None = None
     REDIS_URL: str = "redis://redis-broker-master:6379/0"
 
     model_config = SettingsConfigDict(

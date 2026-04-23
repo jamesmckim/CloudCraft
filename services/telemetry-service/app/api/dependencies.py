@@ -12,7 +12,11 @@ from app.services.incident_service import IncidentService
 from app.services.telemetry_service import TelemetryService
 
 # Global connection instances
-redis_client = aioredis.from_url(settings.REDIS_URL, decode_responses=True)
+redis_client = aioredis.from_url(
+    settings.REDIS_URL,
+    password=settings.REDIS_PASSWORD,
+    decode_responses=True
+)
 
 async def get_db():
     async with AsyncSessionLocal() as session:
@@ -22,7 +26,11 @@ async def get_redis() -> aioredis.Redis:
     return redis_client
 
 async def get_arq_pool() -> ArqRedis:
-    return await create_pool(RedisSettings.from_dsn(settings.REDIS_URL))
+    return await create_pool(RedisSettings(
+        host="redis-broker-master",
+        port=6379,
+        password=settings.REDIS_PASSWORD
+        )
 
 def get_incident_service(db: AsyncSession = Depends(get_db), arq_pool: ArqRedis = Depends(get_arq_pool)) -> IncidentService:
     repo = IncidentRepository(db)

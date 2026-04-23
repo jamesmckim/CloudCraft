@@ -4,7 +4,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # Database & Redis
     DATABASE_URL: str
-    REDIS_URL: str = "redis://telemetry-redis:6379/0"
+    REDIS_URL: str = "redis://redis-broker-master:6379/0"
+    REDIS_PASSWORD: str | None = None
     
     # Auth & Security
     SECRET_KEY: str

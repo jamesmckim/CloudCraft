@@ -9,8 +9,9 @@ class Settings(BaseSettings):
     MANAGER_API_URL: str = "http://fleet-service:5000"
     TELEMETRY_API_URL: str = "http://telemetry-service.craftcloud-system.svc.cluster.local:5000"
     
-    REDIS_HOST: str = "redis-broker"
+    REDIS_HOST: str = os.getenv("REDIS_HOST", "redis-broker-master")
     REDIS_PORT: int = 6379
+    REDIS_PASSWORD: str | None = None
 
     # Database & Security
     DATABASE_URL: str

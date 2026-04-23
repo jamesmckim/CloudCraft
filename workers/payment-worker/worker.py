@@ -130,5 +130,9 @@ async def process_webhook_job(ctx, provider_name: str, raw_payload: bytes, heade
 
 class WorkerSettings:
     functions = [process_webhook_job]
-    redis_settings = RedisSettings.from_dsn(settings.REDIS_URL)
+    redis_settings = RedisSettings(
+        host="redis-broker-master.craftcloud-system.svc.cluster.local",
+        port=6379,
+        password=settings.REDIS_PASSWORD
+    )
     max_tries = 3 # Retries 3 times if the Identity Service is temporarily down

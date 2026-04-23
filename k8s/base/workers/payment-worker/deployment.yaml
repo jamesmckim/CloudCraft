@@ -22,6 +22,11 @@ spec:
           env:
             - name: REDIS_URL
               value: "redis://redis-broker-master.craftcloud-system.svc.cluster.local:6379/0"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secrets
+                  key: REDIS_PASSWORD
             - name: IDENTITY_API_URL
               value: "http://identity-service.craftcloud-system.svc.cluster.local:5000"
             - name: PAYPAL_MODE

@@ -33,6 +33,11 @@ spec:
                 secretKeyRef:
                   name: fleet-secrets
                   key: DATABASE_URL
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secrets
+                  key: REDIS_PASSWORD
       initContainers:
         - name: wait-for-db
           image: postgres:18-alpine
@@ -41,6 +46,11 @@ spec:
               value: "postgres"
             - name: PGUSER
               value: "user"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: DB_PASS
           command:
             - sh
             - -c

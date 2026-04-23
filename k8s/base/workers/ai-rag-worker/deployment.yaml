@@ -23,3 +23,9 @@ spec:
                 name: craftcloud-config
             - secretRef:
                 name: craftcloud-secrets
+          env:
+            - name: QDRANT_API_KEY
+              valueFrom:
+                secretRef:
+                  name: qdrant-secrets
+                  key: API_KEY

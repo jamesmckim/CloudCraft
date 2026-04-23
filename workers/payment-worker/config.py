@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # Redis Queue
-    REDIS_URL: str = "redis://redis-broker:6379/0"
+    REDIS_PASSWORD: str | None = None
     
     # Target API for internal handoff
     IDENTITY_API_URL: str = "http://identity-service:5000"

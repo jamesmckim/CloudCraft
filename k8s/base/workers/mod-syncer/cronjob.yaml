@@ -39,7 +39,7 @@ spec:
                 - name: DB_PASS
                   valueFrom:
                     secretKeyRef:
-                      name: craftcloud-secrets
+                      name: postgres-secrets
                       key: SYNCER_DB_PASSWORD
                 - name: THUNDERSTORE_PROXY
                   valueFrom:
@@ -50,6 +50,12 @@ spec:
           initContainers:
             - name: wait-for-db
               image: postgres:18.3-alpine
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-secrets
+                      key: SYNCER_DB_PASSWORD
               command:
                 - sh
                 - -c

@@ -23,9 +23,39 @@ spec:
             - containerPort: 5000
               name: http
           env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secrets
+                  key: REDIS_PASSWORD
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: STRIPE_SECRET_KEY
+            - name: STRIPE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: STRIPE_WEBHOOK_SECRET
+            - name: PAYPAL_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: PAYPAL_CLIENT_ID
+            - name: PAYPAL_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: PAYPAL_CLIENT_SECRET
+            - name: PAYPAL_WEBHOOK_ID
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: PAYPAL_WEBHOOK_ID
             - name: ENVIRONMENT
               value: "development"
-            - name : DATABASE_URL
+            - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: identity-secrets
@@ -48,6 +78,11 @@ spec:
               value: "postgres"
             - name: PGUSER
               value: "user"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: DB_PASS
           command:
             - sh
             - -c
