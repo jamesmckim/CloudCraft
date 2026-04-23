@@ -5,13 +5,17 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: 'https://prometheus-community.github.io/helm-charts'
-    targetRevision: 82.18.0
-    chart: kube-prometheus-stack
-    helm:
-      releaseName: prometheus-stack
-
+  sources:
+    - repoURL: 'https://prometheus-community.github.io/helm-charts'
+      targetRevision: 82.18.0
+      chart: kube-prometheus-stack
+      helm:
+        releaseName: prometheus-stack
+        valueFiles:
+          - $values/infra/values/prometheus-values.yaml
+    - repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
+      targetRevision: main
+      ref: values
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: prometheus-system

@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cloudcraft-prod
+  name: cloudcraft-dev
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
     targetRevision: main
-    path: k8s/overlays/prod
+    path: k8s/overlays/dev
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: default
+    namespace: craftcloud-system
   syncPolicy:
     automated:
       prune: true

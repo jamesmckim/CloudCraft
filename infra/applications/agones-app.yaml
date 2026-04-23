@@ -5,12 +5,17 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: 'https://agones.dev/chart/stable'
-    targetRevision: 1.56.0
-    chart: agones
-    helm:
-      releaseName: agones-system
+  sources:
+    - repoURL: 'https://agones.dev/chart/stable'
+      targetRevision: 1.56.0
+      chart: agones
+      helm:
+        releaseName: agones-system
+        valueFiles:
+          - $values/infra/values/agones-values.yaml 
+    - repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
+      targetRevision: main
+      ref: values
 
   destination:
     server: 'https://kubernetes.default.svc'

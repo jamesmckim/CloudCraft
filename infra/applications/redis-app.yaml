@@ -5,12 +5,17 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: 'https://charts.bitnami.com/bitnami'
-    targetRevision: 25.3.x
-    chart: redis
-    helm:
-      releaseName: redis-broker
+  sources:
+    - repoURL: 'https://charts.bitnami.com/bitnami'
+      targetRevision: 25.3.x
+      chart: redis
+      helm:
+        releaseName: redis-broker
+        valueFiles:
+          - $values/infra/values/redis-values.yaml
+    - repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
+      targetRevision: main
+      ref: values
 
   destination:
     server: 'https://kubernetes.default.svc'

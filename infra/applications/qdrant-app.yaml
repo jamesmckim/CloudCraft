@@ -5,12 +5,17 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: 'https://qdrant.github.io/qdrant-helm'
-    targetRevision: 1.17.x
-    chart: qdrant
-    helm:
-      releaseName: qdrant
+  sources:
+    - repoURL: 'https://qdrant.github.io/qdrant-helm'
+      targetRevision: 1.17.x
+      chart: qdrant
+      helm:
+        releaseName: qdrant
+        valueFiles:
+          - $values/infra/values/qdrant-values.yaml
+    - repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
+      targetRevision: main
+      ref: values
 
   destination:
     server: 'https://kubernetes.default.svc'

@@ -1,11 +1,12 @@
 fullnameOverride: "redis-broker"
 architecture: standalone
-
-# Disable auth to match your previous raw deployment
 auth:
-  enabled: false
+  enabled: true
+  existingSecret: "redis-secrets"
+  existingSecretPasswordKey: "REDIS_PASSWORD"
   
-# Disable persistent storage so it acts as an in-memory broker
 master:
   persistence:
-    enabled: false
+    enabled: true
+    # 10 Gi is a safe starting point for a production message broker
+    size: 10Gi
