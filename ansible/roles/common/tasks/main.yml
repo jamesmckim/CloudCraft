@@ -47,3 +47,49 @@
       - --strip-components=1
       - linux-amd64/helm
     creates: /usr/local/bin/helm
+
+- name: Check for missing IPv4 Default Gateway (FABRIC Routing Bug)
+  ansible.builtin.shell: ip -4 route | grep default || echo "missing"
+  register: route_check
+  changed_when: false
+  become: yes
+
+- name: Identify Management Interface for DHCP (Ignore internal LAN)
+  ansible.builtin.set_fact:
+    mgmt_iface: "{{ item }}"
+  loop: "{{ ansible_interfaces }}"
+  when: 
+    - item != 'lo'
+    - vars['ansible_' + item | replace('-', '_')].ipv4 is defined
+    - vars['ansible_' + item | replace('-', '_')].ipv4.address != internal_ip
+    - not vars['ansible_' + item | replace('-', '_')].ipv4.address.startswith('10.42')
+
+- name: Restore IPv4 Default Gateway via DHCP
+  ansible.builtin.command: dhclient -4 "{{ mgmt_iface }}"
+  when: ansible_default_ipv4.gateway is not defined
+  become: yes
+
+- name: Clamp MSS to PMTU for IPv4 (FABRIC MTU Fix)
+  ansible.builtin.iptables:
+    table: mangle
+    chain: POSTROUTING
+    protocol: tcp
+    tcp_flags:
+      flags: SYN,RST
+      flags_set: SYN
+    jump: TCPMSS
+    set_mss: 1360
+  become: yes
+
+- name: Clamp MSS to PMTU for IPv6 (FABRIC MTU Fix)
+  ansible.builtin.iptables:
+    table: mangle
+    chain: POSTROUTING
+    protocol: tcp
+    tcp_flags:
+      flags: SYN,RST
+      flags_set: SYN
+    jump: TCPMSS
+    set_mss: 1360
+    ip_version: ipv6
+  become: yes

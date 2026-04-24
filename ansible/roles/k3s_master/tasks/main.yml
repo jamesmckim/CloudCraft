@@ -4,7 +4,15 @@
     url: https://get.k3s.io
     dest: /tmp/install_k3s.sh
     mode: '0700'
-#--flannel-backend=host-gw needs to go once I leave fabric
+
+- name: Determine Flannel interface from Ansible Facts
+  ansible.builtin.set_fact:
+    flannel_iface: "{{ item }}"
+  loop: "{{ ansible_interfaces }}"
+  when: 
+    - vars['ansible_' + item | replace('-', '_')].ipv4 is defined
+    - vars['ansible_' + item | replace('-', '_')].ipv4.address == internal_ip
+    
 - name: Install K3s Control Plane
   ansible.builtin.shell: >
     /tmp/install_k3s.sh server 
@@ -12,7 +20,7 @@
     --advertise-address="{{ internal_ip }}" 
     --node-name="master-{{ internal_ip }}"
     --flannel-backend="{{ k3s_flannel_backend | default('vxlan') }}"
-    --flannel-iface=$(ip -o -4 addr show | grep '10.10.10.' | awk '{print $2}')
+    --flannel-iface="{{ flannel_iface }}"
   environment:
     K3S_TOKEN: "{{ k3s_cluster_token }}"
   args:

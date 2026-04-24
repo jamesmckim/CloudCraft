@@ -17,12 +17,20 @@
     dest: /tmp/install_k3s_agent.sh
     mode: '0700'
 
+- name: Determine Flannel interface from Ansible Facts
+  ansible.builtin.set_fact:
+    flannel_iface: "{{ item }}"
+  loop: "{{ ansible_interfaces }}"
+  when: 
+    - vars['ansible_' + item | replace('-', '_')].ipv4 is defined
+    - vars['ansible_' + item | replace('-', '_')].ipv4.address == internal_ip
+
 - name: Join K3s cluster as Worker (This is apparetnly important)
   ansible.builtin.shell: >
     /tmp/install_k3s_agent.sh agent
     --node-ip="{{ internal_ip }}"
     --node-name="worker-{{ internal_ip }}"
-    --flannel-iface=$(ip -o -4 addr show | grep '10.10.10.' | awk '{print $2}')
+    --flannel-iface="{{ flannel_iface }}"
   environment:
     K3S_URL: "https://{{ master_ip }}:6443"
     K3S_TOKEN: "{{ k3s_cluster_token }}"
