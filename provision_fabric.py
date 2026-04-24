@@ -14,7 +14,7 @@ def create_slice():
         name="control-plane",
         site="NCSA",
         image="default_ubuntu_22",
-        cores=4,
+        cores=2,
         ram=16,
         disk=50
     )
@@ -22,7 +22,7 @@ def create_slice():
         name="worker-1",
         site="NCSA",
         image="default_ubuntu_22",
-        cores=4,
+        cores=2,
         ram=16,
         disk=100
     )
@@ -30,7 +30,7 @@ def create_slice():
         name="worker-2",
         site="NCSA",
         image="default_ubuntu_22",
-        cores=4,
+        cores=2,
         ram=16,
         disk=100
     )
