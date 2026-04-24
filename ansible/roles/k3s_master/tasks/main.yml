@@ -33,3 +33,12 @@
     state: started
     timeout: 300
     msg: "Timeout waiting for K3s API to come online."
+
+- name: Patch CoreDNS to use public DNS (Fix Ubuntu 22.04 Loopback Bug)
+  ansible.builtin.shell: |
+    /usr/local/bin/kubectl get configmap coredns -n kube-system -o yaml | sed 's/forward . \/etc\/resolv.conf/forward . 8.8.8.8 1.1.1.1/g' | /usr/local/bin/kubectl apply -f -
+    /usr/local/bin/kubectl rollout restart deployment coredns -n kube-system
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  register: coredns_patch
+  changed_when: "'configured' in coredns_patch.stdout"
