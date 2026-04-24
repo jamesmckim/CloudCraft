@@ -10,9 +10,30 @@ def create_slice():
     slice = fablib.new_slice(name=slice_name)
 
     # 2. Add a Control Plane Node
-    master = slice.add_node(name="control-plane", site="TACC", image="default_ubuntu_22")
-    worker1 = slice.add_node(name="worker-1", site="TACC", image="default_ubuntu_22")
-    worker2 = slice.add_node(name="worker-2", site="TACC", image="default_ubuntu_22")
+    master = slice.add_node(
+        name="control-plane",
+        site="NCSA",
+        image="default_ubuntu_22",
+        cores=4,
+        ram=16,
+        disk=50
+    )
+    worker1 = slice.add_node(
+        name="worker-1",
+        site="NCSA",
+        image="default_ubuntu_22"
+        cores=4,
+        ram=16,
+        disk=100
+    )
+    worker2 = slice.add_node(
+        name="worker-2",
+        site="NCSA",
+        image="default_ubuntu_22",
+        cores=4,
+        ram=16,
+        disk=100
+    )
 
     iface_m = master.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
     iface_w1 = worker1.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
