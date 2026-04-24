@@ -48,12 +48,6 @@
       - linux-amd64/helm
     creates: /usr/local/bin/helm
 
-- name: Check for missing IPv4 Default Gateway (FABRIC Routing Bug)
-  ansible.builtin.shell: ip -4 route | grep default || echo "missing"
-  register: route_check
-  changed_when: false
-  become: yes
-
 - name: Identify Management Interface for DHCP (Ignore internal LAN)
   ansible.builtin.set_fact:
     mgmt_iface: "{{ item }}"
@@ -69,27 +63,26 @@
   when: ansible_default_ipv4.gateway is not defined
   become: yes
 
+- name: Check if IPv4 MSS Clamping is already applied
+  ansible.builtin.command: iptables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
+  register: iptables_check_ipv4
+  failed_when: false
+  changed_when: false
+  become: yes
+
 - name: Clamp MSS to PMTU for IPv4 (FABRIC MTU Fix)
-  ansible.builtin.iptables:
-    table: mangle
-    chain: POSTROUTING
-    protocol: tcp
-    tcp_flags:
-      flags: SYN,RST
-      flags_set: SYN
-    jump: TCPMSS
-    set_mss: 1360
+  ansible.builtin.command: iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
+  when: iptables_check_ipv4.rc != 0
+  become: yes
+
+- name: Check if IPv6 MSS Clamping is already applied
+  ansible.builtin.command: ip6tables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
+  register: iptables_check_ipv6
+  failed_when: false
+  changed_when: false
   become: yes
 
 - name: Clamp MSS to PMTU for IPv6 (FABRIC MTU Fix)
-  ansible.builtin.iptables:
-    table: mangle
-    chain: POSTROUTING
-    protocol: tcp
-    tcp_flags:
-      flags: SYN,RST
-      flags_set: SYN
-    jump: TCPMSS
-    set_mss: 1360
-    ip_version: ipv6
+  ansible.builtin.command: ip6tables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
+  when: iptables_check_ipv6.rc != 0
   become: yes
