@@ -11,7 +11,8 @@
     --node-ip="{{ internal_ip }}" 
     --advertise-address="{{ internal_ip }}" 
     --node-name="master-{{ internal_ip }}"
-    --flannel-backend=host-gw
+    --flannel-backend="{{ k3s_flannel_backend | default('vxlan') }}"
+    --flannel-iface=$(ip -o -4 addr show | grep '10.10.10.' | awk '{print $2}')
   environment:
     K3S_TOKEN: "{{ k3s_cluster_token }}"
   args:

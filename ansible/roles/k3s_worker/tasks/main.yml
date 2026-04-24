@@ -22,6 +22,8 @@
     /tmp/install_k3s_agent.sh agent
     --node-ip="{{ internal_ip }}"
     --node-name="worker-{{ internal_ip }}"
+    --flannel-backend="{{ k3s_flannel_backend | default('vxlan') }}"
+    --flannel-iface=$(ip -o -4 addr show | grep '10.10.10.' | awk '{print $2}')
   environment:
     K3S_URL: "https://{{ master_ip }}:6443"
     K3S_TOKEN: "{{ k3s_cluster_token }}"
