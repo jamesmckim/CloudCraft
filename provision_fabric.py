@@ -21,7 +21,7 @@ def create_slice():
     worker1 = slice.add_node(
         name="worker-1",
         site="NCSA",
-        image="default_ubuntu_22"
+        image="default_ubuntu_22",
         cores=4,
         ram=16,
         disk=100
