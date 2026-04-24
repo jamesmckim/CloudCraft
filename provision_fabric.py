@@ -10,37 +10,20 @@ def create_slice():
     slice = fablib.new_slice(name=slice_name)
 
     # 2. Add a Control Plane Node
-    master = slice.add_node(
-        name="control-plane",
-        site="NCSA",
-        image="default_ubuntu_22",
-        cores=2,
-        ram=16,
-        disk=50
-    )
-    worker1 = slice.add_node(
-        name="worker-1",
-        site="NCSA",
-        image="default_ubuntu_22",
-        cores=2,
-        ram=16,
-        disk=100
-    )
-    worker2 = slice.add_node(
-        name="worker-2",
-        site="NCSA",
-        image="default_ubuntu_22",
-        cores=2,
-        ram=16,
-        disk=100
-    )
+    master = slice.add_node(name="control-plane", site="NCSA", image="default_ubuntu_22")
+    worker1 = slice.add_node(name="worker-1", site="NCSA", image="default_ubuntu_22")
+    worker2 = slice.add_node(name="worker-2", site="NCSA", image="default_ubuntu_22")
+    worker3 = slice.add_node(name="worker-3", site="NCSA", image="default_ubuntu_22")
+    worker4 = slice.add_node(name="worker-4", site="NCSA", image="default_ubuntu_22")
 
     iface_m = master.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
     iface_w1 = worker1.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
     iface_w2 = worker2.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
-
+    iface_w3 = worker3.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
+    iface_w4 = worker4.add_component(model="NIC_Basic", name="nic1").get_interfaces()[0]
+    
     # 3. Create a Local Area Network (LAN) connecting them
-    net = slice.add_l2network(name="k8s-lan", interfaces=[iface_m, iface_w1, iface_w2])
+    net = slice.add_l2network(name="k8s-lan", interfaces=[iface_m, iface_w1, iface_w2, iface_w3, iface_w4])
 
 
     # 4. Submit the request and wait for the hardware to boot
@@ -52,12 +35,16 @@ def create_slice():
     master = slice.get_node("control-plane")
     worker1 = slice.get_node("worker-1")
     worker2 = slice.get_node("worker-2")
+    worker3 = slice.get_node("worker-3")
+    worker4 = slice.get_node("worker-4")
     
     iface_m = master.get_interface(network_name="k8s-lan")
     iface_w1 = worker1.get_interface(network_name="k8s-lan")
     iface_w2 = worker2.get_interface(network_name="k8s-lan")
+    iface_w3 = worker3.get_interface(network_name="k8s-lan")
+    iface_w4 = worker4.get_interface(network_name="k8s-lan")
     
-    lan_subnet = ipaddress.IPv4Network("10.10.10.0/24") # This needs to be changed to dynamic ipv6 scaling
+    lan_subnet = ipaddress.IPv4Network("10.10.10.0/24")
     
     print("Configuring Internal Network (10.10.10.x)...")
     iface_m.ip_addr_add(addr="10.10.10.10", subnet=lan_subnet)
@@ -68,6 +55,12 @@ def create_slice():
 
     iface_w2.ip_addr_add(addr="10.10.10.12", subnet=lan_subnet)
     iface_w2.ip_link_up()
+    
+    iface_w3.ip_addr_add(addr="10.10.10.13", subnet=lan_subnet)
+    iface_w3.ip_link_up()
+
+    iface_w4.ip_addr_add(addr="10.10.10.14", subnet=lan_subnet)
+    iface_w4.ip_link_up()
     
     # 5. THE HANDOFF: Extract the IPs to pass to your SSH script
     # 5. THE HANDOFF: Generate Ansible Inventory
@@ -83,6 +76,8 @@ control-plane ansible_host={master.get_management_ip()} internal_ip=10.10.10.10
 [workers]
 worker-1 ansible_host={worker1.get_management_ip()} internal_ip=10.10.10.11
 worker-2 ansible_host={worker2.get_management_ip()} internal_ip=10.10.10.12
+worker-3 ansible_host={worker3.get_management_ip()} internal_ip=10.10.10.13
+worker-4 ansible_host={worker4.get_management_ip()} internal_ip=10.10.10.14
 
 [all:vars]
 ansible_user=ubuntu
