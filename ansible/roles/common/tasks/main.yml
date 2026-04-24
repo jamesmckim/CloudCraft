@@ -58,31 +58,63 @@
     - vars['ansible_' + item | replace('-', '_')].ipv4.address != internal_ip
     - not vars['ansible_' + item | replace('-', '_')].ipv4.address.startswith('10.42')
 
-- name: Restore IPv4 Default Gateway via DHCP
-  ansible.builtin.command: dhclient -4 "{{ mgmt_iface }}"
-  when: ansible_default_ipv4.gateway is not defined
-  become: yes
-
-- name: Check if IPv4 MSS Clamping is already applied
-  ansible.builtin.command: iptables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
-  register: iptables_check_ipv4
-  failed_when: false
-  changed_when: false
+- name: Ensure iptables-persistent is installed
+  ansible.builtin.apt:
+    name: iptables-persistent
+    state: present
   become: yes
 
 - name: Clamp MSS to PMTU for IPv4 (FABRIC MTU Fix)
-  ansible.builtin.command: iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
-  when: iptables_check_ipv4.rc != 0
-  become: yes
-
-- name: Check if IPv6 MSS Clamping is already applied
-  ansible.builtin.command: ip6tables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
-  register: iptables_check_ipv6
-  failed_when: false
-  changed_when: false
+  ansible.builtin.iptables:
+    table: mangle
+    chain: POSTROUTING
+    protocol: tcp
+    tcp_flags:
+      flags: SYN,RST
+      flags_set: SYN
+    jump: TCPMSS
+    set_mss: 1360
   become: yes
 
 - name: Clamp MSS to PMTU for IPv6 (FABRIC MTU Fix)
-  ansible.builtin.command: ip6tables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
-  when: iptables_check_ipv6.rc != 0
+  ansible.builtin.iptables:
+    table: mangle
+    chain: POSTROUTING
+    protocol: tcp
+    tcp_flags:
+      flags: SYN,RST
+      flags_set: SYN
+    jump: TCPMSS
+    set_mss: 1360
+    ip_version: ipv6
+  become: yes
+
+- name: Save iptables rules to persist across reboots
+  ansible.builtin.command: netfilter-persistent save
+  become: yes
+
+- name: Create persistent DHCP service for FABRIC IPv4 routing
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/fabric-ipv4-route.service
+    content: |
+      [Unit]
+      Description=Force IPv4 DHCP lease on FABRIC management interface
+      After=network-online.target
+      Wants=network-online.target
+
+      [Service]
+      Type=oneshot
+      ExecStart=/sbin/dhclient -4 -v {{ mgmt_iface }}
+      RemainAfterExit=yes
+
+      [Install]
+      WantedBy=multi-user.target
+  become: yes
+
+- name: Enable and start FABRIC IPv4 routing service
+  ansible.builtin.systemd:
+    name: fabric-ipv4-route
+    enabled: yes
+    state: restarted
+    daemon_reload: yes
   become: yes
