@@ -37,6 +37,7 @@
     --node-name="master-{{ internal_ip }}"
     --flannel-backend="{{ k3s_flannel_backend | default('vxlan') }}"
     --flannel-iface="{{ flannel_iface }}"
+    --flannel-conf='{"Network": "10.42.0.0/16", "Backend": {"Type": "vxlan", "VNI": 1, "Port": 8472}, "MTU": 1150}'
     --resolv-conf="/etc/rancher/k3s/custom-resolv.conf"
   environment:
     K3S_TOKEN: "{{ k3s_cluster_token }}"

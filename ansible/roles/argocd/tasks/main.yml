@@ -113,7 +113,7 @@
                   name: cmp-sops
             initContainers:
               - name: download-tools
-                image: quay.io/argoproj/argpcd:v3.3.8
+                image: quay.io/argoproj/argocd:v3.3.8
                 command:
                   - sh
                   - '-c'
