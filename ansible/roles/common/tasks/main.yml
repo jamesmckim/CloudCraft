@@ -153,6 +153,6 @@
 
 - name: Display installed versions
   ansible.builtin.debug:
-    msg: "{{ item.item | capitalize }}: {{ item.stdout }}"
+    msg: "{{ item.item.name | capitalize }}: {{ item.stdout }}"
   loop: "{{ version_outputs.results }}"
   tags: [verify]
