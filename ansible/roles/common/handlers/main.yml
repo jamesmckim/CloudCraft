@@ -1,0 +1,9 @@
+---
+- name: Save Netfilter Rules
+  ansible.builtin.command: netfilter-persistent save
+
+- name: Restart FABRIC Routing Service
+  ansible.builtin.systemd:
+    name: fabric-ipv4-route
+    state: restarted
+    daemon_reload: yes

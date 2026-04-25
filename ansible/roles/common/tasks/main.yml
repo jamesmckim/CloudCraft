@@ -1,175 +1,150 @@
----
-- name: Setup Cloud Native Environment and FABRIC Networking
-  hosts: all
-  become: yes # Escalate privileges globally for this playbook
+# 2. Pre-flight Checks
+- name: Assert required variables are defined
+  ansible.builtin.assert:
+    that:
+      - internal_ip is defined
+      - age_version is defined
+      - sops_version is defined
+      - helm_version is defined
+    fail_msg: "A required variable is missing. Check your variable definitions."
+  tags: [always]
 
-  # 1. Variables: Keep these centralized or move to vars/main.yml
-  vars:
-    internal_ip: "10.0.0.5" # Example IP
-    age_version: "v1.1.1"
-    sops_version: "v3.8.1"
-    sops_checksum: "sha256:d5cc..." # Replace with actual checksums
-    helm_version: "v3.13.0"
+# 3. Base Utilities
+- name: Ensure apt cache is updated
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags: [base, packages]
 
-  tasks:
-    # 2. Pre-flight Checks
-    - name: Assert required variables are defined
-      ansible.builtin.assert:
-        that:
-          - internal_ip is defined
-          - age_version is defined
-          - sops_version is defined
-          - helm_version is defined
-        fail_msg: "A required variable is missing. Check your variable definitions."
-      tags: [always]
+- name: Install base system utilities
+  ansible.builtin.apt:
+    name:
+      - curl
+      - wget
+      - apt-transport-https
+      - jq
+      - tar
+      - iptables-persistent
+    state: present
+  tags: [base, packages]
 
-    # 3. Base Utilities
-    - name: Ensure apt cache is updated
-      ansible.builtin.apt:
-        update_cache: yes
-        cache_valid_time: 3600
-      tags: [base, packages]
+# 4. Tool Installations
+- name: Install Age (Encryption Tool)
+  ansible.builtin.unarchive:
+    src: "https://github.com/FiloSottile/age/releases/download/{{ age_version }}/age-{{ age_version }}-linux-amd64.tar.gz"
+    dest: /usr/local/bin/
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+      - age/age
+      - age/age-keygen
+    creates: /usr/local/bin/age
+  tags: [tools, security]
 
-    - name: Install base system utilities
-      ansible.builtin.apt:
-        name:
-          - curl
-          - wget
-          - apt-transport-https
-          - jq
-          - tar
-          - iptables-persistent
-        state: present
-      tags: [base, packages]
+- name: Install SOPS (Secrets OPerationS)
+  ansible.builtin.get_url:
+    url: "https://github.com/getsops/sops/releases/download/{{ sops_version }}/sops-{{ sops_version }}.linux.amd64"
+    dest: /usr/local/bin/sops
+    mode: '0755'
+    # checksum: "{{ sops_checksum }}" # Uncomment when checksums are available
+  tags: [tools, security]
 
-    # 4. Tool Installations
-    - name: Install Age (Encryption Tool)
-      ansible.builtin.unarchive:
-        src: "https://github.com/FiloSottile/age/releases/download/{{ age_version }}/age-{{ age_version }}-linux-amd64.tar.gz"
-        dest: /usr/local/bin/
-        remote_src: yes
-        extra_opts:
-          - --strip-components=1
-          - age/age
-          - age/age-keygen
-        creates: /usr/local/bin/age
-      tags: [tools, security]
+- name: Install Skaffold
+  ansible.builtin.get_url:
+    url: "https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64"
+    dest: /usr/local/bin/skaffold
+    mode: '0755'
+  tags: [tools, k8s]
 
-    - name: Install SOPS (Secrets OPerationS)
-      ansible.builtin.get_url:
-        url: "https://github.com/getsops/sops/releases/download/{{ sops_version }}/sops-{{ sops_version }}.linux.amd64"
-        dest: /usr/local/bin/sops
-        mode: '0755'
-        # checksum: "{{ sops_checksum }}" # Uncomment when checksums are available
-      tags: [tools, security]
+- name: Install Helm
+  ansible.builtin.unarchive:
+    src: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
+    dest: /usr/local/bin/
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+      - linux-amd64/helm
+    creates: /usr/local/bin/helm
+  tags: [tools, k8s]
 
-    - name: Install Skaffold
-      ansible.builtin.get_url:
-        url: "https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64"
-        dest: /usr/local/bin/skaffold
-        mode: '0755'
-      tags: [tools, k8s]
+# 5. Networking Fact Gathering & Validation
+- name: Identify Management Interface for DHCP (Ignore internal LAN)
+  ansible.builtin.set_fact:
+    mgmt_iface: "{{ item }}"
+  loop: "{{ ansible_interfaces }}"
+  when: 
+    - item != 'lo'
+    - vars['ansible_' + item | replace('-', '_')].ipv4 is defined
+    - vars['ansible_' + item | replace('-', '_')].ipv4.address != internal_ip
+    - not vars['ansible_' + item | replace('-', '_')].ipv4.address.startswith('10.42')
+  tags: [network]
 
-    - name: Install Helm
-      ansible.builtin.unarchive:
-        src: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
-        dest: /usr/local/bin/
-        remote_src: yes
-        extra_opts:
-          - --strip-components=1
-          - linux-amd64/helm
-        creates: /usr/local/bin/helm
-      tags: [tools, k8s]
+- name: Ensure management interface was successfully identified
+  ansible.builtin.fail:
+    msg: "Could not identify the management interface for DHCP. Network logic failed."
+  when: mgmt_iface is not defined
+  tags: [network]
 
-    # 5. Networking Fact Gathering & Validation
-    - name: Identify Management Interface for DHCP (Ignore internal LAN)
-      ansible.builtin.set_fact:
-        mgmt_iface: "{{ item }}"
-      loop: "{{ ansible_interfaces }}"
-      when: 
-        - item != 'lo'
-        - vars['ansible_' + item | replace('-', '_')].ipv4 is defined
-        - vars['ansible_' + item | replace('-', '_')].ipv4.address != internal_ip
-        - not vars['ansible_' + item | replace('-', '_')].ipv4.address.startswith('10.42')
-      tags: [network]
+# 6. State-Based Iptables Management
+- name: Clamp MSS to PMTU for IPv4 (FABRIC MTU Fix)
+  ansible.builtin.iptables:
+    table: mangle
+    chain: POSTROUTING
+    protocol: tcp
+    tcp_flags: SYN,RST SYN
+    jump: TCPMSS
+    set_mss: "1200"
+  notify: Save Netfilter Rules
+  tags: [network, iptables]
 
-    - name: Ensure management interface was successfully identified
-      ansible.builtin.fail:
-        msg: "Could not identify the management interface for DHCP. Network logic failed."
-      when: mgmt_iface is not defined
-      tags: [network]
+- name: Clamp MSS to PMTU for IPv6 (FABRIC MTU Fix)
+  ansible.builtin.iptables:
+    ip_version: ipv6
+    table: mangle
+    chain: POSTROUTING
+    protocol: tcp
+    tcp_flags: SYN,RST SYN
+    jump: TCPMSS
+    set_mss: "1200"
+  notify: Save Netfilter Rules
+  tags: [network, iptables]
 
-    # 6. State-Based Iptables Management
-    - name: Clamp MSS to PMTU for IPv4 (FABRIC MTU Fix)
-      ansible.builtin.iptables:
-        table: mangle
-        chain: POSTROUTING
-        protocol: tcp
-        tcp_flags: SYN,RST SYN
-        jump: TCPMSS
-        set_mss: "1200"
-      notify: Save Netfilter Rules
-      tags: [network, iptables]
+# 7. Systemd Service Management
+- name: Create persistent DHCP service for FABRIC IPv4 routing
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/fabric-ipv4-route.service
+    content: |
+      [Unit]
+      Description=Force IPv4 DHCP lease on FABRIC management interface
+      After=network-online.target
+      Wants=network-online.target
 
-    - name: Clamp MSS to PMTU for IPv6 (FABRIC MTU Fix)
-      ansible.builtin.iptables:
-        ip_version: ipv6
-        table: mangle
-        chain: POSTROUTING
-        protocol: tcp
-        tcp_flags: SYN,RST SYN
-        jump: TCPMSS
-        set_mss: "1200"
-      notify: Save Netfilter Rules
-      tags: [network, iptables]
+      [Service]
+      Type=oneshot
+      ExecStart=/sbin/dhclient -4 -v {{ mgmt_iface }}
+      RemainAfterExit=yes
 
-    # 7. Systemd Service Management
-    - name: Create persistent DHCP service for FABRIC IPv4 routing
-      ansible.builtin.copy:
-        dest: /etc/systemd/system/fabric-ipv4-route.service
-        content: |
-          [Unit]
-          Description=Force IPv4 DHCP lease on FABRIC management interface
-          After=network-online.target
-          Wants=network-online.target
+      [Install]
+      WantedBy=multi-user.target
+  notify: Restart FABRIC Routing Service
+  tags: [network, systemd]
 
-          [Service]
-          Type=oneshot
-          ExecStart=/sbin/dhclient -4 -v {{ mgmt_iface }}
-          RemainAfterExit=yes
+- name: Enable FABRIC IPv4 routing service
+  ansible.builtin.systemd:
+    name: fabric-ipv4-route
+    enabled: yes
+  tags: [network, systemd]
 
-          [Install]
-          WantedBy=multi-user.target
-      notify: Restart FABRIC Routing Service
-      tags: [network, systemd]
+# 8. Post-Execution Verification
+- name: Verify tool installations
+  ansible.builtin.command: "{{ item }} --version"
+  loop: [age, sops, skaffold, helm]
+  register: version_outputs
+  changed_when: false
+  tags: [verify]
 
-    - name: Enable FABRIC IPv4 routing service
-      ansible.builtin.systemd:
-        name: fabric-ipv4-route
-        enabled: yes
-      tags: [network, systemd]
-
-    # 8. Post-Execution Verification
-    - name: Verify tool installations
-      ansible.builtin.command: "{{ item }} --version"
-      loop: [age, sops, skaffold, helm]
-      register: version_outputs
-      changed_when: false
-      tags: [verify]
-
-    - name: Display installed versions
-      ansible.builtin.debug:
-        msg: "{{ item.item | capitalize }}: {{ item.stdout }}"
-      loop: "{{ version_outputs.results }}"
-      tags: [verify]
-
-  # 9. Handlers (Only triggered if notified by a changed task)
-  handlers:
-    - name: Save Netfilter Rules
-      ansible.builtin.command: netfilter-persistent save
-
-    - name: Restart FABRIC Routing Service
-      ansible.builtin.systemd:
-        name: fabric-ipv4-route
-        state: restarted
-        daemon_reload: yes
+- name: Display installed versions
+  ansible.builtin.debug:
+    msg: "{{ item.item | capitalize }}: {{ item.stdout }}"
+  loop: "{{ version_outputs.results }}"
+  tags: [verify]

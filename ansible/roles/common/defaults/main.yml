@@ -1,0 +1,6 @@
+---
+internal_ip: "10.0.0.5" # Update this to your actual IP or variable
+age_version: "v1.1.1"
+sops_version: "v3.8.1"
+sops_checksum: "sha256:d5cc..." 
+helm_version: "v3.13.0"
