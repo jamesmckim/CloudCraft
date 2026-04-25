@@ -91,7 +91,9 @@
     table: mangle
     chain: POSTROUTING
     protocol: tcp
-    tcp_flags: SYN,RST SYN
+    tcp_flags:
+      flags: SYN,RST
+      flags_set: SYN
     jump: TCPMSS
     set_mss: "1200"
   notify: Save Netfilter Rules
@@ -103,7 +105,9 @@
     table: mangle
     chain: POSTROUTING
     protocol: tcp
-    tcp_flags: SYN,RST SYN
+    tcp_flags: 
+      flages: SYN,RST
+      flags_set: SYN
     jump: TCPMSS
     set_mss: "1200"
   notify: Save Netfilter Rules
