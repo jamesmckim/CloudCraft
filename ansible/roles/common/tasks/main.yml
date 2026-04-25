@@ -65,26 +65,26 @@
   become: yes
 
 - name: Check if IPv4 MSS Clamping is already applied
-  ansible.builtin.command: iptables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
+  ansible.builtin.command: iptables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
   register: iptables_check_ipv4
   failed_when: false
   changed_when: false
   become: yes
 
 - name: Clamp MSS to PMTU for IPv4 (FABRIC MTU Fix)
-  ansible.builtin.command: iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
+  ansible.builtin.command: iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
   when: iptables_check_ipv4.rc != 0
   become: yes
 
 - name: Check if IPv6 MSS Clamping is already applied
-  ansible.builtin.command: ip6tables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
+  ansible.builtin.command: ip6tables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
   register: iptables_check_ipv6
   failed_when: false
   changed_when: false
   become: yes
 
 - name: Clamp MSS to PMTU for IPv6 (FABRIC MTU Fix)
-  ansible.builtin.command: ip6tables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1360
+  ansible.builtin.command: ip6tables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
   when: iptables_check_ipv6.rc != 0
   become: yes
 
