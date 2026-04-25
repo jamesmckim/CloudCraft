@@ -86,30 +86,30 @@
   tags: [network]
 
 # 6. State-Based Iptables Management
+# Note: Reverting to command module because ansible.builtin.iptables does not support the TCPMSS --set-mss extension.
+- name: Check if IPv4 MSS Clamping is already applied
+  ansible.builtin.command: iptables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
+  register: iptables_check_ipv4
+  failed_when: false
+  changed_when: false
+  tags: [network, iptables]
+
 - name: Clamp MSS to PMTU for IPv4 (FABRIC MTU Fix)
-  ansible.builtin.iptables:
-    table: mangle
-    chain: POSTROUTING
-    protocol: tcp
-    tcp_flags:
-      flags: SYN,RST
-      flags_set: SYN
-    jump: TCPMSS
-    set_mss: "1200"
+  ansible.builtin.command: iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
+  when: iptables_check_ipv4.rc != 0
   notify: Save Netfilter Rules
   tags: [network, iptables]
 
+- name: Check if IPv6 MSS Clamping is already applied
+  ansible.builtin.command: ip6tables -t mangle -C POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
+  register: iptables_check_ipv6
+  failed_when: false
+  changed_when: false
+  tags: [network, iptables]
+
 - name: Clamp MSS to PMTU for IPv6 (FABRIC MTU Fix)
-  ansible.builtin.iptables:
-    ip_version: ipv6
-    table: mangle
-    chain: POSTROUTING
-    protocol: tcp
-    tcp_flags: 
-      flages: SYN,RST
-      flags_set: SYN
-    jump: TCPMSS
-    set_mss: "1200"
+  ansible.builtin.command: ip6tables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
+  when: iptables_check_ipv6.rc != 0
   notify: Save Netfilter Rules
   tags: [network, iptables]
 
