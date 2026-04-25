@@ -141,8 +141,12 @@
 
 # 8. Post-Execution Verification
 - name: Verify tool installations
-  ansible.builtin.command: "{{ item }} --version"
-  loop: [age, sops, skaffold, helm]
+  ansible.builtin.command: "{{ item.name }} {{ item.arg }}"
+  loop:
+    - { name: 'age', arg: '--version' }
+    - { name: 'sops', arg: '--version' }
+    - { name: 'skaffold', arg: 'version' }
+    - { name: 'helm', arg: 'version --short' } # Added --short for cleaner Helm output
   register: version_outputs
   changed_when: false
   tags: [verify]
