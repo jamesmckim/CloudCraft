@@ -95,7 +95,7 @@
   tags: [network, iptables]
 
 - name: Clamp MSS to PMTU for IPv4 (FABRIC MTU Fix)
-  ansible.builtin.command: iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
+  ansible.builtin.command: iptables -t mangle -I POSTROUTING 1 -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
   when: iptables_check_ipv4.rc != 0
   notify: Save Netfilter Rules
   tags: [network, iptables]
@@ -108,7 +108,7 @@
   tags: [network, iptables]
 
 - name: Clamp MSS to PMTU for IPv6 (FABRIC MTU Fix)
-  ansible.builtin.command: ip6tables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
+  ansible.builtin.command: ip6tables -t mangle -I POSTROUTING 1 -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
   when: iptables_check_ipv6.rc != 0
   notify: Save Netfilter Rules
   tags: [network, iptables]

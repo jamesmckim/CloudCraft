@@ -113,13 +113,13 @@
                   name: cmp-sops
             initContainers:
               - name: download-tools
-                image: quay.io/argoproj/argocd:v3.3.8
+                image: curlimages/curl:latest
                 command:
                   - sh
                   - '-c'
                 args:
                   - >-
-                    curl -L /custom-tools/sops https://github.com/getsops/sops/releases/download/v3.8.1/sops-v3.8.1.linux.amd64 &&
+                    curl -L -o /custom-tools/sops https://github.com/getsops/sops/releases/download/v3.8.1/sops-v3.8.1.linux.amd64 &&
                     chmod +x /custom-tools/sops
                 volumeMounts:
                   - mountPath: /custom-tools
