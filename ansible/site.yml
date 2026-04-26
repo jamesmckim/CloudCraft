@@ -28,3 +28,11 @@
   gather_facts: false
   roles:
     - argocd
+    
+# 4. Final Network Sweep
+- name: Re-assert MTU Clamps over K3s Rules
+  hosts: all
+  become: yes
+  tags: [mtu_fix]
+  roles:
+    - common
