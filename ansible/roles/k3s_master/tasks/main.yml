@@ -38,7 +38,7 @@
         "Backend": {
           "Type": "vxlan"
         },
-        "MTU": 1000
+        "MTU": 950
       }
 
 - name: Install K3s Control Plane
