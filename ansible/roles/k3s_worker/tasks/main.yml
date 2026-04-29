@@ -36,9 +36,11 @@
   args:
     creates: /etc/rancher/k3s/k3s-agent.env
   # 'creates' ensures idempotency: skips if the agent config already exists
+  become: yes
 
 - name: Ensure K3s agent is started and enabled
   ansible.builtin.systemd:
     name: k3s-agent
     state: started
     enabled: yes
+  become: yes
