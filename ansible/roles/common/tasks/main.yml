@@ -67,50 +67,6 @@
     creates: /usr/local/bin/helm
   tags: [tools, k8s]
 
-# 5. Networking Fact Gathering & Validation
-- name: Identify Management Interface for DHCP (Ignore internal LAN)
-  ansible.builtin.set_fact:
-    mgmt_iface: "{{ item }}"
-  loop: "{{ ansible_interfaces }}"
-  when: 
-    - item != 'lo'
-    - vars['ansible_' + item | replace('-', '_')].ipv4 is defined
-    - vars['ansible_' + item | replace('-', '_')].ipv4.address != internal_ip
-    - not vars['ansible_' + item | replace('-', '_')].ipv4.address.startswith('10.42')
-  tags: [network]
-
-- name: Ensure management interface was successfully identified
-  ansible.builtin.fail:
-    msg: "Could not identify the management interface for DHCP. Network logic failed."
-  when: mgmt_iface is not defined
-  tags: [network]
-
-# 7. Systemd Service Management
-- name: Create persistent DHCP service for FABRIC IPv4 routing
-  ansible.builtin.copy:
-    dest: /etc/systemd/system/fabric-ipv4-route.service
-    content: |
-      [Unit]
-      Description=Force IPv4 DHCP lease on FABRIC management interface
-      After=network-online.target
-      Wants=network-online.target
-
-      [Service]
-      Type=oneshot
-      ExecStart=/sbin/dhclient -4 -v {{ mgmt_iface }}
-      RemainAfterExit=yes
-
-      [Install]
-      WantedBy=multi-user.target
-  notify: Restart FABRIC Routing Service
-  tags: [network, systemd]
-
-- name: Enable FABRIC IPv4 routing service
-  ansible.builtin.systemd:
-    name: fabric-ipv4-route
-    enabled: yes
-  tags: [network, systemd]
-
 # 8. Post-Execution Verification
 - name: Verify tool installations
   ansible.builtin.command: "{{ item.name }} {{ item.arg }}"
