@@ -25,22 +25,7 @@ def create_slice():
     # 3. Create a Local Area Network (LAN) connecting them
     net = slice.add_l2network(name="k8s-lan", interfaces=[iface_m, iface_w1, iface_w2, iface_w3, iface_w4])
 
-    # --- NEW CODE: ADD EXTERNAL INTERNET ---
-    print("Adding External IPv4 Network for Internet Access...")
-    ext_net = slice.add_l3network(name="internet_access", type='IPv4Ext')
-    
-    iface_m_ext = master.add_component(model="NIC_Basic", name="ext_nic").get_interfaces()[0]
-    iface_w1_ext = worker1.add_component(model="NIC_Basic", name="ext_nic").get_interfaces()[0]
-    iface_w2_ext = worker2.add_component(model="NIC_Basic", name="ext_nic").get_interfaces()[0]
-    iface_w3_ext = worker3.add_component(model="NIC_Basic", name="ext_nic").get_interfaces()[0]
-    iface_w4_ext = worker4.add_component(model="NIC_Basic", name="ext_nic").get_interfaces()[0]
-    
-    ext_net.add_interface(iface_m_ext)
-    ext_net.add_interface(iface_w1_ext)
-    ext_net.add_interface(iface_w2_ext)
-    ext_net.add_interface(iface_w3_ext)
-    ext_net.add_interface(iface_w4_ext)
-    
+
     # 4. Submit the request and wait for the hardware to boot
     print("Submitting slice request to NSF FABRIC...")
     slice.submit()
@@ -76,23 +61,6 @@ def create_slice():
 
     iface_w4.ip_addr_add(addr="10.10.10.14", subnet=lan_subnet)
     iface_w4.ip_link_up()
-    
-    # --- NEW CODE: CONFIGURE DEFAULT INTERNET ROUTE ---
-    print("Configuring Default Routes for Internet Access...")
-    ext_net = slice.get_network(name="internet_access")
-    ext_gw = ext_net.get_gateway()
-    
-    for node_name in ["control-plane", "worker-1", "worker-2", "worker-3", "worker-4"]:
-        node = slice.get_node(node_name)
-        
-        # Delete any existing broken default routes, then explicitly route traffic out to the FABRIC IPv4Ext gateway
-        node.execute("sudo ip route del default", quiet=True)
-        stdout, stderr = node.execute(f"sudo ip route add default via {ext_gw}")
-        
-        if stderr:
-            print(f"Warning setting route on {node_name}: {stderr}")
-        else:
-            print(f"✅ Internet access configured for {node_name}")
     
     # 5. THE HANDOFF: Extract the IPs to pass to your SSH script
     # 5. THE HANDOFF: Generate Ansible Inventory

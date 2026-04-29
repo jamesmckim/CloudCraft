@@ -4,7 +4,7 @@
     name: python3-kubernetes
     state: present
     update_cache: yes
-    
+
 - name: Ensure ArgoCD namespace exists
   kubernetes.core.k8s:
     name: argocd
