@@ -7,3 +7,11 @@ build:
   artifacts:
     - image: ai-rag-worker-image
       context: .
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      local:
+        push: false

@@ -9,7 +9,6 @@ resources:
 patches:
   - path: patch-resources.yaml
 
-# 2. Automatically apply a label to EVERYTHING in this environment
 labels:
   - pairs:
       environment: dev
