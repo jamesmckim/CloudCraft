@@ -1,0 +1,29 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: fleet-manager
+
+build:
+  artifacts:
+    - image: fleet-api-image
+      context: .
+      docker:
+        dockerfile: Dockerfile
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      local:
+        push: false
+        useDockerCLI: true
+      artifacts:
+        - image: fleet-api-image
+          context: .
+          docker:
+            target: dev
+          sync:
+            manual:
+              - src: 'app/**/*.py'
+                dest: /app

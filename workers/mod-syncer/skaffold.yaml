@@ -1,0 +1,9 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: mod-syncer
+
+build:
+  artifacts:
+    - image: mod-syncer-image
+      context: .

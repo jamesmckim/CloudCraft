@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: payment-worker
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
+    targetRevision: main
+    path: infra/charts/craftcloud-worker 
+    helm:
+      valueFiles:
+        - ../../values/payment-worker-values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: craftcloud-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

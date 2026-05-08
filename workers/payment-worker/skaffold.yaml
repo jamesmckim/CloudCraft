@@ -1,0 +1,25 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: payment-worker
+
+build:
+  artifacts:
+    - image: payment-worker-image
+      context: .
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      local:
+        push: false
+        useDockerCLI: true
+      artifacts:
+        - image: payment-worker-image
+          context: .
+          sync:
+            manual:
+              - src: '**/*.py'
+                dest: /app

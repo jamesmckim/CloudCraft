@@ -1,0 +1,8 @@
+apiVersion: v2
+name: craftcloud-worker
+description: A generic Helm chart for deploying background workers and async processors in CloudCraft.
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"

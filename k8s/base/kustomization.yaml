@@ -6,8 +6,8 @@ resources:
   - config/
   - frontend/dashboard/
   - workers/mod-syncer/
-  - workers/ai-rag-worker/
-  - workers/payment-worker/
+#  - workers/ai-rag-worker/
+#  - workers/payment-worker/
   - services/
 
 generatorOptions:

@@ -1,0 +1,29 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: webui
+
+build:
+  artifacts:
+    - image: dashboard-image
+      context: .
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      local:
+        push: false
+        useDockerCLI: true
+      artifacts:
+        - image: dashboard-image
+          context: .
+          docker:
+            target: dev
+          sync:
+            manual:
+              - src: 'src/**/*'
+                dest: /app
+              - src: 'index.html'
+                dest: /app

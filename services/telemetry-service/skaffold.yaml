@@ -1,0 +1,27 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: telemetry-service
+
+build:
+  artifacts:
+    - image: telemetry-api-image
+      context: .
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      local:
+        push: false
+        useDockerCLI: true
+      artifacts:
+        - image: telemetry-api-image
+          context: .
+          docker:
+            target: dev
+          sync:
+            manual:
+              - src: 'app/**/*.py'
+                dest: /app

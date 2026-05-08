@@ -3,137 +3,25 @@ kind: Config
 metadata:
   name: craftcloud
 
+requires:
+  - path: services/identity-billing-service/skaffold.yaml
+  - path: services/fleet-manager/skaffold.yaml
+  - path: services/telemetry-service/skaffold.yaml
+  - path: apps/webui/skaffold.yaml
+  - path: workers/mod-syncer/skaffold.yaml
+  - path: workers/ai-worker/skaffold.yaml
+  - path: workers/payment-worker/skaffold.yaml
+  - path: sidecar/skaffold.yaml
+
 build:
   tagPolicy:
     gitCommit: {}
-  artifacts:
-    - image: identity-api-image
-      context: services/identity-billing-service
-      docker:
-        dockerfile: Dockerfile
-
-    - image: fleet-api-image
-      context: services/fleet-manager
-      docker:
-        dockerfile: Dockerfile
-
-    - image: telemetry-api-image
-      context: services/telemetry-service
-      docker:
-        dockerfile: Dockerfile
-
-    - image: dashboard-image
-      context: apps/webui
-      docker:
-        dockerfile: Dockerfile
-        
-    - image: mod-syncer-image
-      context: workers/mod-syncer
-      docker:
-        dockerfile: Dockerfile
-        
-    - image: ai-rag-worker-image
-      context: workers/ai-worker
-      docker:
-        dockerfile: Dockerfile
-        
-    - image: valheim-sidecar-image
-      context: sidecar
-      docker:
-        dockerfile: Dockerfile
-
-    - image: payment-worker-image
-      context: workers/payment-worker
-      docker:
-        dockerfile: Dockerfile
         
 profiles:
-  - name: offline
-    build:
-      artifacts:
-        - image: identity-api-image
-          context: services/identity-billing-service
-          docker:
-            buildArgs:
-              REGISTRY: "localhost:5000/"
-        - image: fleet-api-image
-          context: services/fleet-manager
-          docker:
-            buildArgs:
-              REGISTRY: "localhost:5000/"
-        - image: telemetry-api-image
-          context: services/telemetry-service
-          docker:
-            buildArgs:
-              REGISTRY: "localhost:5000/"
-        - image: dashboard-image
-          context: apps/webui
-          docker:
-            buildArgs:
-              REGISTRY: "localhost:5000/"
-        - image: payment-worker-image
-          context: workers/payment-worker
-          docker:
-            buildArgs:
-              REGISTRY: "localhost:5000/"
   - name: dev
     activation:
       - command: dev
-    build:
-      local:
-        push: false
-        useDockerCLI: true
-      artifacts:
-       - image: identity-api-image
-         context: services/identity-billing-service
-         docker:
-           dockerfile: Dockerfile
-           target: dev
-         sync:
-           manual:
-             - src: 'app/**/*.py'
-               dest: /app
-               
-       - image: fleet-api-image
-         context: services/fleet-manager
-         docker:
-           dockerfile: Dockerfile
-           target: dev
-         sync:
-           manual:
-             - src: 'app/**/*.py'
-               dest: /app
-
-       - image: telemetry-api-image
-         context: services/telemetry-service
-         docker:
-           dockerfile: Dockerfile
-           target: dev
-         sync:
-           manual:
-             - src: 'app/**/*.py'
-               dest: /app
-
-       - image: dashboard-image
-         context: apps/webui
-         docker:
-           dockerfile: Dockerfile
-           target: dev
-         sync:
-           manual:
-             - src: 'src/**/*'
-               dest: /app
-             - src: 'index.html'
-               dest: /app
         
-       - image: payment-worker-image
-         context: workers/payment-worker
-         docker:
-           dockerfile: Dockerfile
-         sync:
-           manual:
-             - src: '**/*.py'
-               dest: /app
     manifests:
       rawYaml:
         - k8s/base/namespace.yaml
