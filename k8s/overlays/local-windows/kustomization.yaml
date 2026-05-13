@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: craftcloud-system
+
+resources:
+  - ../dev-shared
+
+generators:
+  - ksops-windows-generator.yaml
+  
+helmCharts:
+  - name: postgresql
+    repo: https://charts.bitnami.com/bitnami
+    version: 18.5.24
+    releaseName: postgres
+    namespace: craftcloud-system
+    valuesFile: ../../../infra/values/postgres-values.yaml
+
+  - name: redis
+    repo: https://charts.bitnami.com/bitnami
+    version: 25.3.12
+    releaseName: redis-broker
+    namespace: craftcloud-system
+    valuesFile: ../../../infra/values/redis-values.yaml
+
+  - name: qdrant
+    repo: https://qdrant.github.io/qdrant-helm
+    version: 1.18.0
+    releaseName: qdrant
+    namespace: craftcloud-system
+    valuesFile: ../../../infra/values/qdrant-values.yaml

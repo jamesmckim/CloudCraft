@@ -7,9 +7,9 @@ class Settings(BaseSettings):
     # K8s Internal Service Discovery
     IDENTITY_SERVICE_URL: str = "http://identity-service:5000"
     MANAGER_API_URL: str = "http://fleet-service:5000"
-    TELEMETRY_API_URL: str = "http://telemetry-service.craftcloud-system.svc.cluster.local:5000"
+    TELEMETRY_API_URL: str = "http://telemetry-service:5000"
     
-    REDIS_HOST: str = os.getenv("REDIS_HOST", "redis-broker-master")
+    REDIS_HOST: str = "redis-broker-master"
     REDIS_PORT: int = 6379
     REDIS_PASSWORD: str | None = None
 
@@ -23,5 +23,12 @@ class Settings(BaseSettings):
         case_sensitive = True,
         extra = "ignore"
     )
+    
+    @property
+    def redis_url(self) -> str:
+        """Safely constructs the Redis DSN."""
+        if self.REDIS_PASSWORD:
+            return f"redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:{self.REDIS_PORT}/0"
+        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/0"
 
 settings = Settings()

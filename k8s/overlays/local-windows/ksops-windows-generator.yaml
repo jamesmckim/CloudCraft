@@ -1,0 +1,11 @@
+apiVersion: viaduct.ai/v1
+kind: ksops.exe
+metadata:
+  name: ksops-secrets
+files:
+  - ../dev-shared/identity-secret.sops.yaml
+  - ../dev-shared/fleet-secret.sops.yaml
+  - ../dev-shared/telemetry-secret.sops.yaml
+  - ../dev-shared/postgres-secret.sops.yaml
+  - ../dev-shared/redis-secret.sops.yaml
+  - ../dev-shared/qdrant-secret.sops.yaml

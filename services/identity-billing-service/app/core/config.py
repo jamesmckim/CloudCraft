@@ -23,13 +23,21 @@ class Settings(BaseSettings):
     PAYPAL_WEBHOOK_ID: str | None = None
     PAYPAL_MODE: str = "sandbox"  # 'sandbox' or 'live'
     
+    REDIS_HOST: str = "redis-broker-master"
+    REDIS_PORT: int = 6379
     REDIS_PASSWORD: str | None = None
-    REDIS_URL: str = "redis://redis-broker-master:6379/0"
 
     model_config = SettingsConfigDict(
         env_file = ".env",
         case_sensitive = True,
         extra = "ignore"
     )
+    
+    @property
+    def redis_url(self) -> str:
+        """Safely constructs the Redis DSN."""
+        if self.REDIS_PASSWORD:
+            return f"redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:{self.REDIS_PORT}/0"
+        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/0"
 
 settings = Settings()

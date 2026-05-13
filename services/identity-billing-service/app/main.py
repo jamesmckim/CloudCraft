@@ -19,8 +19,8 @@ async def lifespan(app: FastAPI):
     
     print("Connecting to Redis...")
     app.state.redis = await create_pool(RedisSettings(
-        host=settings.REDIS_URL,
-        port=6379,
+        host=settings.REDIS_HOST,
+        port=settings.REDIS_PORT,
         password=settings.REDIS_PASSWORD
     ))
     yield

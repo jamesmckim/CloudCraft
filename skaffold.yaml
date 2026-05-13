@@ -21,13 +21,17 @@ profiles:
   - name: dev
     activation:
       - command: dev
-        
     manifests:
       rawYaml:
         - k8s/base/namespace.yaml
       kustomize:
         paths:
-          - k8s/overlays/dev
+          - k8s/overlays/local-windows
+        buildArgs:
+          - "--enable-alpha-plugins"
+          - "--enable-exec"
+          - "--enable-helm"
+          - "--load-restrictor=LoadRestrictionsNone"
     deploy:
       kubectl: {}
 
