@@ -1,8 +1,6 @@
 # /identity-billing-service/app/main.py
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from arq import create_pool
-from arq.connections import RedisSettings
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
@@ -17,17 +15,9 @@ async def lifespan(app: FastAPI):
     await init_db()
     print("Database initialized.")
     
-    print("Connecting to Redis...")
-    app.state.redis = await create_pool(RedisSettings(
-        host=settings.REDIS_HOST,
-        port=settings.REDIS_PORT,
-        password=settings.REDIS_PASSWORD
-    ))
     yield
     
     print("Shutting down...")
-    app.state.redis.close()
-    await app.state.redis.aclose()
 
 # --- App Initialization ---
 app = FastAPI(

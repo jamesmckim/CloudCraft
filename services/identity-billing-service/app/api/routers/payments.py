@@ -1,8 +1,10 @@
 # /identity-billing-service/app/api/routers/payments.py
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
+from arq.connections import ArqRedis
 
 from app.core.database import get_db
+from app.api.dependencies import get_arq_pool
 from app.schemas.user_schemas import BuyRequest
 from app.repositories.user_repo import UserRepository
 from app.services.payment_service import PaymentService
@@ -29,13 +31,13 @@ async def create_checkout(
 @router.post("/webhook/{provider}")
 async def payment_webhook(
     provider: str, 
-    request: Request
+    request: Request,
+    redis: ArqRedis = Depends(get_arq_pool)
 ):
     raw_payload = await request.body()
     headers = dict(request.headers)
     
-    redis = request.app.state.redis
-    await redis.equeue_job(
+    await redis.enqueue_job(
         "process_webhook_job",
         provider,
         raw_payload,
