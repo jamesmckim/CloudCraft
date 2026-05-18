@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+redis
+kubernetes
+psycopg2-binary
+pydantic-settings
+asyncpg
+arq

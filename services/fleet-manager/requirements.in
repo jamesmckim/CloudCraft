@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+pydantic[email]
+passlib[bcrypt]
+bcrypt
+python-dotenv
+kubernetes
+redis
+httpx
+psycopg2-binary
+pydantic_settings
+pyyaml
+asyncpg
