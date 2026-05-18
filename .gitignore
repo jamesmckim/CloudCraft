@@ -19,7 +19,7 @@ __pycache__/
 *.pyd
 
 # --- Node/Frontend ---
-webui/node_modules/
+apps/webui/node_modules/
 npm-debug.log
 
 # Ignore decrypted SOPS files
