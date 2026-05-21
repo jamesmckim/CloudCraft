@@ -3,7 +3,7 @@ FROM ${REGISTRY}node:24.13-alpine AS base
 WORKDIR /app
 ENV NPM_CONFIG_LOGLEVEL=warn
 COPY package*.json ./
-RUN npm install --no-audit --no-fund --loglevel=error
+RUN npm ci --no-audit --no-fund --loglevel=error
 
 FROM base AS dev
 COPY . .

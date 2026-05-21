@@ -14,18 +14,18 @@ helmCharts:
     version: 18.5.24
     releaseName: postgres
     namespace: craftcloud-system
-    valuesFile: ../../../infra/values/postgres-values.yaml
+    valuesFile: ../../../../infra/values/postgres-values.yaml
 
   - name: redis
     repo: https://charts.bitnami.com/bitnami
     version: 25.3.12
     releaseName: redis-broker
     namespace: craftcloud-system
-    valuesFile: ../../../infra/values/redis-values.yaml
+    valuesFile: ../../../../infra/values/redis-values.yaml
 
   - name: qdrant
     repo: https://qdrant.github.io/qdrant-helm
     version: 1.18.0
     releaseName: qdrant
     namespace: craftcloud-system
-    valuesFile: ../../../infra/values/qdrant-values.yaml
+    valuesFile: ../../../../infra/values/qdrant-values.yaml

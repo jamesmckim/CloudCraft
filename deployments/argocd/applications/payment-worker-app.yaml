@@ -11,7 +11,7 @@ spec:
     path: infra/charts/craftcloud-worker 
     helm:
       valueFiles:
-        - ../../values/payment-worker-values.yaml
+        - $values/infra/values/payment-worker-values.yaml
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: craftcloud-system

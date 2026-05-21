@@ -1,0 +1,75 @@
+# k8s/minio.yaml
+---
+# 1. Storage Claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pvc
+  labels:
+    app: minio
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi # Adjust based on how many mods you plan to sync locally
+
+---
+# 2. The MinIO Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  labels:
+    app: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        image: minio/minio:latest
+        # Run the server and expose the web UI console on port 9001
+        command: ["minio", "server", "/data", "--console-address", ":9001"]
+        env:
+        # These act as your AWS_ACCESS_KEY and AWS_SECRET_KEY locally
+        - name: MINIO_ROOT_USER
+          value: "minioadmin"
+        - name: MINIO_ROOT_PASSWORD
+          value: "minioadmin"
+        ports:
+        - containerPort: 9000 # API Port (S3 Protocol)
+        - containerPort: 9001 # Web UI Console Port
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: minio-pvc
+
+---
+# 3. The Internal Network Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio # This name becomes the internal DNS resolution!
+  labels:
+    app: minio
+spec:
+  type: ClusterIP
+  ports:
+    - name: api
+      port: 9000
+      targetPort: 9000
+    - name: console
+      port: 9001
+      targetPort: 9001
+  selector:
+    app: minio
