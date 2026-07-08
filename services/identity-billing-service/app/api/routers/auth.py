@@ -1,11 +1,8 @@
 # /identity-billing-service/app/api/routers/auth.py
-from fastapi import APIRouter, Depends, status, HTTPException, Header, Response
-from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, status, Response
 
 from app.core.database import get_db
-from app.schemas.user_schemas import UserRegister
-from app.core.security import get_current_user_id, verify_and_decode_jwt
+from app.core.security import verify_and_decode_jwt
 from app.repositories.user_repo import UserRepository
 from app.services.auth_service import AuthService
 
@@ -17,31 +14,28 @@ def get_auth_service(db: Session = Depends(get_db)) -> AuthService:
 
 @router.get("/verify")
 async def verify_token(
-    user_id: str = Depends(verify_and_decode_jwt),
-    # Inject your JWT validation logic here
+    response: Response,
+    token_payload: dict = Depends(verify_and_decode_jwt),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """
     Called by Traefik ForwardAuth. 
-    Validates the JWT and returns the X-User-ID header for internal routing.
+    Validates the Keycloak JWT, provisions the user if they are new, 
+    and returns the X-User-ID header for internal microservice routing.
     """
-    # Traefik ForwardAuth expects a 2xx response
-    response = Response(status_code=status.HTTP_200_OK)
+    user_id = token_payload.get("sub")
     
-    # Inject the validated user ID into the header for Traefik to extract
+    # Just-In-Time Provisioning: Sync Keycloak user to local DB for billing tracking
+    await auth_service.sync_idp_user(
+        keycloak_id=user_id, 
+        email=token_payload.get("email"), 
+        username=token_payload.get("preferred_username")
+    )
+
+    # Traefik ForwardAuth expects a 20X response to allow traffic through
+    response.status_code = status.HTTP_200_OK
+    
+    # Inject the validated user ID into the header for Traefik to extract and pass downstream
     response.headers["X-User-ID"] = str(user_id)
-    return response
-
-@router.post("/register", status_code=status.HTTP_201_CREATED)
-async def register(
-    user: UserRegister, 
-    service: AuthService = Depends(get_auth_service)
-):
-    new_user = await service.register_user(user)
-    return {"message": "Account created successfully", "user_id": new_user.id}
-
-@router.post("/token")
-async def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    service: AuthService = Depends(get_auth_service)
-):
-    return await service.authenticate_user(form_data.username, form_data.password)
+    
+    return {"status": "authenticated"}

@@ -9,7 +9,7 @@ class UserRepository(BaseRepository[User]):
     def __init__(self, db: AsyncSession):
         super().__init__(db, User)
 
-    async def get_by_id(self, user_id: int) -> User | None:
+    async def get_by_id(self, user_id: str) -> User | None:
         """Retrieve a user by their numeric database ID."""
         stmt = select(User).filter(User.id == user_id)
         result = await self.db.execute(stmt)
@@ -38,10 +38,6 @@ class UserRepository(BaseRepository[User]):
         return result.scalars().first()
     
     async def add_credits(self, user_id: str, amount: int):
-        try:
-            db_id = int(user_id)
-        except ValueError:
-            return None 
             
         user = await self.get_by_id(db_id)
         if user:

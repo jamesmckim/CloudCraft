@@ -6,6 +6,9 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "oidc-client-ts": "^3.5.0"
+  },
   "devDependencies": {
     "vite": "^5.0.0"
   }

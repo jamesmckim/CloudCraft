@@ -26,7 +26,7 @@ primary:
         
         export PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/DB_PASS)
         
-        psql -v ON_ERROR_STOP=1 --username postgres --dbname postgres <<-EOSQL
+        psql -v --username postgres --dbname postgres <<-EOSQL
             CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
             CREATE DATABASE thunderstore;
             GRANT ALL PRIVILEGES ON DATABASE thunderstore TO syncer_user;

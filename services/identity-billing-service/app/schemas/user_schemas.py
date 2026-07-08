@@ -1,12 +1,7 @@
 # /identity-billing-service/app/schemas/user_schemas.py
 from pydantic import BaseModel, EmailStr, ConfigDict
 
-# --- User Authentication Schemas ---
-
-class UserRegister(BaseModel):
-    username: str
-    email: EmailStr
-    password: str
+# --- User Profile Schemas ---
 
 class UserProfile(BaseModel):
     username: str
