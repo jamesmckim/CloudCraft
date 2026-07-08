@@ -16,6 +16,10 @@ RUN curl -LO https://github.com/kubernetes-sigs/kustomize/releases/download/kust
     && tar -zxvf kustomize_v5.8.1_linux_amd64.tar.gz \
     && chmod +x kustomize
 
+RUN curl -LO https://get.helm.sh/helm-v3.15.2-linux-amd64.tar.gz \
+    && tar -zxvf helm-v3.15.2-linux-amd64.tar.gz \
+    && mv linux-amd64/helm /helm \
+    && chmod +x /helm
 
 # ==========================================
 # STAGE 2: The Final Dev Environment
@@ -43,6 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=builder /skaffold /usr/local/bin/skaffold
 COPY --from=builder /sops /usr/local/bin/sops
 COPY --from=builder /kustomize /usr/local/bin/kustomize
+COPY --from=builder /helm /usr/local/bin/helm
 
 # Create the standard VS Code non-root user
 RUN useradd -ms /bin/bash vscode \
