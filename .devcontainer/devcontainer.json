@@ -1,12 +1,23 @@
 {
     "name": "CloudCraft Enterprise Dev",
-    "image": "ghcr.io/jamesmckim/cloudcraft-devcontainer:latest",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
     "features": {
         "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
             "version": "latest",
             "enableNonRootDocker": "true",
             "moby": "true"
-        },
+        }
     },
+    "mounts": [
+        "source=${localEnv:USERPROFILE}/AppData/Roaming/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind,readonly",
+        "source=${localEnv:USERPROFILE}/.kube,target=/tmp/.kube-localhost,type=bind,readonly"
+    ],
+    "remoteEnv": {
+        "SOPS_AGE_KEY_FILE": "/home/vscode/.config/sops/age/keys.txt",
+        "KUBECONFIG": "/home/vscode/.kube/config"
+    },
+    "postCreateCommand": "mkdir -p ~/.kube && cp -r /tmp/.kube-localhost/* ~/.kube/ && sed -i 's/127.0.0.1/host.docker.internal/g' ~/.kube/config",
     "remoteUser": "vscode"
 }

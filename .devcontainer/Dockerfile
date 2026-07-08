@@ -26,6 +26,10 @@ RUN curl -LO https://github.com/viaduct-ai/kustomize-sops/releases/download/v4.3
     && mv ksops /ksops \
     && chmod +x /ksops
 
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
+    && chmod +x kubectl \
+    && mv kubectl /kubectl
+	
 # ==========================================
 # STAGE 2: The Final Dev Environment
 # ==========================================
@@ -54,6 +58,7 @@ COPY --from=builder /sops /usr/local/bin/sops
 COPY --from=builder /kustomize /usr/local/bin/kustomize
 COPY --from=builder /helm /usr/local/bin/helm
 COPY --from=builder /ksops /usr/local/bin/ksops
+COPY --from=builder /kubectl /usr/local/bin/kubectl
 
 # Create the standard VS Code non-root user
 RUN useradd -ms /bin/bash vscode \
