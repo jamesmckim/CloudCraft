@@ -6,16 +6,13 @@ FROM alpine:3.19 AS builder
 
 RUN apk add --no-cache curl tar
 
-# 1. Fetch Skaffold (Pinned to v2.13.0 for stability)
-RUN curl -Lo /skaffold https://storage.googleapis.com/skaffold/releases/v2.13.0/skaffold-linux-amd64 \
+RUN curl -Lo /skaffold https://storage.googleapis.com/skaffold/releases/v2.23.0/skaffold-linux-amd64 \
     && chmod +x /skaffold
 
-# 2. Fetch SOPS (Pinned to v3.8.1)
-RUN curl -Lo /sops https://github.com/getsops/sops/releases/download/v3.8.1/sops-v3.8.1.linux.amd64 \
+RUN curl -Lo /sops https://github.com/getsops/sops/releases/download/v3.13.2/sops-v3.13.2.linux.amd64 \
     && chmod +x /sops
 
-# 3. Fetch Kustomize (Pinned to v5.4.1, explicitly extracting the tarball)
-RUN curl -LO https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.1/kustomize_v5.4.1_linux_amd64.tar.gz \
+RUN curl -LO https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.8.1/kustomize_v5.8.1_linux_amd64.tar.gz \
     && tar -zxvf kustomize_v5.4.1_linux_amd64.tar.gz \
     && chmod +x kustomize
 

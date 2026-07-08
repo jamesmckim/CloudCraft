@@ -8,19 +8,5 @@
             "moby": "true"
         },
     },
-    "customizations": {
-        "vscode": {
-            "settings": {
-                "python.defaultInterpreterPath": "/usr/local/bin/python"
-            },
-            "extensions": [
-                "ms-python.python",
-                "charliermarsh.ruff",
-                "GoogleCloudTools.cloudcode",
-                "ms-kubernetes-tools.vscode-kubernetes-tools",
-                "signageos.signageos-vscode-sops"
-            ]
-        }
-    },
     "remoteUser": "vscode"
 }
