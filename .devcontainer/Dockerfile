@@ -21,6 +21,11 @@ RUN curl -LO https://get.helm.sh/helm-v3.15.2-linux-amd64.tar.gz \
     && mv linux-amd64/helm /helm \
     && chmod +x /helm
 
+RUN curl -LO https://github.com/viaduct-ai/kustomize-sops/releases/download/v4.3.1/ksops_4.3.1_Linux_x86_64.tar.gz \
+    && tar -zxvf ksops_4.3.1_Linux_x86_64.tar.gz \
+    && mv ksops /ksops \
+    && chmod +x /ksops
+
 # ==========================================
 # STAGE 2: The Final Dev Environment
 # ==========================================
@@ -48,6 +53,7 @@ COPY --from=builder /skaffold /usr/local/bin/skaffold
 COPY --from=builder /sops /usr/local/bin/sops
 COPY --from=builder /kustomize /usr/local/bin/kustomize
 COPY --from=builder /helm /usr/local/bin/helm
+COPY --from=builder /ksops /usr/local/bin/ksops
 
 # Create the standard VS Code non-root user
 RUN useradd -ms /bin/bash vscode \

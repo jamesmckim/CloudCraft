@@ -6,7 +6,7 @@ resources:
   - ../dev-shared
 
 generators:
-  - ksops-windows-generator.yaml
+  - ksops-generator.yaml
   
 helmCharts:
   - name: postgresql

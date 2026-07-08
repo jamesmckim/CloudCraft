@@ -26,7 +26,7 @@ profiles:
         - deployments/k8s/base/namespace.yaml
       kustomize:
         paths:
-          - deployments/k8s/overlays/local-windows
+          - deployments/k8s/overlays/local-dev
         buildArgs:
           - "--enable-alpha-plugins"
           - "--enable-exec"
