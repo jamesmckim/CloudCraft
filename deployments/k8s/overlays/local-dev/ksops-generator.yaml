@@ -5,7 +5,7 @@ metadata:
   annotations:
     config.kubernetes.io/function: |
       exec:
-        path: ksops
+        path: /usr/local/bin/ksops
 files:
   - ../dev-shared/identity-secret.sops.yaml
   - ../dev-shared/fleet-secret.sops.yaml
