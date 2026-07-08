@@ -13,7 +13,7 @@ RUN curl -Lo /sops https://github.com/getsops/sops/releases/download/v3.13.2/sop
     && chmod +x /sops
 
 RUN curl -LO https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.8.1/kustomize_v5.8.1_linux_amd64.tar.gz \
-    && tar -zxvf kustomize_v5.4.1_linux_amd64.tar.gz \
+    && tar -zxvf kustomize_v5.8.1_linux_amd64.tar.gz \
     && chmod +x kustomize
 
 
