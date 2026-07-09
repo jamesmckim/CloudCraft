@@ -1,4 +1,9 @@
-body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
+body {
+    font-family: sans-serif;
+    background: #f4f7f6;
+    padding: 40px;
+}
+
 /* Container for the whole dashboard */
 .dashboard-container {
     max-width: 1200px;
@@ -22,15 +27,16 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
 
 /* Create button styling */
 .btn-create {
-    background-color: #9b59b6; /* Purple for differentiation */
+    background-color: #9b59b6;
+    /* Purple for differentiation */
     font-weight: bold;
 }
 
-.server-card { 
-    background: white; 
-    padding: 20px; 
-    border-radius: 8px; 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+.server-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     /* Remove max-width so the grid controls the size */
     display: flex;
     flex-direction: column;
@@ -49,6 +55,7 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
     font-size: 1.2rem;
     color: #2c3e50;
 }
+
 .card-controls {
     display: flex;
     gap: 10px;
@@ -56,8 +63,10 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
 }
 
 .card-controls button {
-    flex: 1; /* Makes all buttons the same width */
-    margin-top: 0; /* Override your previous margin-top */
+    flex: 1;
+    /* Makes all buttons the same width */
+    margin-top: 0;
+    /* Override your previous margin-top */
     padding: 8px 5px;
     font-size: 0.9rem;
 }
@@ -65,6 +74,7 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
 .btn-settings {
     background-color: #95a5a6;
 }
+
 .status-indicator {
     font-size: 0.75rem;
     padding: 4px 8px;
@@ -73,10 +83,32 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
     text-transform: uppercase;
 }
 
-.online { background: #d4f8e2; color: #27ae60; }
-.offline { background: #fce4e4; color: #c0392b; }
-.btn-start { background-color: #2ecc71; color: white; border: none; padding: 10px 20px; cursor: pointer; }
-.btn-stop { background-color: #e74c3c; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+.online {
+    background: #d4f8e2;
+    color: #27ae60;
+}
+
+.offline {
+    background: #fce4e4;
+    color: #c0392b;
+}
+
+.btn-start {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.btn-stop {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
 .progress-bar {
     width: 100%;
     background-color: #333;
@@ -88,17 +120,20 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
 
 .progress-bar div {
     height: 100%;
-    background-color: #2ecc71; /* Green for CPU */
+    background-color: #2ecc71;
+    /* Green for CPU */
     transition: width 0.5s ease-in-out;
 }
 
 .progress-bar .ram-fill {
-    background-color: #3498db; /* Blue for RAM */
+    background-color: #3498db;
+    /* Blue for RAM */
 }
 
 .stat-group {
     margin-bottom: 15px;
 }
+
 .app-container {
     display: flex;
     height: 100vh;
@@ -114,50 +149,62 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
 }
 
 .tab-content {
-    display: none; /* Hide all by default */
+    display: none;
+    /* Hide all by default */
     padding: 40px;
     flex: 1;
     overflow-y: auto;
 }
 
 .tab-content.active {
-    display: block; /* Show only the active one */
+    display: block;
+    /* Show only the active one */
 }
 
 .nav-btn.active {
     background: #3498db;
     border-radius: 8px;
 }
+
 /* Login Overlay */
 .login-overlay {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(15, 15, 15, 0.98); /* Nearly solid dark background */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 15, 15, 0.98);
+    /* Nearly solid dark background */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Stays on top of everything */
+    z-index: 1000;
+    /* Stays on top of everything */
 }
 
 .login-card {
     background: #2a2a2a;
     padding: 2.5rem;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     text-align: center;
     width: 350px;
 }
 
-.login-card h2 { color: #fff; margin-bottom: 1.5rem; }
-
-#login-form, #register-form { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 1rem; 
+.login-card h2 {
+    color: #fff;
+    margin-bottom: 1.5rem;
 }
 
-#login-form input, #register-form input {
+#login-form,
+#register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#login-form input,
+#register-form input {
     padding: 12px;
     border-radius: 6px;
     border: 1px solid #444;
@@ -180,7 +227,9 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
     font-weight: bold;
 }
 
-.btn-login:hover { background: #2980b9; }
+.btn-login:hover {
+    background: #2980b9;
+}
 
 /* Ensure the selection grid uses the same layout as the dashboard */
 .game-grid {
@@ -211,9 +260,11 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
 /* Modal Background */
 .modal-overlay {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -222,7 +273,8 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
 
 /* Modal Box */
 .modal-content {
-    background: #2a2a2a; /* Dark theme background */
+    background: #2a2a2a;
+    /* Dark theme background */
     color: white;
     padding: 2rem;
     border-radius: 8px;
@@ -256,8 +308,23 @@ body { font-family: sans-serif; background: #f4f7f6; padding: 40px; }
     margin-top: 1rem;
 }
 
-.btn-stripe { background: #6772e5; color: white; border: none; padding: 8px; cursor: pointer; border-radius: 4px; }
-.btn-paypal { background: #ffc439; color: black; border: none; padding: 8px; cursor: pointer; border-radius: 4px; }
+.btn-stripe {
+    background: #6772e5;
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-paypal {
+    background: #ffc439;
+    color: black;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+}
 
 .close-btn {
     position: absolute;

@@ -9,21 +9,29 @@
 	<link rel="stylesheet" href="./src/style.css">
 </head>
 
-<body>
+<body id"body">
 	<div class="app-container">
 		<main>
 			<aside class="sidebar">
 				<div class="logo">CraftCloud</div>
 				<nav>
-					<button class="nav-btn active" data-tab="account">Account</button>
-					<button class="nav-btn" data-tab="selection">Deploy Game</button>
-					<button class="nav-btn" data-tab="dashboard">My Servers</button>
+					<button class="nav-btn active" data-tab="account">
+						<i class="icon-user"></i> Account
+					</button>
+					<button class="nav-btn" data-tab="selection">
+						<i class="icon-plus"></i> Deploy Game
+					</button>
+					<button class="nav-btn" data-tab="dashboard">
+						<i class="icon-server"></i> My Servers
+					</button>
 				</nav>
 			</aside>
 
-			<div id="login-overlay" class="login-overlay">
-				<h1>Welcome to CraftCloud</h1>
-				<button id="login-btn" class="btn-primary">Login / Register via Keycloak</button>
+			<div id="login-overlay" class="login-overlay" onclick="off()">
+				<div class=" login-card">
+					<h1>Welcome to CraftCloud</h1>
+					<button id="btn-login" class="btn-login">Login / Register via Keycloak</button>
+				</div>
 			</div>
 
 			<section id="tab-account" class="tab-content active">

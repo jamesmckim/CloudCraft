@@ -4,6 +4,13 @@
 **/.env
 *.env
 
+# --- Vite/Node ---
+venv/
+.venv/
+env/
+.pytest_cache/
+*.log
+
 # --- Skaffold ---
 skaffold
 
@@ -21,6 +28,18 @@ __pycache__/
 # --- Node/Frontend ---
 apps/webui/node_modules/
 npm-debug.log
+dist/
+build/
+.vite/
+
+# --- Infrastructure ---
+*.retry
+.terraform/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
 
 # Ignore decrypted SOPS files
 *.plain.yaml
