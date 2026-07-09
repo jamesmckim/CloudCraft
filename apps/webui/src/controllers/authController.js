@@ -3,7 +3,7 @@ import Auth from '../services/authService.js';
 
 export class AuthController {
     constructor(startAppCallback) {
-        this.loginBtn = document.getElementById('login-btn');
+        this.loginBtn = document.getElementById('btn-login');
         this.overlay = document.getElementById('login-overlay');
 
         this.startApp = startAppCallback;
