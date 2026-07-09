@@ -26,12 +26,26 @@ primary:
         
         export PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/DB_PASS)
         
+        # 1. Create the database and user
         psql -v --username postgres --dbname postgres <<-EOSQL
-            CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
             CREATE DATABASE thunderstore;
-            GRANT ALL PRIVILEGES ON DATABASE thunderstore TO syncer_user;
+            CREATE DATABASE keycloak;
+            CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
         EOSQL
         
+        # 2. Grant privileges for 'thunderstore'
+        psql -v --username postgres --dbname thunderstore <<-EOSQL
+            GRANT ALL PRIVILEGES ON DATABASE thunderstore TO syncer_user;
+            GRANT ALL ON SCHEMA public TO syncer_user;
+        EOSQL
+        
+        # 3. Grant privileges for 'keycloak'
+        psql -v --username postgres --dbname keycloak <<-EOSQL
+            GRANT ALL PRIVILEGES ON DATABASE keycloak TO user;
+            GRANT ALL ON SCHEMA public TO user;
+        EOSQL
+        
+        # 4. Your existing craftcloud db permissions
         psql -v ON_ERROR_STOP=1 --username postgres --dbname craftcloud <<-EOSQL
             GRANT SELECT ON ALL TABLES IN SCHEMA public TO "user";
         EOSQL

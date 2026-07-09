@@ -1,0 +1,10 @@
+apiVersion: k8s.keycloak.org/valpha1
+kind: KeycloakRealmImport
+metadata:
+  name: craftcloud-realm-import
+  namespace: craftcloud-system
+spec:
+  keycloakCRName: keycloak
+  realm:
+    # Paste your JSON realm config here or reference a secret
+  # ...
