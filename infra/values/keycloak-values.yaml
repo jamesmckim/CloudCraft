@@ -1,0 +1,18 @@
+auth:
+  adminUser: admin
+  # In production, use your ksops-secrets instead of plaintext
+  adminPassword: "admin_password"
+
+# Connect to your existing Postgres deployment from Kustomize
+postgresql:
+  enabled: false # Disable Bitnami's sub-chart Postgres
+
+externalDatabase:
+  host: postgres-postgresql
+  port: 5432
+  user: postgres
+  password: "postgres_password"
+  database: keycloak
+
+service:
+  type: ClusterIP

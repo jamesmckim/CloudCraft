@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sso-gateway
+  namespace: craftcloud-system
+  labels:
+    app: craftcloud
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+    # Use the magic DNS we set up earlier!
+    - host: "sso.127.0.0.1.nip.io" 
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak-service # Route straight to the Operator's service
+                port:
+                  number: 8080

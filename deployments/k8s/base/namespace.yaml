@@ -4,8 +4,3 @@ metadata:
   name: valheim-workloads
   labels:
     purpose: game-servers
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: craftcloud-system

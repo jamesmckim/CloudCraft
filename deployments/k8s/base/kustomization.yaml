@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - infra/agones-sdk/rbac-sdk.yaml
+  - infra/keycloak/keycloak.yml
   - config/
   - frontend/dashboard/
   - workers/mod-syncer/

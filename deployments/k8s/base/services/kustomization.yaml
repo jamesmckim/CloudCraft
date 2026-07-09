@@ -7,3 +7,4 @@ resources:
   - identity/
   - public-ingress.yaml
   - protected-ingress.yaml
+  - keycloak-ingress.yaml

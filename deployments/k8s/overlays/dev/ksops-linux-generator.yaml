@@ -9,3 +9,4 @@ files:
   - ../dev-shared/postgres-secret.sops.yaml
   - ../dev-shared/redis-secret.sops.yaml
   - ../dev-shared/qdrant-secret.sops.yaml
+  - ../dev-shared/keycloak-secret.sops.yaml

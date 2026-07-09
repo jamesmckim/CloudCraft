@@ -1,0 +1,14 @@
+---
+- name: Wait for Kubernetes API to be ready
+  command: kubectl get nodes
+  register: k8s_ready
+  until: k8s_ready.rc == 0
+  retries: 10
+  delay: 10
+  changed_when: false
+
+- name: Deploy Keycloak Operator and CRDs
+  command: >
+    kubectl apply --server-side -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/26.6.4/kubernetes/kubernetes.yml
+  register: keycloak_deploy
+  changed_when: "'configured' in keycloak_deploy.stdout or 'created' in keycloak_deploy.stdout"

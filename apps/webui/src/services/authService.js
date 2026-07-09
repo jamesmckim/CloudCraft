@@ -6,7 +6,7 @@ import { UserManager, WebStorageStateStore } from 'oidc-client-ts';
 const oidcConfig = {
     // In production, this would be https://auth.craftcloud.com/realms/craftcloud
     authority: window.location.origin.includes('localhost')
-        ? "http://localhost:8080/realms/craftcloud"
+        ? "http://sso.127.0.0.1.nip.io/realms/craftcloud"
         : "https://auth.craftcloud.com/realms/craftcloud",
     client_id: "webui-client",
     redirect_uri: window.location.origin + "/", // Return to the main page after login

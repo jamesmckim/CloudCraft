@@ -18,6 +18,6 @@
         "SOPS_AGE_KEY_FILE": "/home/vscode/.config/sops/age/keys.txt",
         "KUBECONFIG": "/home/vscode/.kube/config"
     },
-    "postCreateCommand": "mkdir -p ~/.kube && cp -r /tmp/.kube-localhost/* ~/.kube/ && sed -i 's/127.0.0.1/host.docker.internal/g' ~/.kube/config",
+    "postCreateCommand": "bash .devcontainer/setup.sh",
     "remoteUser": "vscode"
 }

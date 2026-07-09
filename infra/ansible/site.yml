@@ -27,4 +27,5 @@
   become: yes
   gather_facts: false
   roles:
+    - cluster_operators
     - argocd
