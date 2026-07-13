@@ -39,7 +39,7 @@ class UserRepository(BaseRepository[User]):
     
     async def add_credits(self, user_id: str, amount: int):
             
-        user = await self.get_by_id(db_id)
+        user = await self.get_by_id(user_id)
         if user:
             user.credits += amount
             await self.db.commit()

@@ -43,6 +43,8 @@ async def verify_and_decode_jwt(credentials: HTTPAuthorizationCredentials = Secu
     """
     token = credentials.credentials
     try:
+        signing_key = jwks_client.get_signing_key_from_jwt(token)
+
         payload = jwt.decode(
             token,
             signing_key.key,
@@ -63,7 +65,7 @@ async def verify_and_decode_jwt(credentials: HTTPAuthorizationCredentials = Secu
 
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.InvalidTokenError:
+    except jwt.InvalidTokenError as e:
         raise HTTPException(status_code=401, detail="Invalid token payload or signature")
     except Exception:
         raise HTTPException(status_code=500, detail="Internal identity verification error")

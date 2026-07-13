@@ -6,5 +6,36 @@ metadata:
 spec:
   keycloakCRName: keycloak
   realm:
-    realm: creaftcloud
+    realm: craftcloud
     enabled: true
+    displayName: "CraftCloud SSO"
+    
+    clients:
+      - clientId: identity-service
+        enabled: true
+        standardFlowEnabled: true
+        publicClient: false
+        secret: "dev-secret-key-123" # NEED TO MOVE EXTERNAL
+        redirectUris:
+          - "http://localhost:5000/*"
+          - "http://sso.127.0.0.1.nip.io/*"
+          
+      - clientId: webui-client
+        enabled: true
+        standardFlowEnabled: true
+        publicClient: true
+        redirectUris:
+          - "http://localhost:3000/*"
+          - "http://localhost:8080/*"
+
+    users:
+      - username: testadmin
+        enabled: true
+        email: "admin@craftcloud.local"
+        emailVerified: true
+        firstName: "Test"
+        lastName: "Admin"
+        credentials:
+          - type: password
+            value: "password123" # The password they will log in with
+            temporary: false     # Set to false so it doesn't force a reset on first login
