@@ -3,19 +3,13 @@ kind: Kustomization
 namespace: craftcloud-system
 
 resources:
-  - ../dev-shared
+  - postgres-cluster.yaml
+  - ../dev-shared/
 
 generators:
   - ksops-generator.yaml
-  
-helmCharts:
-  - name: postgresql
-    repo: https://charts.bitnami.com/bitnami
-    version: 18.5.24
-    releaseName: postgres
-    namespace: craftcloud-system
-    valuesFile: ../../../../infra/values/postgres-values.yaml
 
+helmCharts:
   - name: redis
     repo: https://charts.bitnami.com/bitnami
     version: 25.3.12

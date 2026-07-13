@@ -1,4 +1,5 @@
 # /identity-billing-service/app/core/config.py
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -8,6 +9,16 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def format_async_db_url(cls, v: str) -> str:
+        """Intercepts the Operator's URL and injects the async driver."""
+        if v and v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql+asyncpg://", 1)
+        elif v and v.startswith("postgresql://"):
+            return v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return v
 
     # Security
     SECRET_KEY: str

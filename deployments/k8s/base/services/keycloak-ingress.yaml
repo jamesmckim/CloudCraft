@@ -6,9 +6,13 @@ metadata:
   labels:
     app: craftcloud
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - "sso.127.0.0.1.nip.io"
+      secretName: sso-tls
   rules:
     # Use the magic DNS we set up earlier!
     - host: "sso.127.0.0.1.nip.io" 

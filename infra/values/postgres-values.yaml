@@ -1,8 +1,8 @@
 fullnameOverride: "postgres"
+
 primary:
   persistence:
     size: 5Gi
-  
   resources:
     requests:
       cpu: "100m"
@@ -17,6 +17,11 @@ primary:
         secretKeyRef:
           name: postgres-secrets
           key: SYNCER_DB_PASSWORD
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgres-secrets
+          key: DB_PASS
 
   initdb:
     scripts:
@@ -24,25 +29,27 @@ primary:
         #!/bin/bash
         set -e
         
-        export PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/DB_PASS)
-        
+        export PGPASSWORD=$POSTGRES_PASSWORD
+
         # 1. Create the database and user
-        psql -v --username postgres --dbname postgres <<-EOSQL
+        psql -U postgres -d postgres <<-EOSQL
             CREATE DATABASE thunderstore;
             CREATE DATABASE keycloak;
             CREATE USER syncer_user WITH PASSWORD '${SYNCER_DB_PASSWORD}';
         EOSQL
         
         # 2. Grant privileges for 'thunderstore'
-        psql -v --username postgres --dbname thunderstore <<-EOSQL
+        psql -v ON_ERROR_STOP=1 --username postgres --dbname thunderstore <<-EOSQL
             GRANT ALL PRIVILEGES ON DATABASE thunderstore TO syncer_user;
+            ALTER SCHEMA public OWNER TO syncer_user;
             GRANT ALL ON SCHEMA public TO syncer_user;
         EOSQL
         
         # 3. Grant privileges for 'keycloak'
-        psql -v --username postgres --dbname keycloak <<-EOSQL
-            GRANT ALL PRIVILEGES ON DATABASE keycloak TO user;
-            GRANT ALL ON SCHEMA public TO user;
+        psql -v ON_ERROR_STOP=1 --username postgres --dbname keycloak <<-EOSQL
+            GRANT ALL PRIVILEGES ON DATABASE keycloak TO "user";
+            ALTER SCHEMA public OWNER TO "user";
+            GRANT ALL ON SCHEMA public TO "user";
         EOSQL
         
         # 4. Your existing craftcloud db permissions

@@ -22,8 +22,6 @@ profiles:
     activation:
       - command: dev
     manifests:
-      rawYaml:
-        - deployments/k8s/base/namespace.yaml
       kustomize:
         paths:
           - deployments/k8s/overlays/local-dev
@@ -33,7 +31,14 @@ profiles:
           - "--enable-helm"
           - "--load-restrictor=LoadRestrictionsNone"
     deploy:
-      kubectl: {}
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: [
+                  "bash", "-c", 
+                  "kustomize build deployments/k8s/crds --load-restrictor=LoadRestrictionsNone | kubectl apply --server-side -f - && kubectl wait --for=condition=Available --timeout=120s deployment/cnpg-controller-manager -n cnpg-system"
+                ]
 
   - name: prod
     build:

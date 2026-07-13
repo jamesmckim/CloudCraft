@@ -7,13 +7,19 @@ spec:
   instances: 1
   db:
     vendor: postgres
-    host: postgres
+    host: craftcloud-db-rw
+    database: keycloak
     usernameSecret:
-      name: keycloak-db-secret
+      name: craftcloud-db-app
       key: username
     passwordSecret:
-      name: keycloak-db-secret
+      name: craftcloud-db-app
       key: password
+  additionalOptions:
+    - name: proxy
+      value: edge
+    - name: proxy-headers
+      value: xforwarded
   http:
     httpEnabled: true
   hostname:

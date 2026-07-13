@@ -1,4 +1,4 @@
-apiVersion: k8s.keycloak.org/valpha1
+apiVersion: k8s.keycloak.org/v2beta1
 kind: KeycloakRealmImport
 metadata:
   name: craftcloud-realm-import
@@ -6,5 +6,5 @@ metadata:
 spec:
   keycloakCRName: keycloak
   realm:
-    # Paste your JSON realm config here or reference a secret
-  # ...
+    realm: creaftcloud
+    enabled: true

@@ -2,14 +2,12 @@
 import os
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import declarative_base
+
 from app.core.config import settings
 
-DATABASE_URL = settings.DATABASE_URL
 
-# SQLite requires specific connect args to avoid thread issues; Postgres does not
-connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
+engine = create_async_engine(settings.DATABASE_URL, echo=False)
 
-engine = create_async_engine(DATABASE_URL, connect_args=connect_args)
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
     class_=AsyncSession,

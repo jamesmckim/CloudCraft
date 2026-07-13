@@ -58,8 +58,8 @@ spec:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: identity-secrets
-                  key: DATABASE_URL
+                  name: craftcloud-db-app
+                  key: uri
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -75,14 +75,17 @@ spec:
           image: postgres:18-alpine
           env:
             - name: PGHOST
-              value: "postgres"
+              value: "craftcloud-db-rw"
             - name: PGUSER
-              value: "user"
+              valueFrom:
+                secretKeyRef:
+                  name: craftcloud-db-app
+                  key: username
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
-                  key: DB_PASS
+                  name: craftcloud-db-app
+                  key: password
           command:
             - sh
             - -c

@@ -1,0 +1,51 @@
+---
+# 1. THE MAIN SERVER
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: craftcloud-db
+  namespace: craftcloud-system
+spec:
+  instances: 1
+  storage:
+    size: 5Gi
+
+  # CNPG auto-generates 'user', password, and the 'craftcloud' database.
+  bootstrap:
+    initdb:
+      database: craftcloud
+      owner: user
+
+  # Extra Roles are managed here!
+  managed:
+    roles:
+      - name: syncer_user
+        login: true
+        passwordSecret:
+          name: postgres-secrets 
+
+---
+# 2. KEYCLOAK DATABASE
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: keycloak-db
+  namespace: craftcloud-system
+spec:
+  cluster:
+    name: craftcloud-db
+  name: keycloak
+  owner: user
+
+---
+# 3. THUNDERSTORE DATABASE
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: thunderstore-db
+  namespace: craftcloud-system
+spec:
+  cluster:
+    name: craftcloud-db
+  name: thunderstore
+  owner: syncer_user
