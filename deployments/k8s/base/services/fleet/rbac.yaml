@@ -5,3 +5,41 @@ metadata:
   namespace: craftcloud-system
   labels:
     app: fleet-service
+---
+# 1. THE UNIFIED PERMISSIONS LIST
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: fleet-manager-role
+  namespace: valheim-workloads
+rules:
+  # Core Kubernetes Resources (including PVCs)
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims", "pods", "services", "configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+  # Standard Workloads
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+  # Agones Game Server Resources
+  - apiGroups: ["agones.dev"]
+    resources: ["gameservers", "fleets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+# 2. THE STAPLER (Binding it all together)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: fleet-manager-binding
+  namespace: valheim-workloads
+subjects:
+  - kind: ServiceAccount
+    name: fleet-service-sa
+    namespace: craftcloud-system
+roleRef:
+  kind: Role
+  name: fleet-manager-role
+  apiGroup: rbac.authorization.k8s.io

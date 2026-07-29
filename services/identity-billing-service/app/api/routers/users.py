@@ -3,24 +3,37 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.schemas.user_schemas import UserProfile
+from app.schemas.user_schemas import UserProfile, CreditGrantRequest
 from app.core.security import get_current_user_id
 from app.repositories.user_repo import UserRepository
 
 router = APIRouter(tags=["Users"])
+
+@router.post("/me/add-funds")
+async def add_dev_funds(
+    request: CreditGrantRequest,
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db)
+):
+    """DEV MODE ONLY: Instantly adds funds without a payment processor."""
+    repo = UserRepository(db)
+    
+    # Calls the method you already wrote in user_repo.py
+    updated_user = await repo.add_credits(user_id, request.amount)
+    
+    if not updated_user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    # Return the new balance so the frontend UI can update instantly
+    return {"status": "success", "new_balance": updated_user.credits}
 
 @router.get("/me", response_model=UserProfile)
 async def get_user_profile(
     user_id: str = Depends(get_current_user_id), 
     db: AsyncSession = Depends(get_db)
 ):
-    try:
-        db_user_id = int(user_id)
-    except ValueError:
-        raise HTTPException(status_code=401, detail="Invalid user ID format in token")
-    
     repo = UserRepository(db)
-    user = await repo.get_by_id(db_user_id)
+    user = await repo.get_by_id(user_id)
     
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -29,7 +42,7 @@ async def get_user_profile(
 
 @router.get("/{user_id}/credits") # This creates the /users/{user_id}/credits path
 async def get_user_credits(
-    user_id: int,
+    user_id: str,
     requesting_user_id: str = Depends(get_current_user_id),
     db: AsyncSession = Depends(get_db)
 ):

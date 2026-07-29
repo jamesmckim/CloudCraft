@@ -12,7 +12,7 @@ class Server(Base):
     id = Column(String, primary_key=True) 
     
     # Store the user's ID from the Identity Service (No longer a ForeignKey)
-    owner_id = Column(Integer, index=True)
+    owner_id = Column(String, index=True)
     
     # Store game type and configs to enable redeployment
     game_id = Column(String)

@@ -2,21 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: craftcloud-system
 
-resources:
-  - postgres-cluster.yaml
-  - ../dev-shared/
-
 generators:
   - ksops-generator.yaml
 
 helmCharts:
-  - name: redis
-    repo: oci://registry-1.docker.io/bitnamicharts
-    version: 25.3.12
-    releaseName: redis-broker
-    namespace: craftcloud-system
-    valuesFile: values/redis-values.yaml
-
   - name: qdrant
     repo: https://qdrant.github.io/qdrant-helm
     version: 1.18.0

@@ -60,6 +60,11 @@ spec:
                 secretKeyRef:
                   name: craftcloud-db-app
                   key: uri
+            - name: OIDC_ISSUER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secrets
+                  key: OIDC_ISSUER_URL
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:

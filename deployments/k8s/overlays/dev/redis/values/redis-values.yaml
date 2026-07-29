@@ -1,0 +1,12 @@
+fullnameOverride: "redis-broker"
+architecture: standalone
+auth:
+  enabled: true
+  existingSecret: "redis-secrets"
+  existingSecretPasswordKey: "REDIS_PASSWORD"
+  
+master:
+  persistence:
+    enabled: true
+    # 10 Gi is a safe starting point for a production message broker
+    size: 10Gi

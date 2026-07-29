@@ -28,13 +28,8 @@ class ServerService:
 
     async def list_servers(self, user_id: str):
         """Fetches servers from the database so the UUID is preserved and filtered by owner."""
-        
-        try:
-            user_id_int = int(user_id)
-        except ValueError:
-            raise HTTPException(status_code=400, detail="Invalid user ID format.")
-            
-        db_servers = await self.server_repo.get_by_owner(user_id_int) 
+
+        db_servers = await self.server_repo.get_by_owner(user_id) 
         
         server_list = []
         for server_record in db_servers:
@@ -95,10 +90,6 @@ class ServerService:
         }
 
     async def toggle_power(self, user_id: str, server_id: str, action: str):
-        try:
-            user_id_int = int(user_id)
-        except ValueError:
-            raise HTTPException(status_code=400, detail="Invalid user ID format.")
             
         server_record = self.server_repo.get(server_id)
         
@@ -146,11 +137,6 @@ class ServerService:
             except Exception as e:
                 raise HTTPException(status_code=400, detail=f"Invalid configuration: {str(e)}")
         
-        try:
-            user_id_int = int(user_id)
-        except ValueError:
-            raise HTTPException(status_code=400, detail="Invalid user ID format.")
-        
         # 1. Async Credit Check via injected client
         credits = await self.identity_client.get_user_credits(user_id)
         if credits < 5.0:
@@ -172,7 +158,7 @@ class ServerService:
         try:
             self.server_repo.create({
                 "id": logical_server_id,
-                "owner_id": user_id_int,
+                "owner_id": user_id,
                 "game_id": game_id,
                 "config": config,
                 "active_pod_name": new_container.name,

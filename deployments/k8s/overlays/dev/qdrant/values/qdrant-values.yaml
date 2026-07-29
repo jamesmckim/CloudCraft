@@ -1,0 +1,6 @@
+persistence:
+  size: 50Gi
+
+apiKey: true
+existingSecret: "qdrant-secrets"
+existingSecretApiKeyKey: "API_KEY"

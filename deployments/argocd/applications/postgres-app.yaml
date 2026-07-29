@@ -3,20 +3,14 @@ kind: Application
 metadata:
   name: postgres-database
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   project: default
   sources:
-    - repoURL: 'https://charts.bitnami.com/bitnami'
-      targetRevision: 18.5.24
-      chart: postgresql
-      helm:
-        releaseName: postgres
-        valueFiles:
-          - $values/infra/values/postgres-values.yaml
-
     - repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
       targetRevision: main
-      ref: values
+      path: deployments/k8s/overlays/dev/postgres
 
   destination:
     server: 'https://kubernetes.default.svc'

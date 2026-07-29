@@ -31,14 +31,7 @@ profiles:
           - "--enable-helm"
           - "--load-restrictor=LoadRestrictionsNone"
     deploy:
-      kubectl:
-        hooks:
-          before:
-            - host:
-                command: [
-                  "bash", "-c", 
-                  "kustomize build deployments/k8s/crds --load-restrictor=LoadRestrictionsNone | kubectl apply --server-side -f - && kubectl wait --for=condition=Available --timeout=120s deployment/cnpg-controller-manager -n cnpg-system"
-                ]
+      kubectl: {}
 
   - name: prod
     build:
@@ -52,26 +45,3 @@ profiles:
           - "--enable-alpha-plugins"
     deploy:
       kubectl: {}
-
-portForward:
-  - resourceType: service
-    resourceName: dashboard
-    namespace: craftcloud-system
-    port: 80
-    address: 127.0.0.1
-    localPort: 8080
-  - resourceType: service
-    resourceName: identity-service
-    namespace: craftcloud-system
-    port: 5000
-    localPort: 5000
-  - resourceType: service
-    resourceName: fleet-service
-    namespace: craftcloud-system
-    port: 5000
-    localPort: 5001
-  - resourceType: service
-    resourceName: telemetry-service
-    namespace: craftcloud-system
-    port: 5000
-    localPort: 5002

@@ -4,6 +4,9 @@ namespace: craftcloud-system
 
 resources:
   - ../dev-shared
-
-generators:
-  - ksops-linux-generator.yaml
+  - postgres/
+  - redis/
+  - qdrant/
+  - prometheus/
+  - agones/
+  - workers/

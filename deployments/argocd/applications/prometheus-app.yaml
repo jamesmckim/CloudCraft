@@ -3,19 +3,14 @@ kind: Application
 metadata:
   name: prometheus-stack
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
   sources:
-    - repoURL: 'https://prometheus-community.github.io/helm-charts'
-      targetRevision: 82.18.0
-      chart: kube-prometheus-stack
-      helm:
-        releaseName: prometheus-stack
-        valueFiles:
-          - $values/infra/values/prometheus-values.yaml
     - repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
       targetRevision: main
-      ref: values
+      path: deployments/k8s/overlays/dev/prometheus
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: prometheus-system

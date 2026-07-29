@@ -16,3 +16,7 @@ class UserProfile(BaseModel):
 class BuyRequest(BaseModel):
     package_id: str
     provider: str  # e.g., 'stripe' or 'paypal'
+
+# Temp model needs to be
+class CreditGrantRequest(BaseModel):
+    amount: float

@@ -1,0 +1,6 @@
+apiVersion: viaduct.ai/v1
+kind: ksops
+metadata:
+  name: postgres-secret-generator
+files:
+  - ../../dev-shared/postgres-secret.sops.yaml

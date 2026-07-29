@@ -1,0 +1,6 @@
+apiVersion: viaduct.ai/v1
+kind: ksops
+metadata:
+  name: redis-secret-generator
+files:
+  - ../../dev-shared/redis-secret.sops.yaml

@@ -29,6 +29,16 @@ const StoreView = {
                             <button onclick="window.StoreController.buy('pack_pro', 'paypal')" class="btn-paypal">PayPal</button>
                         </div>
                     </div>
+
+                    <div class="price-card">
+                        <h3>Promo Code</h3>
+                        <p class="credits">100 Credits</p>
+                        <p class="price">FREE (Admin)</p>
+                        <div class="provider-buttons">
+                            <!-- Calls the new grant method -->
+                            <button onclick="window.StoreController.grant(100)" class="btn-promo" style="background: #28a745;">Redeem Promo</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
