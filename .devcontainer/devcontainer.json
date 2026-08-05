@@ -3,6 +3,7 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
+    "initializeCommand": "docker network inspect k3d-dev-cluster || docker network create k3d-dev-cluster",
     "runArgs": [
         "--network=k3d-dev-cluster"
     ],
