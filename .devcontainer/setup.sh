@@ -14,4 +14,9 @@ sed -i 's/127.0.0.1/host.docker.internal/g' ~/.kube/config
 # 3. Secure the config file to silence Kustomize/Helm warnings
 chmod 600 ~/.kube/config
 
+# Point kubectl inside the Dev Container to k3d's internal Docker network load balancer
+if [ -f "$HOME/.kube/config" ]; then
+    sed -i 's|server: https://.*|server: https://k3d-dev-cluster-serverlb:6443|g' "$HOME/.kube/config" 2>/dev/null || true
+fi
+
 echo "✅ Kubeconfig ready! You can now run: skaffold dev"

@@ -3,6 +3,9 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
+    "runArgs": [
+        "--network=k3d-dev-cluster"
+    ],
     "features": {
         "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
             "version": "latest",
@@ -11,8 +14,8 @@
         }
     },
     "mounts": [
-        "source=${localEnv:USERPROFILE}/AppData/Roaming/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind,readonly",
-        "source=${localEnv:USERPROFILE}/.kube,target=/tmp/.kube-localhost,type=bind,readonly"
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.config/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind,readonly",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.kube,target=/tmp/.kube-localhost,type=bind,readonly"
     ],
     "remoteEnv": {
         "SOPS_AGE_KEY_FILE": "/home/vscode/.config/sops/age/keys.txt",

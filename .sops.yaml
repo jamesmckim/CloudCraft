@@ -1,5 +1,5 @@
 creation_rules:
   - path_regex: 'k8s(/|\\)overlays(/|\\).*(/|\\).*\.(sops|plain)\.yaml$'
-    age: age1xkwx4z6rzmf95xvqnan69agjyvt0lrh0305gzh6p5anndfaee9mqur9933,age1yngf5ztpu6g6da96xdlheheyv5pwuax2g7yale5d4tvwd6y02c7sc8gfm6
+    age: age1xkwx4z6rzmf95xvqnan69agjyvt0lrh0305gzh6p5anndfaee9mqur9933,age1yngf5ztpu6g6da96xdlheheyv5pwuax2g7yale5d4tvwd6y02c7sc8gfm6,age12r0mh7h98zrn7m0zrzwxm75wr3terzkf6q58nqg64tcul5eyfg0qmgt5lk
   - path_regex: 'k8s(/|\\)overlays(/|\\)prod(/|\\).*\.sops\.yaml$'
     age: <your-prod-age-public-key>
