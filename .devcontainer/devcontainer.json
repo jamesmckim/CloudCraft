@@ -12,6 +12,20 @@
             "version": "latest",
             "enableNonRootDocker": "true",
             "moby": "true"
+        },
+        "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+            "version": "latest",
+            "helm": "latest",
+            "minikube": "none"
+        },
+        "ghcr.io/rio/features/k3d:1": {
+            "version": "latest"
+        },
+        "ghcr.io/rio/features/kustomize:1": {
+            "version": "latest"
+        },
+        "ghcr.io/rio/features/skaffold:2": {
+            "version": "latest"
         }
     },
     "mounts": [

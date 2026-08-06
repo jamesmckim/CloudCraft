@@ -1,0 +1,36 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: dev-cluster
+servers: 1
+agents: 2
+network: k3d-dev-cluster
+
+# 1. Declaratively lock the API server routing to the Dev Container network
+kubeAPI:
+  host: "k3d-dev-cluster-serverlb"
+  hostIP: "0.0.0.0"
+  hostPort: "6443"
+
+# 2. Declaratively map port 8080 for Linux Mint & Windows browsers
+ports:
+  - port: 8080:80
+    nodeFilters:
+      - loadbalancer
+
+# 3. Declaratively bake hostnames into the Kubernetes TLS certificate
+options:
+  k3s:
+    extraArgs:
+      - arg: --tls-san=k3d-dev-cluster-serverlb
+        nodeFilters:
+          - server:*
+      - arg: --tls-san=localhost
+        nodeFilters:
+          - server:*
+      - arg: --tls-san=host.docker.internal
+        nodeFilters:
+          - server:*
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true
