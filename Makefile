@@ -22,7 +22,7 @@ setup-cluster: create-cluster
 	@kustomize build deployments/k8s/crds --load-restrictor=LoadRestrictionsNone | kubectl apply --server-side -f -
 	@echo " --- Waiting for CNPG operator to become available..."
 	@kubectl wait --for=condition=Available --timeout=120s deployment/cnpg-controller-manager -n cnpg-system
-	@echo " ✅ Environment ready! You can now run: skaffold dev -p dev"
+	@echo " ✅ Environment ready! You can now run: skaffold dev"
 
 # 3. Quick teardown: Destroys only the Kubernetes cluster and its network
 destroy-cluster:

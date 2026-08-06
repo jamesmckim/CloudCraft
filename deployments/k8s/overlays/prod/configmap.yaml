@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webui-runtime-config
+data:
+  config.js: |
+    window.APP_CONFIG = {
+      SSO_AUTHORITY: "https://auth.craftcloud.com/realms/craftcloud",
+      SSO_CLIENT_ID: "webui-client",
+      API_BASE_URL: "https://api.craftcloud.com"
+    };

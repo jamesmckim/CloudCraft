@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webui-runtime-config
+data:
+  config.js: |
+    window.APP_CONFIG = {
+      SSO_AUTHORITY: "REPLACE_SSO_AUTHORITY",
+      SSO_CLIENT_ID: "webui-client",
+      API_BASE_URL: "REPLACE_API_GATEWAY_URL"
+    };

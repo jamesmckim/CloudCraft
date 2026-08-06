@@ -26,7 +26,14 @@ spec:
               mountPath: /etc/nginx/conf.d/default.conf
               subPath: default.conf
               readOnly: true
+            - name: runtime-config
+              mountPath: /usr/share/nginx/html/config.js
+              subPath: config.js
+              readOnly: true
       volumes:
         - name: nginx-config
           configMap:
             name: dashboard-nginx-conf
+        - name: runtime-config
+          configMap:
+            name: webui-runtime-config

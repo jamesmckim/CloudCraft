@@ -4,11 +4,9 @@ import { UserManager, WebStorageStateStore } from 'oidc-client-ts';
 
 // OIDC Configuration for Keycloak
 const oidcConfig = {
-    // In production, this would be https://auth.craftcloud.com/realms/craftcloud
-    authority: window.location.origin.includes('localhost')
-        ? "http://sso.127.0.0.1.nip.io/realms/craftcloud"
-        : "https://auth.craftcloud.com/realms/craftcloud",
-    client_id: "webui-client",
+    // Read from the globally injected runtime config, fallback to localhost for standalone dev
+    authority: window.APP_CONFIG?.SSO_AUTHORITY || "http://sso.127.0.0.1.nip.io:8080/realms/craftcloud",
+    client_id: window.APP_CONFIG?.SSO_CLIENT_ID || "webui-client",
     redirect_uri: window.location.origin + "/", // Return to the main page after login
     post_logout_redirect_uri: window.location.origin + "/",
     response_type: "code",

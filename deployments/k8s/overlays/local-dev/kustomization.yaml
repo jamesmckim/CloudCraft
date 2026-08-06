@@ -5,9 +5,40 @@ namespace: craftcloud-system
 resources:
   - postgres-cluster.yaml
   - ../dev-shared/
+  - cluster-domains.yaml
+  - webui-runtime-config.yaml
 
 generators:
   - ksops-generator.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: cluster-domains
+      fieldPath: data.SSO_AUTHORITY
+    targets:
+      - select:
+          kind: ConfigMap
+          name: webui-runtime-config
+        fieldPaths:
+          - data.[config.js]
+        options:
+          delimiter: '"'
+          index: 1
+
+  - source:
+      kind: ConfigMap
+      name: cluster-domains
+      fieldPath: data.API_GATEWAY_URL
+    targets:
+      - select:
+          kind: ConfigMap
+          name: webui-runtime-config
+        fieldPaths:
+          - data.[config.js]
+        options:
+          delimiter: '"'
+          index: 5
 
 helmCharts:
   - name: redis
