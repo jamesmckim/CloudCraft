@@ -6,13 +6,19 @@ metadata:
   labels:
     app: craftcloud
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
     # Apply API stripping AND Header stripping
     traefik.ingress.kubernetes.io/router.middlewares: craftcloud-system-strip-api@kubernetescrd, craftcloud-system-strip-external-user-id@kubernetescrd
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - "app.127.0.0.1.nip.io"
+      secretName: sso-tls
   rules:
-    - http:
+    - host: "app.127.0.0.1.nip.io"
+      http:
         paths:
           # --- Public Auth Routes (Register, Token) ---
           - path: /api/auth
@@ -24,8 +30,6 @@ spec:
                   number: 5000
 
           # --- Public Webhook Routes ---
-          # Because this path is longer than /api/payments, Traefik will 
-          # correctly route webhook traffic here instead of the protected ingress.
           - path: /api/payments/webhook
             pathType: Prefix
             backend:

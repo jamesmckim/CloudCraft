@@ -6,7 +6,6 @@ namespace: craftcloud-system
 resources:
   - deployment.yaml
   - service.yaml
-  - dashboard-ingress.yaml
 
 configMapGenerator:
   - name: dashboard-nginx-conf

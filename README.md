@@ -1,5 +1,9 @@
 # Server Hosting Service
 
+local dev ip adress: https://app.127.0.0.1.nip.io:8443
+(need to grant spoofed cert perm at this address to login): https://sso.127.0.0.1.nip.io:8443/realms/craftcloud/.well-known/openid-configuration
+
+
 A kubernetes native game server hosting service. 
 
 ```mermaid
