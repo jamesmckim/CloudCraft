@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sso-gateway
+  name: dashboard-gateway
   namespace: craftcloud-system
   labels:
     app: craftcloud
@@ -11,16 +11,16 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - "sso.127.0.0.1.nip.io"
+        - "app.127.0.0.1.nip.io"
       secretName: sso-tls
   rules:
-    - host: "sso.127.0.0.1.nip.io" 
+    - host: "app.127.0.0.1.nip.io"
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: keycloak-service
+                name: dashboard
                 port:
-                  number: 8080
+                  number: 80

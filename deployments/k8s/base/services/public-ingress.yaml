@@ -12,8 +12,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: "localhost"
-      http:
+    - http:
         paths:
           # --- Public Auth Routes (Register, Token) ---
           - path: /api/auth

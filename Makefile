@@ -16,8 +16,24 @@ create-cluster:
 	@chmod 600 ~/.kube/config
 	@echo " --- Cluster connected and ready!"
 
+setup-tls:
+	@echo " --- Checking mkcert local Certificate Authority..."
+	@mkcert -install >/dev/null 2>&1
+	@mkdir -p .certs
+	@echo " --- Generating wildcard certificate for *.127.0.0.1.nip.io..."
+	@mkcert -cert-file .certs/tls.crt -key-file .certs/tls.key "*.127.0.0.1.nip.io" "127.0.0.1.nip.io" >/dev/null 2>&1
+	@echo " --- Ensuring target namespace 'craftcloud-system' exists..."
+	@kubectl create namespace craftcloud-system --dry-run=client -o yaml | kubectl apply --server-side -f -
+	@echo " --- Applying idempotent TLS secret 'sso-tls'..."
+	@kubectl create secret tls sso-tls \
+		--cert=.certs/tls.crt \
+		--key=.certs/tls.key \
+		-n craftcloud-system \
+		--dry-run=client -o yaml | kubectl apply -f -
+	@echo " ✅ TLS certificates ready and secret 'sso-tls' applied!"
+
 # 2. All-in-one idempotent bootstrap: Ensures cluster is up, applies CRDs, and waits for operators
-setup-cluster: create-cluster
+setup-cluster: create-cluster setup-tls
 	@echo " --- Applying Custom Resource Definitions (CRDs)..."
 	@kustomize build deployments/k8s/crds --load-restrictor=LoadRestrictionsNone | kubectl apply --server-side -f -
 	@echo " --- Waiting for CNPG operator to become available..."
@@ -28,7 +44,9 @@ setup-cluster: create-cluster
 destroy-cluster:
 	@echo " --- Deleting k3d development cluster..."
 	@k3d cluster delete dev-cluster 2>/dev/null || true
-	@echo " --- Cluster deleted cleanly."
+	@echo " --- Cleaning up local certificate files..."
+	@rm -rf .certs
+	@echo " --- Cluster and temporary certs deleted cleanly."
 
 # 4. Nuclear reset: Wipes the cluster and immediately rebuilds a fresh environment
 reset-cluster: destroy-cluster setup-cluster
@@ -39,6 +57,8 @@ clean:
 	@skaffold delete -p dev 2>/dev/null || true
 	@echo " --- Tearing down CRDs..."
 	@kustomize build deployments/k8s/crds --load-restrictor=LoadRestrictionsNone | kubectl delete --ignore-not-found -f -
-	@echo " --- Wiping database and storage volumes..."
+	@echo " --- Wiping database, storage volumes, and local cert files..."
 	@kubectl delete pvc --all -n craftcloud-system --ignore-not-found
 	@kubectl delete pvc -l app=qdrant -n default --ignore-not-found
+	@rm -rf .certs
+	@echo " --- Environment cleaned."

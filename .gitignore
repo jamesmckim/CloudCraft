@@ -49,6 +49,7 @@ build/
 Thumbs.db
 
 # Ignore SSL certificates and keys
+.certs/
 certs/
 *.pem
 *.key

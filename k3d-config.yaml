@@ -17,6 +17,9 @@ ports:
   - port: 8080:80
     nodeFilters:
       - loadbalancer
+  - port: 8443:443
+    nodeFilters:
+      - loadbalancer
 
 # 3. Declaratively bake hostnames into the Kubernetes TLS certificate
 options:

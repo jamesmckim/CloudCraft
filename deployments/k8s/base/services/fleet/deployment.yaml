@@ -26,8 +26,11 @@ spec:
           env:
             - name: ENVIRONMENT
               value: "development"
-            - name: IDENTITY_SERVICE_URL
-              value: "http://identity-service:5000"
+            - name: DOMAIN_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: cluster-domains
+                  key: WEBUI_URL
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:

@@ -4,3 +4,6 @@ persistence:
 apiKey: true
 existingSecret: "qdrant-secrets"
 existingSecretApiKeyKey: "API_KEY"
+
+tests:
+  enabled: false

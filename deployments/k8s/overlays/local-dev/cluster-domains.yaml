@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: cluster-domains
 data:
-  BASE_DOMAIN: "127.0.0.1.nip.io:8080"
-  SSO_AUTHORITY: "http://sso.127.0.0.1.nip.io:8080/realms/craftcloud"
-  API_GATEWAY_URL: "http://api.127.0.0.1.nip.io:8080"
-  WEBUI_URL: "http://app.127.0.0.1.nip.io:8080"
+  BASE_DOMAIN: "127.0.0.1.nip.io:8443"
+  SSO_AUTHORITY: "https://sso.127.0.0.1.nip.io:8443/realms/craftcloud"
+  API_GATEWAY_URL: "https://api.127.0.0.1.nip.io:8443"
+  WEBUI_URL: "https://app.127.0.0.1.nip.io:8443"

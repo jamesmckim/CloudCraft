@@ -27,7 +27,7 @@ spec:
               subPath: default.conf
               readOnly: true
             - name: runtime-config
-              mountPath: /usr/share/nginx/html/config.js
+              mountPath: /app/public/config.js
               subPath: config.js
               readOnly: true
       volumes:

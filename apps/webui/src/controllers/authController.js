@@ -31,6 +31,7 @@ export class AuthController {
                 try {
                     await Auth.login();
                 } catch (err) {
+                    console.error("Auth.login() crashed with:", err);
                     alert("Failed to reach identity provider.");
                 }
             });

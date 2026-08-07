@@ -71,6 +71,9 @@ USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     sudo \
+    make \
+    mkcert \
+    libnss3-tools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
