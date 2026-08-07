@@ -1,0 +1,19 @@
+# /workspaces/CloudCraft/.skaffoldignore
+
+# 1. Never watch Kustomize-generated Helm chart caches
+**/charts/**
+*.tgz
+
+# 2. Never watch Git history or IDE metadata
+**/.git/**
+**/.vscode/**
+
+# 3. Never watch frontend dependencies or build output
+**/node_modules/**
+**/dist/**
+**/build/**
+
+# 4. Never watch Python virtual environments or bytecode
+**/.venv/**
+**/__pycache__/**
+**/*.pyc

@@ -1,10 +1,18 @@
+# --- Version Control ---
+.git
+**/.git
+**/.git/**
+
 # --- Enviroment Variables & Secrets
 .env
 */env
 **/.env
 *.env
 
+**/.cache/
+
 # --- Vite/Node ---
+**/.venv/
 venv/
 .venv/
 env/
@@ -25,12 +33,14 @@ backend/creaftcloud.db
 *.sqlite3
 
 # --- Python ---
+**/__pycache__
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
 # --- Node/Frontend ---
+**/node_modules/
 apps/webui/node_modules/
 npm-debug.log
 dist/

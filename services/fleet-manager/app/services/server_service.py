@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from app.manager import ServerManager
     
 from app.repositories.server_repo import ServerRepository
-from app.schemas.schemas import ValheimConfigValidator
+from app.schemas.schemas import ValheimConfigValidator, TestServerConfigValidator
 from app.clients.identity_client import IdentityServiceClient
 
 class ServerService:
@@ -55,9 +55,9 @@ class ServerService:
             
         return server_list
 
-    def get_server_details(self, server_id: str):
+    async def get_server_details(self, server_id: str):
         """Combines K8s container info with Redis stats using the DB as the source of truth."""
-        server_record = self.server_repo.get(server_id)
+        server_record = await self.server_repo.get(server_id)
         if not server_record:
             raise HTTPException(status_code=404, detail="Server not found in database")
 
@@ -91,7 +91,7 @@ class ServerService:
 
     async def toggle_power(self, user_id: str, server_id: str, action: str):
             
-        server_record = self.server_repo.get(server_id)
+        server_record = await self.server_repo.get(server_id)
         
         if not server_record:
             raise HTTPException(status_code=404, detail="Server not registered in database.")
@@ -104,7 +104,7 @@ class ServerService:
                 raise HTTPException(status_code=404, detail="Server instance not found or already stopped.")
                 
             self.manager.stop_server(server_record.active_pod_name)
-            self.server_repo.update(server_record, {"active_pod_name": None})
+            await self.server_repo.update(server_record, {"active_pod_name": None})
 
         elif action == "start":
             # 1. Async Credit Check via injected client
@@ -126,7 +126,7 @@ class ServerService:
                 config_data=server_record.config
             )
             
-            self.server_repo.update(server_record, {"active_pod_name": new_container.name})
+            await self.server_repo.update(server_record, {"active_pod_name": new_container.name})
         
         return {"result": "success", "status": "processing"}
 
@@ -161,7 +161,7 @@ class ServerService:
         )
         
         try:
-            self.server_repo.create({
+            await self.server_repo.create({
                 "id": logical_server_id,
                 "owner_id": user_id,
                 "game_id": game_id,

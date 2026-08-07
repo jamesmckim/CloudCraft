@@ -29,7 +29,7 @@ async def get_server_details(
     """
     Gets details for a specific server, including live Redis stats.
     """
-    return service.get_server_details(server_id)
+    return await service.get_server_details(server_id)
 
 @router.post("/{server_id}/power")
 async def power_action(
