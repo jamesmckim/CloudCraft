@@ -3,6 +3,8 @@ export class GameModel {
     async fetchAvailableGames() {
         // Current: Local Data
         const localData = [
+            { id: 'test-server', name: 'Test Server (Echo)', icon: '🧪', version: 'Alpine 3.20 (<10MB)' },
+            { id: 'valheim', name: 'Valheim', icon: '🌲', version: '0.217.38' },
             { id: 'valheim', name: 'Valheim', icon: '🌲', version: '0.217.38' },
             { id: 'minecraft', name: 'Minecraft', icon: '⛏️', version: '1.20.4' },
             { id: 'rust', name: 'Rust', icon: '☢️', version: 'Latest' },

@@ -11,3 +11,10 @@ metadata:
   name: craftcloud-system
   labels:
     purpose: platform-infrastructure
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: agones-system
+  labels:
+    purpose: game-server-orchestration

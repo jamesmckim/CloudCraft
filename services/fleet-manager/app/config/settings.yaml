@@ -2,7 +2,7 @@
 
 kubernetes:
   # The default namespace where your game servers will live
-  namespace: "craftcloud-system"
+  namespace: "valheim-workloads"
 
 agones:
   # The Custom Resource Definition (CRD) details for Agones

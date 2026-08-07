@@ -10,7 +10,7 @@ spec:
   sources:
     - repoURL: 'https://github.com/jamesmckim/CloudCraft.git'
       targetRevision: main
-      path: deployments/k8s/overlays/dev/agones
+      path: deployments/k8s/overlays/base/agones
 
   destination:
     server: 'https://kubernetes.default.svc'

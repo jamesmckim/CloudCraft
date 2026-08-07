@@ -1,0 +1,6 @@
+agones:
+  crds:
+    install: true
+  rbacEnabled: true
+  registerServiceAccounts: true
+  registerWebhooks: true

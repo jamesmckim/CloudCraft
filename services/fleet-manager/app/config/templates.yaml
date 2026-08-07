@@ -91,3 +91,31 @@ minecraft:
         value: "TRUE"
       - name: TYPE
         value: "FORGE"
+test-server:
+  vanilla:
+    image: alpine:3.20
+    # Command keeps pod alive, logs a heartbeat, and opens a basic TCP/UDP listener
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        echo "🧪 [CraftCloud Test Server] Booting up..."
+        echo "Server Name: ${TEST_SERVER_NAME:-DefaultTestServer}"
+        echo "Echo Message: ${TEST_ECHO_MSG:-Hello from CraftCloud}"
+        while true; do
+          echo "heartbeat: $(date) - alive and healthy"
+          sleep 10
+        done
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 9999
+        protocol: TCP
+      - name: query
+        portPolicy: Dynamic
+        containerPort: 9998
+        protocol: UDP
+    env_defaults:
+      - name: TEST_SERVER_NAME
+        value: "Local-Test-Server"
+      - name: TEST_ECHO_MSG
+        value: "CraftCloud Integration OK"

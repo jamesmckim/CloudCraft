@@ -32,13 +32,22 @@ setup-tls:
 		--dry-run=client -o yaml | kubectl apply -f -
 	@echo " ✅ TLS certificates ready and secret 'sso-tls' applied!"
 
-# 2. All-in-one idempotent bootstrap: Ensures cluster is up, applies CRDs, and waits for operators
-setup-cluster: create-cluster setup-tls
-	@echo " --- Applying Custom Resource Definitions (CRDs)..."
+# 2. Install core operators, CRDs, and optional platform extensions (Agones)
+setup-platform:
+	@echo " --- Applying core Platform Custom Resource Definitions (CRDs)..."
 	@kustomize build deployments/k8s/crds --load-restrictor=LoadRestrictionsNone | kubectl apply --server-side -f -
 	@echo " --- Waiting for CNPG operator to become available..."
 	@kubectl wait --for=condition=Available --timeout=120s deployment/cnpg-controller-manager -n cnpg-system
-	@echo " ✅ Environment ready! You can now run: skaffold dev"
+	@echo " --- Installing Agones (Local K3d Overlay)..."
+	@kustomize build --enable-helm deployments/k8s/overlays/local-dev/agones | kubectl apply --server-side -f -
+	@echo " --- Waiting for Agones controller to become available..."
+	@kubectl wait --for=condition=available --timeout=120s deployment/agones-controller -n agones-system
+	@echo " ✅ Platform layer ready!"
+
+setup-cluster: create-cluster setup-tls setup-platform
+	@echo " =================================================================="
+	@echo " ✅ Environment fully initialized! You can now run: skaffold dev"
+	@echo " =================================================================="
 
 # 3. Quick teardown: Destroys only the Kubernetes cluster and its network
 destroy-cluster:

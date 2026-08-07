@@ -136,7 +136,12 @@ class ServerService:
                 config = ValheimConfigValidator(**config).dict()
             except Exception as e:
                 raise HTTPException(status_code=400, detail=f"Invalid configuration: {str(e)}")
-        
+        elif game_id == "test-server":
+            try:
+                config = TestServerConfigValidator(**config).dict()
+            except Exception as e:
+                raise HTTPException(status_code=400, detail=f"Invalid configuration: {str(e)}")
+                
         # 1. Async Credit Check via injected client
         credits = await self.identity_client.get_user_credits(user_id)
         if credits < 5.0:

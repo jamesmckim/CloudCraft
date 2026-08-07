@@ -24,7 +24,11 @@ class ValheimConfigValidator(BaseModel):
             raise ValueError("Server password cannot contain the world name.")
             
         return self
-    
+
+class TestServerConfigValidator(BaseModel):
+    TEST_SERVER_NAME: Optional[str] = Field(default="Local-Test-Server", max_length=50)
+    TEST_ECHO_MSG: Optional[str] = Field(default="CraftCloud Integration OK", max_length=100)
+
 class PowerActionPayload(BaseModel):
     action: Literal["start", "stop"]
 

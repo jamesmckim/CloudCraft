@@ -14,6 +14,11 @@ env/
 # --- Skaffold ---
 skaffold
 
+# --- Helm ---
+**/charts/
+charts/
+*.tgz
+
 # --- Databases ---
 backend/creaftcloud.db
 *.db

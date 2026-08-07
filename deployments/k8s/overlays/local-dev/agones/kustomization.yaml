@@ -12,4 +12,4 @@ patches:
     patch: |-
       - op: replace
         path: /valuesFile
-        value: values-cloud.yaml
+        value: values-local.yaml

@@ -28,7 +28,12 @@ export class GameController {
 				VALHEIM_UPDATE_CRON: document.getElementById(`${gameId}-cron`).value,
 				VALHEIM_BACKUPS_MAX_COUNT: document.getElementById(`${gameId}-backups`).value
 			};
-		}
+		} else if (gameId === 'test-server') {
+            configData = {
+                TEST_SERVER_NAME: document.getElementById(`${gameId}-name`).value,
+                TEST_ECHO_MSG: document.getElementById(`${gameId}-msg`).value
+            };
+        }
 		
         try {
             await this.dashModel.deployServer(gameId, configData);

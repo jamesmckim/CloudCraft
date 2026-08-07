@@ -17,7 +17,14 @@ export class GameView {
 						<label>Max Backups: <input type="number" id="${game.id}-backups" value="5"></label>
 					</div>
 				`;
-			}
+			} else if (game.id === 'test-server') {
+                configForm = `
+                    <div class="server-config" style="text-align: left; padding: 10px; font-size: 0.9em;">
+                        <label>Test Name: <input type="text" id="${game.id}-name" value="My-Test-Instance"></label><br>
+                        <label>Echo Message: <input type="text" id="${game.id}-msg" value="Hello CraftCloud!"></label>
+                    </div>
+                `;
+            }
 
 			return `
 				<div class="server-card game-card">
