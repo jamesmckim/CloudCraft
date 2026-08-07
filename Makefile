@@ -53,9 +53,10 @@ setup-cluster: create-cluster setup-tls setup-platform
 destroy-cluster:
 	@echo " --- Deleting k3d development cluster..."
 	@k3d cluster delete dev-cluster 2>/dev/null || true
-	@echo " --- Cleaning up local certificate files..."
+	@echo " --- Cleaning up local certificate files and Helm chart caches..."
 	@rm -rf .certs
-	@echo " --- Cluster and temporary certs deleted cleanly."
+	@find deployments/k8s -type d -name "charts" -exec rm -rf {} + 2>/dev/null || true
+	@echo " --- Cluster and temporary files deleted cleanly."
 
 # 4. Nuclear reset: Wipes the cluster and immediately rebuilds a fresh environment
 reset-cluster: destroy-cluster setup-cluster
@@ -66,8 +67,9 @@ clean:
 	@skaffold delete -p dev 2>/dev/null || true
 	@echo " --- Tearing down CRDs..."
 	@kustomize build deployments/k8s/crds --load-restrictor=LoadRestrictionsNone | kubectl delete --ignore-not-found -f -
-	@echo " --- Wiping database, storage volumes, and local cert files..."
+	@echo " --- Wiping database, storage volumes, certs, and Helm chart caches..."
 	@kubectl delete pvc --all -n craftcloud-system --ignore-not-found
 	@kubectl delete pvc -l app=qdrant -n default --ignore-not-found
 	@rm -rf .certs
-	@echo " --- Environment cleaned."
+	@find deployments/k8s -type d -name "charts" -exec rm -rf {} + 2>/dev/null || true
+	@echo " --- Environment cleaned."	
