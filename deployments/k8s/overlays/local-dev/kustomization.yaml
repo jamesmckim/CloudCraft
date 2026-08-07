@@ -4,11 +4,9 @@ kind: Kustomization
 resources:
   - postgres-cluster.yaml
   - ../dev-shared/
+  - ../dev-secrets/
   - cluster-domains.yaml
   - webui-runtime-config.yaml
-
-generators:
-  - ksops-generator.yaml
 
 replacements:
   - source:
