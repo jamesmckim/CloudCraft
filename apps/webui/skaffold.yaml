@@ -23,7 +23,9 @@ profiles:
             target: dev
           sync:
             manual:
-              - src: 'src/**/*'
+              - src: 'src/**/*.js'
+                dest: /app
+              - src: 'src/**/*.css'
                 dest: /app
               - src: 'index.html'
                 dest: /app
