@@ -1,5 +1,9 @@
 # Server Hosting Service
 
+########### SET-UP ##############3
+
+needs sops age key placed on host at: ~/.config/aops/age/keys.txt
+
 local dev ip adress: https://app.127.0.0.1.nip.io:8443
 
 (need to grant spoofed cert perm at this adress to login): https://sso.127.0.0.1.nip.io:8443/realms/craftcloud/.well-known/openid-configuration
