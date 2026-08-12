@@ -1,0 +1,14 @@
+kubernetes:
+  # The default namespace where your game servers will live
+  namespace: "valheim-workloads"
+
+agones:
+  # The Custom Resource Definition (CRD) details for Agones
+  group: "agones.dev"
+  version: "v1"
+  plural: "gameservers"
+
+app:
+  # The internal URL your sidecar uses to talk back to the manager
+  # (Note: In Go, we also allow overriding this via MANAGER_API_URL env var)
+  manager_api_url: "http://manager-api:5000"

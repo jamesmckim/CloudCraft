@@ -1,50 +1,67 @@
-# STAGE 1: Build 
-ARG REGISTRY=""
-FROM ${REGISTRY}python:3.14-alpine AS builder
+# ==========================================
+# Stage 1: Build the Go binary
+# ==========================================
+FROM golang:1.26-alpine AS builder
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PIP_NO_CACHE_DIR=1
+# Set environment variables for optimized Go build
+ENV CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
 
-# Added rust and cargo: required to compile python-jose[cryptography] and bcrypt on Alpine
-RUN apk add --no-cache \
-    gcc \
-    musl-dev \
-    postgresql-dev \
-    python3-dev \
-    libffi-dev \
-    cargo \
-    rust
+WORKDIR /build
+
+# Install ca-certificates (required to verify TLS connections for K8s/Identity calls)
+RUN apk add --no-cache ca-certificates
+
+# Copy go.mod and go.sum first to leverage Docker layer caching
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy the rest of the application source code
+COPY . .
+
+# Build a statically linked binary. 
+# -s -w strips debugging information to reduce binary size
+RUN go build -ldflags="-s -w" -a -installsuffix cgo -o fleet-manager ./cmd/server/main.go
+
+FROM golang:1.26-alpine AS dev
 
 WORKDIR /app
 
-# Install dependencies into a separate directory
-COPY requirements.txt .
-RUN pip install --prefix=/install -r requirements.txt
+RUN go install github.com/air-verse/air@latest
 
-# STAGE 2: Base Runtime
-FROM ${REGISTRY}python:3.14-alpine AS base
+COPY go.mod go.sum ./
+RUN go mod download
 
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+COPY . .
 
-# Keeping libpq for potential PostgreSQL database usage
-RUN apk add --no-cache libpq
+CMD ["air", "--build.cmd", "go build -o tmp/main ./cmd/server/main.go", "--build.bin", "tmp/main"]
+
+# ==========================================
+# Stage 2: Create the minimal runtime image
+# ==========================================
+FROM alpine:3.24
 
 WORKDIR /app
 
-# Copy the pre-compiled libraries from the builder stage
-COPY --from=builder /install /usr/local
+# Import the root ca-certificates from the builder stage
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-# STAGE 3: Development
-FROM base AS dev
-COPY . .
-EXPOSE 5000
-# Updated entrypoint: main.py is now at the root directory, not inside the app/ folder
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
+# Create a non-root user and group for Kubernetes security best practices
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# STAGE 4: Production
-FROM base AS prod
-COPY . .
+# Copy the static binary and the config directory from the builder stage
+COPY --from=builder /build/fleet-manager .
+COPY --from=builder /build/config ./config
+
+# Set ownership to the non-root user
+RUN chown -R appuser:appgroup /app
+
+# Switch to the non-root user
+USER appuser
+
+# Expose the standard application port
 EXPOSE 5000
-# Updated entrypoint: main.py is now at the root directory
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
+
+# Run the binary
+CMD ["./fleet-manager"]

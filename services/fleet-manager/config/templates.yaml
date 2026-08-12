@@ -1,0 +1,121 @@
+valheim:
+  vanilla:
+    image: lloesche/valheim-server:latest
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 2456
+        protocol: UDP
+      - name: query
+        portPolicy: Dynamic
+        containerPort: 2457
+        protocol: UDP
+    env_defaults:
+      - name: SERVER_PUBLIC
+        value: "1"
+  modded:
+    image: lloesche/valheim-server:latest
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 2456
+        protocol: UDP
+      - name: query
+        portPolicy: Dynamic
+        containerPort: 2457
+        protocol: UDP
+    env_defaults:
+      - name: SERVER_PUBLIC
+        value: "1"
+      - name: VALHEIM_PLUS
+        value: "true"
+    initContainers:
+      - name: mod-downloader
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        # This script expects a comma-separated list of download URLs in the MOD_URLS env var
+        args:
+          - |
+            echo "🚀 Starting Mod Download sequence..."
+            
+            # 1. Ensure the BepInEx plugin directory exists on the shared volume
+            mkdir -p /config/BepInEx/plugins
+            
+            # 2. Split the MOD_URLS string by comma and loop through them
+            IFS=','
+            for url in $MOD_URLS; do
+              if [ -n "$url" ]; then
+                echo "⬇️ Downloading: $url"
+                wget -qO /tmp/mod.zip "$url"
+                
+                # 3. Unzip directly into the plugins folder (overwriting conflicts)
+                echo "📦 Unpacking..."
+                unzip -q -o /tmp/mod.zip -d /config/BepInEx/plugins/
+                
+                # 4. Clean up the zip file
+                rm /tmp/mod.zip
+              fi
+            done
+            
+            echo "✅ All mods installed successfully!"
+        env:
+          - name: MOD_URLS
+            value: "" 
+        volumeMounts:
+          - name: world-data
+            mountPath: /config
+
+minecraft:
+  vanilla:
+    image: itzg/minecraft-server:latest
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 25565
+        protocol: TCP
+    env_defaults:
+      - name: EULA
+        value: "TRUE"
+      - name: TYPE
+        value: "PAPER"
+  modded:
+    image: itzg/minecraft-server:latest
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 25565
+        protocol: TCP
+    env_defaults:
+      - name: EULA
+        value: "TRUE"
+      - name: TYPE
+        value: "FORGE"
+
+test-server:
+  vanilla:
+    image: alpine:3.20
+    # Command keeps pod alive, logs a heartbeat, and opens a basic TCP/UDP listener
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        echo "🧪 [CraftCloud Test Server] Booting up..."
+        echo "Server Name: ${TEST_SERVER_NAME:-DefaultTestServer}"
+        echo "Echo Message: ${TEST_ECHO_MSG:-Hello from CraftCloud}"
+        while true; do
+          echo "heartbeat: $(date) - alive and healthy"
+          sleep 10
+        done
+    ports:
+      - name: game
+        portPolicy: Dynamic
+        containerPort: 9999
+        protocol: TCP
+      - name: query
+        portPolicy: Dynamic
+        containerPort: 9998
+        protocol: UDP
+    env_defaults:
+      - name: TEST_SERVER_NAME
+        value: "Local-Test-Server"
+      - name: TEST_ECHO_MSG
+        value: "CraftCloud Integration OK"

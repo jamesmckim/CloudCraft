@@ -25,11 +25,5 @@ profiles:
             target: dev
           sync:
             manual:
-              - src: '**/*.go'
-                dest: /app
-              - src: 'go.mod'
-                dest: /app
-              - src: 'go.sum'
-                dest: /app
-              - src: 'config/**/*.yaml'
+              - src: 'app/**/*.py'
                 dest: /app

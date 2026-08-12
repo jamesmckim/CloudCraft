@@ -4,7 +4,7 @@ A kubernetes native game server hosting service.
 
 ### SET-UP
 
-needs sops age key placed on host at: ~/.config/aops/age/keys.txt
+needs sops age key placed on host at: ~/.config/sops/age/keys.txt
 
 ### Troubleshooting: "Too many open files" (fsnotify limit)
 
