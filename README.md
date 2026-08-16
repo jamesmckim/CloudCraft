@@ -20,8 +20,15 @@ This happens because modern IDEs (like VS Code) and hot-reloaders require more f
    ```bash
    echo fs.file-max=524288 | sudo tee -a /etc/sysctl.conf
    echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
+   echo fs.inotify.max_user_instances=8192 | sudo tee -a /etc/sysctl.conf
    sudo sysctl -p
 
+
+### Launching Dev Env
+
+make setup-cluster
+
+make dev --- <- limits fsnotify
 
 local dev ip adress: https://app.127.0.0.1.nip.io:8443
 

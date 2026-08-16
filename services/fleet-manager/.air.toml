@@ -1,0 +1,17 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  # The command to compile your Go code
+  cmd = "go build -o ./tmp/main ./cmd/server/main.go"
+  
+  # This replaces the deprecated "build.bin" your logs were complaining about
+  entrypoint = ["./tmp/main"]
+  
+  # CRITICAL: Tell Air to ignore the build output folder so it doesn't crash
+  exclude_dir = ["tmp", "vendor", "node_modules"]
+  
+  # Only watch these specific file extensions
+  include_ext = ["go", "yaml", "yml"]
+  
+  exclude_unchanged = true

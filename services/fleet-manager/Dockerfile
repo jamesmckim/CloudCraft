@@ -35,10 +35,10 @@ RUN go mod download
 
 COPY . .
 
-CMD ["air", "--build.cmd", "go build -o tmp/main ./cmd/server/main.go", "--build.bin", "tmp/main"]
+CMD ["air"]
 
 # ==========================================
-# Stage 2: Create the minimal runtime image
+# Stage 3: Create the minimal runtime image
 # ==========================================
 FROM alpine:3.24
 

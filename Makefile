@@ -72,4 +72,8 @@ clean:
 	@kubectl delete pvc -l app=qdrant -n default --ignore-not-found
 	@rm -rf .certs
 	@find deployments/k8s -type d -name "charts" -exec rm -rf {} + 2>/dev/null || true
-	@echo " --- Environment cleaned."	
+	@echo " --- Environment cleaned."
+	
+dev:
+	@echo " --- Forcing maximum file descriptor limits for this session..."
+	bash -c "ulimit -n 100000 && skaffold dev --trigger=polling --watch-poll-interval=2000"

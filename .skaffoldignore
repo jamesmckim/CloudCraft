@@ -19,3 +19,8 @@
 **/*.pyc
 
 **/tmp/**
+
+**/node_modules
+**/.venv
+**/tmp
+**/.git
