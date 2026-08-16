@@ -20,8 +20,8 @@ setup-tls:
 	@echo " --- Checking mkcert local Certificate Authority..."
 	@mkcert -install >/dev/null 2>&1
 	@mkdir -p .certs
-	@echo " --- Generating wildcard certificate for *.127.0.0.1.nip.io..."
-	@mkcert -cert-file .certs/tls.crt -key-file .certs/tls.key "*.127.0.0.1.nip.io" "127.0.0.1.nip.io" >/dev/null 2>&1
+	@echo " --- Generating wildcard certificate for *.192.168.0.161.nip.io..."
+	@mkcert -cert-file .certs/tls.crt -key-file .certs/tls.key "*.192.168.0.161.nip.io" "192.168.0.161.nip.io" >/dev/null 2>&1
 	@echo " --- Ensuring target namespace 'craftcloud-system' exists..."
 	@kubectl create namespace craftcloud-system --dry-run=client -o yaml | kubectl apply --server-side -f -
 	@echo " --- Applying idempotent TLS secret 'sso-tls'..."
@@ -46,7 +46,7 @@ setup-platform:
 
 setup-cluster: create-cluster setup-tls setup-platform
 	@echo " =================================================================="
-	@echo " ✅ Environment fully initialized! You can now run: skaffold dev"
+	@echo " ✅ Environment fully initialized! You can now run: make dev"
 	@echo " =================================================================="
 
 # 3. Quick teardown: Destroys only the Kubernetes cluster and its network
@@ -73,7 +73,27 @@ clean:
 	@rm -rf .certs
 	@find deployments/k8s -type d -name "charts" -exec rm -rf {} + 2>/dev/null || true
 	@echo " --- Environment cleaned."
-	
+
+setup-host:
+	@echo " --- Verifying Linux host kernel limits (requires sudo)..."
+	@sudo bash -c '\
+		grep -q "fs.file-max=524288" /etc/sysctl.conf || echo "fs.file-max=524288" >> /etc/sysctl.conf; \
+		grep -q "fs.inotify.max_user_watches=524288" /etc/sysctl.conf || echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf; \
+		grep -q "fs.inotify.max_user_instances=8192" /etc/sysctl.conf || echo "fs.inotify.max_user_instances=8192" >> /etc/sysctl.conf; \
+		sysctl -p; \
+	'
+	@echo " --- Verifying Docker daemon ulimits..."
+	@sudo bash -c '\
+		if [ ! -f /etc/docker/daemon.json ] || ! grep -q "default-ulimits" /etc/docker/daemon.json; then \
+			echo "{\"default-ulimits\": {\"nofile\": {\"Name\": \"nofile\",\"Hard\": 100000,\"Soft\": 100000}}}" > /etc/docker/daemon.json; \
+			echo " --- Restarting Docker daemon to apply limits..."; \
+			systemctl restart docker; \
+		else \
+			echo " --- Docker limits already configured."; \
+		fi \
+	'
+	@echo " ✅ Host machine is ready for heavy local K8s development!"
+
 dev:
 	@echo " --- Forcing maximum file descriptor limits for this session..."
 	bash -c "ulimit -n 100000 && skaffold dev --trigger=polling --watch-poll-interval=2000"

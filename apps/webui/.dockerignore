@@ -5,3 +5,9 @@ npm-debug.log
 dist
 # Docker config
 Dockerfile
+
+node_modules/
+dist/
+build/
+.git/
+.env

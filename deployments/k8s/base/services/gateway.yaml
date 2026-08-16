@@ -1,0 +1,52 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-gateway
+  namespace: craftcloud-system
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    secretName: sso-tls
+  routes:
+    - match: Host(`app.192.168.0.161.nip.io`) && (PathPrefix(`/api/auth`) || PathPrefix(`/api/payments/webhook`))
+      kind: Rule
+      middlewares:
+        - name: strip-api
+        - name: strip-external-user-id
+      services:
+        - name: identity-service
+          port: 5000
+
+    - match: Host(`app.192.168.0.161.nip.io`) && (PathPrefix(`/api/users`) || PathPrefix(`/api/payments`))
+      kind: Rule
+      middlewares:
+        - name: strip-api
+        - name: auth-verify
+      services:
+        - name: identity-service
+          port: 5000
+
+    - match: Host(`app.192.168.0.161.nip.io`) && (PathPrefix(`/api/internal`) || PathPrefix(`/api/incidents`))
+      kind: Rule
+      middlewares:
+        - name: strip-api
+        - name: auth-verify
+      services:
+        - name: telemetry-service
+          port: 5000
+
+    - match: Host(`app.192.168.0.161.nip.io`) && PathPrefix(`/api/servers`)
+      kind: Rule
+      middlewares:
+        - name: strip-api
+        - name: auth-verify
+      services:
+        - name: fleet-service
+          port: 5000
+          
+    - match: Host(`app.192.168.0.161.nip.io`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: dashboard
+          port: 80

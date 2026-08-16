@@ -1,26 +1,16 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: sso-gateway
   namespace: craftcloud-system
-  labels:
-    app: craftcloud
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
-  ingressClassName: traefik
+  entryPoints:
+    - websecure
   tls:
-    - hosts:
-        - "sso.127.0.0.1.nip.io"
-      secretName: sso-tls
-  rules:
-    - host: "sso.127.0.0.1.nip.io" 
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: keycloak-service
-                port:
-                  number: 8080
+    secretName: sso-tls
+  routes:
+    - match: Host(`sso.192.168.0.161.nip.io`) && PathPrefix(`/`) 
+      kind: Rule
+      services:
+        - name: keycloak-service
+          port: 8080

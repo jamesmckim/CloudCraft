@@ -5,6 +5,5 @@ resources:
   - fleet/
   - telemetry/
   - identity/
-  - public-ingress.yaml
-  - protected-ingress.yaml
+  - gateway.yaml
   - keycloak-ingress.yaml

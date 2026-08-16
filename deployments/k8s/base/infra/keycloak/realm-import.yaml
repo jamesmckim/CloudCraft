@@ -17,14 +17,14 @@ spec:
         publicClient: false
         secret: "dev-secret-key-123" # NEED TO MOVE EXTERNAL
         redirectUris:
-          - "https://sso.127.0.0.1.nip.io:8443/*"
+          - "https://sso.192.168.0.161.nip.io:8443/*"
           
       - clientId: webui-client
         enabled: true
         standardFlowEnabled: true
         publicClient: true
         redirectUris:
-          - "https://app.127.0.0.1.nip.io:8443/*"
+          - "https://app.192.168.0.161.nip.io:8443/*"
         webOrigins:
          - "+"
 

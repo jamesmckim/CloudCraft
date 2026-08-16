@@ -23,6 +23,6 @@ spec:
   http:
     httpEnabled: true
   hostname:
-    hostname: sso.127.0.0.1.nip.io
+    hostname: sso.192.168.0.161.nip.io
     strict: false
     strictBackchannel: false
