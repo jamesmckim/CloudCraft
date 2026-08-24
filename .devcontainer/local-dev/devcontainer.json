@@ -1,5 +1,5 @@
 {
-    "name": "CloudCraft Enterprise Dev",
+    "name": "CloudCraft Local Dev",
     "build": {
         "dockerfile": "Dockerfile"
     },
