@@ -1,6 +1,6 @@
 module fleet-manager
 
-go 1.26
+go 1.26.0
 
 require (
 	agones.dev/agones v1.59.0

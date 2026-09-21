@@ -13,7 +13,6 @@ import (
 	agonesclient "agones.dev/agones/pkg/client/clientset/versioned"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -121,7 +120,7 @@ func (m *ServerManager) CreateServer(gameID, userID, logicalServerID, sidecarTok
 		Spec: agonesv1.GameServerSpec{
 			Container: "game-engine",
 			// We map the dynamic ports from YAML into Agones types
-			Ports: buildAgonesPorts(blueprint.Ports), 
+			Ports: blueprint.Ports, 
 			Template: corev1.PodTemplateSpec{
 				Spec: corev1.PodSpec{
 					Volumes: volumes,
@@ -198,11 +197,4 @@ func (m *ServerManager) StopServer(serverID string) error {
 func (m *ServerManager) ensurePVCExists(ctx context.Context, logicalServerID string) (string, error) {
 	// (Omitted for brevity - exact same logic as before, using standard k8sClient.CoreV1())
 	return fmt.Sprintf("world-pvc-%s", logicalServerID), nil
-}
-
-// Helper to cast YAML ports to Agones typed ports
-func buildAgonesPorts(yamlPorts []interface{}) []agonesv1.GameServerPort {
-	var parsed []agonesv1.GameServerPort
-    // ... basic type assertions mapping your interface{} to agonesv1.GameServerPort 
-	return parsed
 }
